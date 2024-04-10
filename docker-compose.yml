@@ -10,4 +10,8 @@ services:
       - POSTGRESQL_PASSWORD=docker
       - POSTGRESQL_DATABASE=obra-facil
 
-
+  redis:
+    image: redis:latest
+    command: redis-server --requirepass redispwd
+    ports:
+      - 6379:6379

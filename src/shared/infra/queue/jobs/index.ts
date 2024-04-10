@@ -1,14 +1,8 @@
-import { UserSendVerificationCodeForgotPassword } from '@modules/user/jobs/send-verification-code-forgot-password'
-
-import { UserSendVerificationCodeEmail } from '@modules/user/jobs/send-verification-code-email'
+import { SendForgotPasswordCode } from '@modules/user/jobs/send-forgot-password-code'
 
 export const jobs = {
-  UserSendVerificationCodeEmail: {
-    key: 'UserSendVerificationCodeEmail',
-    job: new UserSendVerificationCodeEmail(),
-  },
-  UserSendVerificationCodeForgotPassword: {
-    key: 'UserSendVerificationCodeForgotPassword',
-    job: new UserSendVerificationCodeForgotPassword(),
+  SendForgotPasswordCode: {
+    key: 'SendForgotPasswordCode',
+    job: new SendForgotPasswordCode(),
   },
 }

@@ -4,12 +4,9 @@ import rateLimit from '@fastify/rate-limit'
 import Redis from 'ioredis'
 
 import RedisConfig from '@shared/infra/config/redis'
-import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 import { getRoutes } from '@shared/infra/http/routes/get-routes'
 
 export async function AppRoutes(app: FastifyInstance) {
-  app.addHook('onRequest', verifyJwt)
-
   await app.register(rateLimit, {
     global: true,
     max: 50,
@@ -32,7 +29,7 @@ export async function AppRoutes(app: FastifyInstance) {
   for (const route of routes) {
     const routeFile = require(route)
     if (typeof routeFile === 'object') {
-      app.register(routeFile.default)
+      app.register(routeFile.Router)
     }
   }
 }

@@ -11,7 +11,11 @@ import { AppRoutes } from '@shared/infra/http/routes'
 
 export const app = fastify()
 
-app.register(cors)
+app.register(cors, {
+  // credentials: true,
+  allowedHeaders: ['content-type'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
+})
 app.register(cookies)
 app.register(jwt, {
   secret: env.JWT_SECRET,
@@ -32,7 +36,7 @@ app.setErrorHandler((error, req, reply) => {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    const singleError = zError?.[keys?.[1]]?._errors?.[0] || ''
+    const singleError = zError?.[keys?.[1]]?._errors?.[0] ?? ''
     return reply.status(400).send({
       code: 'schema.validation',
       error: singleError,
@@ -55,8 +59,7 @@ app.setErrorHandler((error, req, reply) => {
 
   if (error instanceof Error) {
     if (error?.statusCode === 429) {
-      console.log('Rate Limit: ', req.headers.customer ?? '')
-      console.log('User: ', req?.user?.sub ?? '')
+      console.log('Rate Limit - user: ', req?.user?.sub ?? '')
       return reply.status(429).send({
         code: 'rate.limit_exceeded',
         error: error.message,

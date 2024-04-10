@@ -1,26 +1,43 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
+import { strMessage } from '@core/utils/custom-zod-error'
+import { Document } from '@core/domain/entities/value-object/document'
+import { Email } from '@core/domain/entities/value-object/email'
+
 import { makeSendForgotPasswordCode } from '@modules/user/use-cases/factories/make-send-forgot-password-code'
 
-import { message } from '@shared/infra/http/utils/zod'
-
-const bodySchema = z.object({
-  document: z
-    .string(message('documento'))
-    .length(11, { message: 'O campo documento deve ter 11 caracteres.' })
-    .regex(/^[0-9]+$/, {
-      message: 'O campo documento deve conter apenas números.',
-    }),
-  email: z
-    .string(message('email'))
-    .email({
-      message: 'O email deve ser um endereço de email.',
-    })
-    .nonempty({
-      message: 'O email deve ser um endereço de email válido.',
-    }),
-})
+const bodySchema = z
+  .object({
+    document: z
+      .string(strMessage('CPF'))
+      .length(11, { message: 'O campo CPF deve conter 11 caracteres.' })
+      .regex(/^[0-9]+$/, {
+        message: 'O campo CPF deve conter apenas números.',
+      })
+      .optional(),
+    email: z
+      .string(strMessage('e-mail'))
+      .email('O campo e-mail deve conter um endereço de email válido.')
+      .min(1, 'O campo e-mail é obrigatório.')
+      .optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.document && data.email) {
+      ctx.addIssue({
+        path: ['document'],
+        message:
+          'Apenas o campo CPF ou e-mail deve ser fornecido, mas não ambos.',
+        code: 'custom',
+      })
+    } else if (!data.document && !data.email) {
+      ctx.addIssue({
+        path: ['document'],
+        message: 'Um dos campos, CPF ou e-mail, deve ser fornecido.',
+        code: 'custom',
+      })
+    }
+  })
 
 export async function sendForgotPasswordCode(
   request: FastifyRequest,
@@ -31,9 +48,8 @@ export async function sendForgotPasswordCode(
   const sendForgotPasswordCode = makeSendForgotPasswordCode()
 
   await sendForgotPasswordCode.execute({
-    customer: request.customer,
-    document,
-    email,
+    document: document && new Document(document, 'CPF').value,
+    email: email && new Email(email).value,
   })
 
   return reply.status(200).send()

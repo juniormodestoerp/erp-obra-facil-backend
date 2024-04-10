@@ -5,6 +5,7 @@ import { UserRepository } from '@modules/user/repositories/user-repository'
 import { PrismaUserMapper } from '@modules/user/repositories/prisma/mappers/prisma-user-mapper'
 
 import { prisma } from '@shared/infra/database/prisma'
+import { RedisCache } from '@shared/infra/providers/cache/redis'
 
 export class PrismaUserRepository implements UserRepository {
   private repository: PrismaClient
@@ -76,19 +77,19 @@ export class PrismaUserRepository implements UserRepository {
       data: prismaUserData,
     })
   }
+
+  async save(user: User): Promise<void> {
+    const prismaUserData = PrismaUserMapper.toPrisma(user)
+
+    await this.repository.user.update({
+      where: {
+        id: prismaUserData.id,
+      },
+      data: prismaUserData,
+    })
+
+    RedisCache.getInstance().delete(`user:${user.id}`)
+  }
 }
-
-// async save(user: User): Promise<void> {
-//   const prismaUserData = PrismaUserMapper.toPrisma(user)
-
-//   await this.repository.user.update({
-//     where: {
-//       id: prismaUserData.id,
-//     },
-//     data: prismaUserData,
-//   })
-
-//   RedisCache.getInstance().delete(`user:${user.id}`)
-// }
 
 // async delete(): Promise<void> {}

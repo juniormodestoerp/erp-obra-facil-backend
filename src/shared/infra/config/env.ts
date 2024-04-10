@@ -1,4 +1,3 @@
-import 'dotenv/config'
 import { z } from 'zod'
 
 import { numbMessage, strMessage } from '@core/utils/custom-zod-error'
@@ -7,21 +6,32 @@ const envSchema = z.object({
   NODE_ENV: z
     .enum(['development', 'test', 'production'])
     .default('development'),
-  PORT: z.coerce.number(numbMessage('porta da API')).default(3333),
-  JWT_SECRET: z.string(strMessage('segredo JWT')),
-  DATABASE_URL: z.string(strMessage('URL do banco de dados')),
+  PORT: z.coerce.number(numbMessage('porta da api')).default(3333),
+  JWT_SECRET: z.string(strMessage('segredo jwt')),
+  DATABASE_URL: z.string(strMessage('url do banco de dados')),
   REDIS_PORT: z.coerce.number(numbMessage('porta do redis')),
   REDIS_HOST: z.string(strMessage('host do redis')),
   REDIS_PASS: z.string(strMessage('senha do redis')),
-  SEND_GRID_KEY: z.string(strMessage('chave do SendGrid')),
+  SEND_GRID_KEY: z.string(strMessage('chave do sendgrid')),
+  RESEND_API_KEY: z.string(strMessage('chave do resend')),
+  CLOUDFLARE_ENDPOINT: z
+    .string(strMessage('endpoint do cloudflare'))
+    .url('O endpoint deve ser um url válida.'),
+  CLOUDFLARE_ACCESS_KEY_ID: z.string(
+    strMessage('id da chave de acesso do cloudflare'),
+  ),
+  CLOUDFLARE_SECRET_ACCESS_KEY: z.string(
+    strMessage('chave de acesso secreta do cloudflare'),
+  ),
+  BUCKET_NAME: z.string(strMessage('nome do bucket')),
 })
 
 const _env = envSchema.safeParse(process.env)
 
 if (_env.success === false) {
-  console.error('Invalid environment variables', _env.error.format())
+  console.error('❌ Invalid environment variables', _env.error.format())
 
-  throw new Error('Invalid environment variables.')
+  throw new Error('❌ Invalid environment variables.')
 }
 
 export const env = _env.data

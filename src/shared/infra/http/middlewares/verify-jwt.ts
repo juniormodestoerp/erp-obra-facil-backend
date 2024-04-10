@@ -35,6 +35,8 @@ export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
     }
 
     if (!user) {
+      console.log('1')
+
       return reply.status(401).send({
         code: 'auth.authorization',
         error: 'unauthorized',
@@ -44,6 +46,8 @@ export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
     }
 
     if (!(user instanceof User)) {
+      console.log('2')
+
       return reply.status(401).send({
         code: 'auth.authorization',
         error: 'unauthorized',
@@ -54,6 +58,8 @@ export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
 
     request.user.data = user
   } catch (err) {
+    console.log('3')
+
     return reply.status(401).send({
       code: 'auth.authorization',
       error: 'unauthorized',

@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto'
 import { AppError } from '@core/domain/errors/app-error'
 import { Utils } from '@core/utils/string'
 
-import { CustomerPayload } from '@modules/customer/dtos/customer-payload'
+import { User } from '@modules/user/entities/user'
 import { UserToken } from '@modules/user/entities/user-token'
 import { UserRepository } from '@modules/user/repositories/user-repository'
 import { UserTokensRepository } from '@modules/user/repositories/user-tokens-respository'
@@ -11,11 +11,12 @@ import { UserTokensRepository } from '@modules/user/repositories/user-tokens-res
 import { Queue } from '@shared/infra/providers/queue'
 import { jobs } from '@shared/infra/queue/jobs'
 
-interface SendForgotPasswordCodeInput {
-  customer: CustomerPayload
-  document: string
-  email: string
+interface Input {
+  document: string | undefined
+  email: string | undefined
 }
+
+type Output = void
 
 export class SendForgotPasswordCodeUseCase {
   constructor(
@@ -24,12 +25,20 @@ export class SendForgotPasswordCodeUseCase {
     private readonly queueProvider: Queue,
   ) {}
 
-  async execute({
-    customer: { data: customer, config },
-    document,
-    email,
-  }: SendForgotPasswordCodeInput): Promise<void> {
-    const user = await this.userRepository.findByDocument(document, customer.id)
+  async execute({ document, email }: Input): Promise<Output> {
+    if ((document && email) || (!document && !email)) {
+      throw new AppError({
+        code: 'authenticate.invalid_credentials',
+      })
+    }
+
+    let user: User | undefined
+
+    if (document && !email) {
+      user = await this.userRepository.findByDocument(document)
+    } else if (email && !document) {
+      user = await this.userRepository.findByEmail(email)
+    }
 
     if (!user) {
       throw new AppError({
@@ -37,7 +46,10 @@ export class SendForgotPasswordCodeUseCase {
       })
     }
 
-    if (user?.email?.value !== email) {
+    if (
+      (email && user.email.value !== email) ||
+      (document && user.document.value !== document)
+    ) {
       throw new AppError({
         code: 'user.not_found',
       })
@@ -54,16 +66,17 @@ export class SendForgotPasswordCodeUseCase {
 
     await this.userTokenRepository.create(userToken)
 
-    this.queueProvider.add(jobs.UserSendVerificationCodeForgotPassword.key, {
-      customer: {
-        data: customer.toRaw(),
-        config: config.toRaw(),
-      },
-      email: user?.email?.value,
+    const resetPasswordLink = new URL(
+      '/reset-password',
+      'http://localhost:3000/',
+    )
+    resetPasswordLink.searchParams.set('token', userToken.token)
+    resetPasswordLink.searchParams.set('code', userToken.code)
+
+    this.queueProvider.add(jobs.SendForgotPasswordCode.key, {
+      email: user.email.value,
       name: user.name,
-      commonName: user.commonName,
-      token: userToken.token,
-      code,
+      resetPasswordLink,
     })
   }
 }

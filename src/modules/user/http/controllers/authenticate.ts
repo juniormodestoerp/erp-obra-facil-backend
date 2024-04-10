@@ -10,7 +10,7 @@ import { UserViewModel } from '@modules/user/http/view-models/user-view-model'
 const bodySchema = z.object({
   email: z
     .string(strMessage('e-mail'))
-    .email('O campo e-mail é inválido.')
+    .email('O campo e-mail deve conter um endereço de email válido.')
     .min(1, 'O campo e-mail é obrigatório.'),
   password: z
     .string(strMessage('senha'))

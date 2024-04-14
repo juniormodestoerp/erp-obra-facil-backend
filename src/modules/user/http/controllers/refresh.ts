@@ -1,6 +1,8 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
+import { FastifyRequest } from 'fastify'
 
-export async function refresh(request: FastifyRequest, reply: FastifyReply) {
+import { RefreshReply } from '@modules/user/http/schemas/refresh'
+
+export async function refresh(request: FastifyRequest, reply: RefreshReply) {
   await request.jwtVerify({ onlyCookie: true })
 
   const { role } = request.user

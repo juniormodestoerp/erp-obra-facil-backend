@@ -1,0 +1,13 @@
+@baseUrl = http://localhost:3333/erp
+
+# @name authenticate
+POST {{baseUrl}}/user
+Content-Type: application/json
+
+{
+    "document": "09899291676",
+    "email": "bruno.clara@yahoo.com",
+    "name": "Bruno Vilefort Clara",
+    "password": "9431",
+    "phone": "+5531991505564"
+}

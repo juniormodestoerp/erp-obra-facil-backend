@@ -1,22 +1,13 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import { z } from 'zod'
+import { FastifyReply } from 'fastify'
 
-import { strMessage } from '@core/utils/custom-zod-error'
-
+import { DownloadFileRequest } from '@modules/file/http/schemas/download-file'
 import { makeDownloadFileUseCase } from '@modules/file/use-cases/factories/make-download-file'
 
-const paramsSchema = z.object({
-  id: z
-    .string(strMessage('id'))
-    .uuid({ message: 'O campo id deve ser um UUID válido.' })
-    .min(1, 'O campo id é obrigatório.'),
-})
-
 export async function downloadFile(
-  request: FastifyRequest,
+  request: DownloadFileRequest,
   reply: FastifyReply,
 ) {
-  const { id } = paramsSchema.parse(request.params)
+  const { id } = request.params
 
   const downloadFileUseCase = makeDownloadFileUseCase()
 

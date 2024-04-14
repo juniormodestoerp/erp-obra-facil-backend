@@ -1,6 +1,4 @@
 node_modules
-build
+dist
 .env
-coverage
-pgdata
-unzip_all.sh
+pnpm-lock.yaml

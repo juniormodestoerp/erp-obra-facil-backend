@@ -5,7 +5,7 @@ import { strMessage } from '@core/utils/custom-zod-error'
 import { Document } from '@core/domain/entities/value-object/document'
 import { Email } from '@core/domain/entities/value-object/email'
 
-import { makeSendForgotPasswordCode } from '@modules/user/use-cases/factories/make-send-forgot-password-code'
+import { makeSendForgotPasswordCodeUseCase } from '@modules/user/use-cases/factories/make-send-forgot-password-code'
 
 const bodySchema = z
   .object({
@@ -45,9 +45,11 @@ export async function sendForgotPasswordCode(
 ) {
   const { document, email } = bodySchema.parse(request.body)
 
-  const sendForgotPasswordCode = makeSendForgotPasswordCode()
+  const sendForgotPasswordCodeUseCase = makeSendForgotPasswordCodeUseCase()
 
-  await sendForgotPasswordCode.execute({
+  await sendForgotPasswordCodeUseCase.execute({
+    protocol: request.protocol,
+    hostname: request.hostname,
     document: document && new Document(document, 'CPF').value,
     email: email && new Email(email).value,
   })

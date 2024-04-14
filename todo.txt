@@ -1,0 +1,16 @@
+[] - Improve sentry implementation.
+[] - Add tests.
+[] - Implement SonarQube.
+[] - Implement Jenkins.
+[] - Implement Prometheus.
+[] - Implement Rest level 5.
+[] - Change redis to RabbitMQ.
+[] - Implement Grafana.
+[] - Implement Jaeger.
+[] - Implement Jaeger.
+[] - Implement Kubernetes.
+[] - Implement Docker.
+[] - Implement Helm.
+[] - Implement Terraform.
+[] - Implement Ansible.
+[] - Implement AWS.

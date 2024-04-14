@@ -17,7 +17,7 @@ export class AppError {
 
   public readonly code: ErrorKeys
 
-  public readonly status?: number
+  public readonly status: number
 
   public readonly data?: Array<unknown>
 

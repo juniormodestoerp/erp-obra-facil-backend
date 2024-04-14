@@ -24,6 +24,7 @@ const envSchema = z.object({
     strMessage('chave de acesso secreta do cloudflare'),
   ),
   BUCKET_NAME: z.string(strMessage('nome do bucket')),
+  SENTRY_DSN: z.string(strMessage('dsn do sentry')),
 })
 
 const _env = envSchema.safeParse(process.env)

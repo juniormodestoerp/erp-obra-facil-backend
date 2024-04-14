@@ -12,6 +12,8 @@ import { Queue } from '@shared/infra/providers/queue'
 import { jobs } from '@shared/infra/queue/jobs'
 
 interface Input {
+  protocol: string
+  hostname: string
   document: string | undefined
   email: string | undefined
 }
@@ -25,7 +27,12 @@ export class SendForgotPasswordCodeUseCase {
     private readonly queueProvider: Queue,
   ) {}
 
-  async execute({ document, email }: Input): Promise<Output> {
+  async execute({
+    protocol,
+    hostname,
+    document,
+    email,
+  }: Input): Promise<Output> {
     if ((document && email) || (!document && !email)) {
       throw new AppError({
         code: 'authenticate.invalid_credentials',
@@ -67,8 +74,7 @@ export class SendForgotPasswordCodeUseCase {
     await this.userTokenRepository.create(userToken)
 
     const resetPasswordLink = new URL(
-      '/reset-password',
-      'http://localhost:3000/',
+      `${protocol}://${hostname}/reset-password`,
     )
     resetPasswordLink.searchParams.set('token', userToken.token)
     resetPasswordLink.searchParams.set('code', userToken.code)

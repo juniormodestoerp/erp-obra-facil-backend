@@ -12,6 +12,6 @@ services:
 
   redis:
     image: redis:latest
-    command: redis-server --requirepass redispwd
+    command: redis-server --requirepass redispw
     ports:
       - 6379:6379

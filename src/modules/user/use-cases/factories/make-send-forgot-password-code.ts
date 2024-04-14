@@ -5,7 +5,7 @@ import { SendForgotPasswordCodeUseCase } from '@modules/user/use-cases/send-forg
 
 import { BullProvider } from '@shared/infra/providers/queue/bull'
 
-export function makeSendForgotPasswordCode() {
+export function makeSendForgotPasswordCodeUseCase() {
   const usersRepository = new PrismaUserRepository()
   const userTokenRepository = new PrismaUserTokensRepository()
   const queue = new BullProvider()

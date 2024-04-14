@@ -1,21 +1,37 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "_version": "20.1.0",
   "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
+    "lib": [
+      "es2023"
+    ],
+    "module": "node16",
+    "target": "es2022",
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@config/*": ["./src/config/*"],
-      "@core/*": ["./src/core/*"],
-      "@modules/*": ["./src/modules/*"],
-      "@shared/*": ["./src/shared/*"],
+      "@config/*": [
+        "./src/config/*"
+      ],
+      "@core/*": [
+        "./src/core/*"
+      ],
+      "@modules/*": [
+        "./src/modules/*"
+      ],
+      "@shared/*": [
+        "./src/shared/*"
+      ],
+      "@/*": [
+        "./src/*"
+      ]
     },
-    "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
+    "moduleResolution": "node16",
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     "jsx": "react"
-
   }
 }

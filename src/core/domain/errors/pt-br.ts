@@ -122,6 +122,12 @@ export const errors = {
     message: 'O campo senha é obrigatório.',
     status: StatusCode.BAD_REQUEST,
   },
+
+  'file.not_found': {
+    error: 'File not found!',
+    message: 'O arquivo solicitado não foi encontrado.',
+    status: StatusCode.BAD_REQUEST,
+  },
 }
 
 export type ErrorKeys = keyof typeof errors

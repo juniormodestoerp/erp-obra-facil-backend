@@ -12,7 +12,7 @@ interface Input {
   password: string
 }
 
-type Output = Promise<void>
+type Output = void
 
 export class ResetForgotPasswordUseCase {
   constructor(

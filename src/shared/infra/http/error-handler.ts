@@ -1,7 +1,8 @@
 import { FastifyInstance } from 'fastify'
 import { ZodError } from 'zod'
+import { MulterError } from 'fastify-multer'
 
-import { app } from '@shared/infra/http/app'
+// import { app } from '@shared/infra/http/app'
 import { env } from '@shared/infra/config/env'
 import { AppError } from '@core/domain/errors/app-error'
 
@@ -17,7 +18,18 @@ export const errorHandler: FastifyErrorHandler = async (
     console.error(error)
   } else {
     console.error(error)
-    app.Sentry.captureException(error)
+    // app.Sentry.captureException(error)
+  }
+
+  /* Authorization cookie */
+  if (error.code === 'FST_JWT_NO_AUTHORIZATION_IN_COOKIE') {
+    return reply.status(401).send({
+      code: 'authenticate.missing_authorization_cookie',
+      error: 'Missing authorization cookie',
+      message: 'Nenhum cookie de autorização foi encontrado na requisição.',
+      status: 401,
+      data: {},
+    })
   }
 
   /* Zod */
@@ -34,6 +46,18 @@ export const errorHandler: FastifyErrorHandler = async (
       message: primaryErrorMessage,
       data: error.format(),
     })
+  }
+
+  if (error instanceof MulterError && error.code === 'LIMIT_FILE_SIZE') {
+    const multerError = new AppError({
+      code: 'file.invalid_size',
+      error: 'File size limit exceeded',
+      message: 'O arquivo ter no máximo 10MB de tamanho.',
+      status: 400,
+      data: [],
+    })
+
+    return reply.status(multerError.status).send(multerError)
   }
 
   /* AppError */

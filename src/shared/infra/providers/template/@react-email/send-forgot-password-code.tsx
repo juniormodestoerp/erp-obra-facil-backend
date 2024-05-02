@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
+// import { readFileSync } from 'node:fs'
+// import { join } from 'node:path'
 import * as React from 'react'
 import {
   Body,
@@ -8,7 +8,6 @@ import {
   Head,
   Hr,
   Html,
-  Img,
   Link,
   Preview,
   Section,
@@ -18,22 +17,12 @@ import {
 
 import { ISendForgotPasswordVariables } from '@shared/infra/providers/template'
 
-const hardHatIconPath = join(__dirname, 'static', 'hard-hat-icon.png')
-const obraFacilLogoPath = join(__dirname, 'static', 'obra-facil-logo.png')
-
 export function SendForgotPasswordTemplate({
   name,
   userEmail,
   resetPasswordLink,
 }: ISendForgotPasswordVariables) {
-  const previewText = 'Obra Fácil | Recupere sua senha Obra Fácil'
-
-  const hardHatIconBase64 = readFileSync(hardHatIconPath, {
-    encoding: 'base64',
-  })
-  const obraFacilLogoBase64 = readFileSync(obraFacilLogoPath, {
-    encoding: 'base64',
-  })
+  const previewText = 'Odonto Mais | Recupere sua senha Odonto Mais'
 
   return (
     <Html lang="pt-BR">
@@ -44,32 +33,17 @@ export function SendForgotPasswordTemplate({
       <Tailwind>
         <Body className="bg-white my-auto mx-auto font-sans">
           <Container className="border border-solid border-gray-300 bg-sky-100/50 rounded my-[40px] mx-auto p-[20px] w-[465px]">
-            <Section className="mt-[32px] flex justify-center">
-              <div className="flex">
-                <Img
-                  src={obraFacilLogoBase64}
-                  alt="logo obra fácil"
-                  width="32"
-                  height="32"
-                />
-                <span className="text-2xl ml-1.5">Obra Fácil</span>
-              </div>
+            <Section className="mt-[32px] flex justify-center w-full text-center">
+              <span className="text-2xl mx-axuto text-center">Odonto Mais</span>
             </Section>
 
-            <Text className="text-black text-xl font-normal text-center flex justify-center p-0 my-[30px] mx-0">
-              Recuperação de senha Obra Fácil
-              <Img
-                src={hardHatIconBase64}
-                alt="icone de capacete de obra"
-                width="24"
-                height="24"
-                className="mt-0.5 ml-1"
-              />
+            <Text className="text-black text-xl font-normal text-center flex justify-center p-0 my-[30px] mx-auto">
+              Recuperação de senha
             </Text>
 
             <Text className="text-black text-[14px] leading-[24px]">
               Olá {name}! Você solicitou um link para recuperar sua senha no
-              Obra Fácil através do email
+              Odonto Mais através do email
               <span className="ml-1">{userEmail}</span>.
             </Text>
             <Section className="text-center mt-[32px] mb-[32px]">

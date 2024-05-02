@@ -11,6 +11,6 @@ app
   })
   .catch((error) => {
     console.error('Error running HTTP server.', error)
-    app.Sentry.captureException(error)
+    // app.Sentry.captureException(error)
     process.exit(1)
   })

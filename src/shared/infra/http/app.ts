@@ -1,15 +1,13 @@
 import fastify from 'fastify'
 import cookies from '@fastify/cookie'
 import cors from '@fastify/cors'
+import helmet from '@fastify/helmet'
 import jwt from '@fastify/jwt'
 import swagger from '@fastify/swagger'
 import swaggerUI from '@fastify/swagger-ui'
-import {
-  serializerCompiler,
-  validatorCompiler,
-} from 'fastify-type-provider-zod'
+import multer from 'fastify-multer'
 
-import CorsConfig from '@shared/infra/config/cors'
+import HelmetConfig from '@shared/infra/config/helmet'
 import JwtConfig from '@shared/infra/config/jwt'
 import { SwaggerConfig, SwaggerUIConfig } from '@shared/infra/config/swagger'
 import { AppRoutes } from '@shared/infra/http/routes'
@@ -17,14 +15,17 @@ import { errorHandler } from '@shared/infra/http/error-handler'
 
 export const app = fastify()
 
-app.setValidatorCompiler(validatorCompiler)
-app.setSerializerCompiler(serializerCompiler)
+app.register(cors, {
+  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  credentials: true,
+})
 
-app.register(cors, CorsConfig)
+app.register(cookies)
+app.register(helmet, HelmetConfig)
 app.register(swagger, SwaggerConfig)
 app.register(swaggerUI, SwaggerUIConfig)
-app.register(cookies)
 app.register(jwt, JwtConfig)
-app.register(AppRoutes, { prefix: 'erp' })
+app.register(multer.contentParser)
+app.register(AppRoutes, { prefix: 'api/v1' })
 
 app.setErrorHandler(errorHandler)

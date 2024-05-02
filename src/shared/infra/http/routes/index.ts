@@ -1,19 +1,19 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { FastifyInstance, FastifyRequest } from 'fastify'
-import fastifySentry from '@immobiliarelabs/fastify-sentry'
+// import fastifySentry from '@immobiliarelabs/fastify-sentry'
 import rateLimit from '@fastify/rate-limit'
 import Redis from 'ioredis'
 
 import RedisConfig from '@shared/infra/config/redis'
-import { env } from '@shared/infra/config/env'
+// import { env } from '@shared/infra/config/env'
 import { getRoutes } from '@shared/infra/http/routes/get-routes'
 
 export async function AppRoutes(app: FastifyInstance) {
-  app.register(fastifySentry, {
-    dsn: env.SENTRY_DSN,
-    environment: 'production',
-    release: '1.0.0',
-  })
+  // app.register(fastifySentry, {
+  //   dsn: env.SENTRY_DSN,
+  //   environment: 'production',
+  //   release: '1.0.0',
+  // })
 
   await app.register(rateLimit, {
     global: true,

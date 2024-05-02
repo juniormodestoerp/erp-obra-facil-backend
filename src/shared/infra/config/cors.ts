@@ -1,7 +1,6 @@
-import { FastifyCorsOptions } from '@fastify/cors'
+// import { FastifyCorsOptions } from '@fastify/cors'
 
-export default {
-  credentials: true,
-  allowedHeaders: ['content-type'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-} as FastifyCorsOptions
+// export default {
+//   origin: 'http://localhost:3000',
+//   credentials: true,
+// } as FastifyCorsOptions

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FastifyReply, FastifyRequest } from 'fastify'
 // import { User as UserPrisma } from '@prisma/client'
 
@@ -56,9 +57,17 @@ export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
       })
     }
 
-    request.user.data = user
-  } catch (err) {
-    console.log('3')
+    // request.user.sub = user
+  } catch (err: any) {
+    if (err.code === 'authenticate.missing_authorization_cookie') {
+      return reply.status(401).send({
+        code: 'authenticate.missing_authorization_cookie',
+        error: 'error.messag',
+        message: 'error.message',
+        status: 401,
+        data: {},
+      })
+    }
 
     return reply.status(401).send({
       code: 'auth.authorization',

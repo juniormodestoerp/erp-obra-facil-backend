@@ -20,6 +20,7 @@ model User {
   deletedAt DateTime?
 
   userTokens UserToken[]
+  settings   Setting[]
 
   @@map("users")
 }
@@ -49,4 +50,21 @@ model File {
   deletedAt   DateTime?
 
   @@map("files")
+}
+
+model Setting {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  fieldName       String    @map("field_name")
+  isFieldEnable   Boolean   @map("is_field_enable")
+  isFieldRequired Boolean   @map("is_field_required")
+  title           String
+  description     String
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+  deletedAt       DateTime? @map("deleted_at")
+  
+  User            User      @relation(fields: [userId], references: [id])
+
+  @@map("settings")
 }

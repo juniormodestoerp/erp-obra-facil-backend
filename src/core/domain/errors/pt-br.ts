@@ -128,6 +128,12 @@ export const errors = {
     message: 'O arquivo solicitado não foi encontrado.',
     status: StatusCode.BAD_REQUEST,
   },
+
+  'setting.not_found': {
+    error: 'Setting not found!',
+    message: 'A configuração solicitada não foi encontrada.',
+    status: StatusCode.BAD_REQUEST,
+  },
 }
 
 export type ErrorKeys = keyof typeof errors

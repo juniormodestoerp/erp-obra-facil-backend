@@ -2,8 +2,8 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 // import { User as UserPrisma } from '@prisma/client'
 
-import { User } from '@modules/user/entities/user'
-import { PrismaUserMapper } from '@modules/user/repositories/prisma/mappers/prisma-user-mapper'
+import { User } from '@modules/users/entities/user'
+import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
 import { prisma } from '@shared/infra/database/prisma'
 import { RedisCache } from '@shared/infra/providers/cache/redis'
 

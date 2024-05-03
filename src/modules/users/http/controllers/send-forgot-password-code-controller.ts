@@ -5,7 +5,7 @@ import { Document } from '@core/domain/entities/value-object/document'
 import { Email } from '@core/domain/entities/value-object/email'
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { makeSendForgotPasswordCodeUseCase } from '@modules/users/use-cases/factories/make-send-forgot-password-code'
+import { makeSendForgotPasswordCodeUseCase } from '@modules/users/use-cases/factories/make-send-forgot-password-code-factory'
 
 const schema = z
   .object({
@@ -39,7 +39,7 @@ const schema = z
     }
   })
 
-export async function sendForgotPasswordCode(
+export async function sendForgotPasswordCodeController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -54,5 +54,5 @@ export async function sendForgotPasswordCode(
     email: email && new Email(email).value,
   })
 
-  return reply.status(200).send()
+  return reply.status(204).send()
 }

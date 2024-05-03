@@ -11,11 +11,12 @@ interface Output {
   user: User
 }
 
-export class ProfileUseCase {
-  constructor(private userRepository: UsersRepository) {}
+export class ShowUserProfileUseCase {
+  constructor(private usersRepository: UsersRepository) {}
 
   async execute({ userId }: Input): Promise<Output> {
-    const user = await this.userRepository.findById(userId)
+    const user = await this.usersRepository.findById(userId)
+
     if (!user) {
       throw new AppError({
         code: 'user.not_found',

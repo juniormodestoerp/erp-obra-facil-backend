@@ -1,7 +1,7 @@
 import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-respository'
 import { PrismaUserTokensRepository } from '@modules/users/repositories/prisma/repositories/user-tokens-respository'
 
-import { SendForgotPasswordCodeUseCase } from '@modules/users/use-cases/send-forgot-password-code'
+import { SendForgotPasswordCodeUseCase } from '@modules/users/use-cases/send-forgot-password-code-use-case'
 
 import { BullProvider } from '@shared/infra/providers/queue/bull'
 

@@ -1,8 +1,8 @@
 import { Entity } from '@core/domain/entities/entity'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { Document } from '@core/domain/entities/value-object/document'
-import { Optional } from '@core/domain/types/opcional'
 import { Email } from '@core/domain/entities/value-object/email'
+import { Optional } from '@core/domain/types/opcional'
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -12,10 +12,12 @@ export enum UserRole {
 interface Props {
   name: string
   document: Document
-  password: string
   email: Email
   phone: string
+  birthDate: Date
+  password: string
   role: UserRole
+  status: string
   createdAt: Date
   updatedAt: Date
   deletedAt?: Date | null
@@ -34,24 +36,16 @@ export class User extends Entity<Props> {
     return this.props.document
   }
 
-  set document(document: string) {
-    this.props.document = new Document(document, 'CPF')
+  set document(document: Document) {
+    this.props.document = document
   }
 
   get email(): Email {
     return this.props.email
   }
 
-  set email(email: string) {
-    this.props.email = new Email(email)
-  }
-
-  get password(): string {
-    return this.props.password
-  }
-
-  set password(password: string) {
-    this.props.password = password
+  set email(email: Email) {
+    this.props.email = email
   }
 
   get phone(): string {
@@ -62,12 +56,36 @@ export class User extends Entity<Props> {
     this.props.phone = phone
   }
 
+  get birthDate(): Date {
+    return this.props.birthDate
+  }
+
+  set birthDate(birthDate: Date) {
+    this.props.birthDate = birthDate
+  }
+
+  get password(): string {
+    return this.props.password
+  }
+
+  set password(password: string) {
+    this.props.password = password
+  }
+
   get role(): UserRole {
     return this.props.role
   }
 
   set role(role: UserRole) {
     this.props.role = role
+  }
+
+  get status(): string {
+    return this.props.status
+  }
+
+  set status(status: string) {
+    this.props.status = status
   }
 
   get createdAt(): Date {
@@ -82,11 +100,11 @@ export class User extends Entity<Props> {
     this.props.updatedAt = updatedAt
   }
 
-  get deletedAt(): Date | undefined | null {
+  get deletedAt(): Date | null | undefined {
     return this.props.deletedAt
   }
 
-  set deletedAt(deletedAt: Date | undefined | null) {
+  set deletedAt(deletedAt: Date | null | undefined) {
     this.props.deletedAt = deletedAt
   }
 

@@ -12,16 +12,14 @@ interface Input {
   password: string
 }
 
-type Output = void
-
 export class ResetForgotPasswordUseCase {
   constructor(
-    private readonly userRepository: UsersRepository,
+    private readonly usersRepository: UsersRepository,
     private readonly userTokenRepository: UserTokensRepository,
     private readonly hash: Hash,
   ) {}
 
-  async execute({ token, code, password }: Input): Promise<Output> {
+  async execute({ token, code, password }: Input): Promise<void> {
     const userToken = await this.userTokenRepository.findByToken(token)
     if (!userToken) {
       throw new AppError({
@@ -53,7 +51,7 @@ export class ResetForgotPasswordUseCase {
       })
     }
 
-    const user = await this.userRepository.findById(userToken.userId)
+    const user = await this.usersRepository.findById(userToken.userId)
     if (!user) {
       throw new AppError({
         code: 'user.not_found',
@@ -63,7 +61,7 @@ export class ResetForgotPasswordUseCase {
     user.password = await this.hash.generate(password)
     userToken.usage = true
 
-    await this.userRepository.save(user)
+    await this.usersRepository.save(user)
     await this.userTokenRepository.save(userToken)
   }
 }

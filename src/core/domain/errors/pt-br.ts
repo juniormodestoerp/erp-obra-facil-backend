@@ -27,6 +27,24 @@ export const errors = {
     status: StatusCode.BAD_REQUEST,
   },
 
+  'authenticate.missing_authorization_cookie': {
+    error: 'Missing authorization cookie!',
+    message: 'Nenhum cookie de autorização foi encontrado na requisição.',
+    status: StatusCode.FORBIDDEN,
+  },
+
+  'authenticate.missing_refresh_token_cookie': {
+    error: 'Missing refresh token cookie!',
+    message: 'Nenhum cookie de refresh token foi encontrado na requisição.',
+    status: StatusCode.FORBIDDEN,
+  },
+
+  'authenticate.invalid_refresh_token': {
+    error: 'Invalid refresh token cookie!',
+    message: 'O cookie de refresh token é inválido ou está expirado.',
+    status: StatusCode.FORBIDDEN,
+  },
+
   'document.invalid': {
     error: 'Invalid document!',
     message: 'O número do documento é inválido.',
@@ -132,6 +150,18 @@ export const errors = {
   'setting.not_found': {
     error: 'Setting not found!',
     message: 'A configuração solicitada não foi encontrada.',
+    status: StatusCode.BAD_REQUEST,
+  },
+
+  'file.invalid_type': {
+    error: 'Invalid type!',
+    message: 'O arquivo deve estar no formato .png, .jpg ou .gif.',
+    status: StatusCode.BAD_REQUEST,
+  },
+
+  'file.invalid_size': {
+    error: 'File size limit exceeded!',
+    message: 'O arquivo ter no máximo 10MB de tamanho.',
     status: StatusCode.BAD_REQUEST,
   },
 }

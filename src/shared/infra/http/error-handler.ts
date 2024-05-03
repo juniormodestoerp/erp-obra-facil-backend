@@ -2,7 +2,6 @@ import { FastifyInstance } from 'fastify'
 import { ZodError } from 'zod'
 import { MulterError } from 'fastify-multer'
 
-// import { app } from '@shared/infra/http/app'
 import { env } from '@shared/infra/config/env'
 import { AppError } from '@core/domain/errors/app-error'
 
@@ -25,7 +24,7 @@ export const errorHandler: FastifyErrorHandler = async (
   if (error.code === 'FST_JWT_NO_AUTHORIZATION_IN_COOKIE') {
     return reply.status(401).send({
       code: 'authenticate.missing_authorization_cookie',
-      error: 'Missing authorization cookie',
+      error: 'Missing authorization cookie!',
       message: 'Nenhum cookie de autorização foi encontrado na requisição.',
       status: 401,
       data: {},

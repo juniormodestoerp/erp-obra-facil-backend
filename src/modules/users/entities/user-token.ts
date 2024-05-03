@@ -1,5 +1,6 @@
 import { Entity } from '@core/domain/entities/entity'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
+import { Optional } from '@core/domain/types/opcional'
 
 import { User } from '@modules/users/entities/user'
 
@@ -8,9 +9,9 @@ interface Props {
   token: string
   code: string
   usage: boolean
-  createdAt?: Date
-  updatedAt?: Date
-  deletedAt?: Date
+  createdAt: Date
+  updatedAt: Date
+  deletedAt: Date | null
 
   user?: User
 }
@@ -48,11 +49,11 @@ export class UserToken extends Entity<Props> {
     this.props.usage = usage
   }
 
-  get createdAt(): Date | undefined {
+  get createdAt(): Date {
     return this.props.createdAt
   }
 
-  get updatedAt(): Date | undefined {
+  get updatedAt(): Date {
     return this.props.updatedAt
   }
 
@@ -60,11 +61,11 @@ export class UserToken extends Entity<Props> {
     this.props.updatedAt = updatedAt
   }
 
-  get deletedAt(): Date | undefined {
+  get deletedAt(): Date | null {
     return this.props.deletedAt
   }
 
-  set deletedAt(deletedAt: Date) {
+  set deletedAt(deletedAt: Date | null) {
     this.props.deletedAt = deletedAt
   }
 
@@ -80,15 +81,18 @@ export class UserToken extends Entity<Props> {
     return this.props.user
   }
 
-  static create(props: Props, id?: UniqueEntityID) {
-    const userToken = new UserToken(
+  static create(
+    props: Optional<Props, 'createdAt' | 'updatedAt' | 'deletedAt'>,
+    id?: UniqueEntityID,
+  ): UserToken {
+    return new UserToken(
       {
-        createdAt: new Date(),
+        createdAt: props.createdAt ?? new Date(),
+        updatedAt: props.updatedAt ?? new Date(),
+        deletedAt: props.deletedAt ?? null,
         ...props,
       },
       id,
     )
-
-    return userToken
   }
 }

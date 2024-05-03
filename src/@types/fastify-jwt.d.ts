@@ -5,7 +5,7 @@ import { User } from '@modules/users/entities/user'
 declare module '@fastify/jwt' {
   export interface FastifyJWT {
     user: {
-      role: 'USER'
+      role: string
       sub: string
       data: User
     }

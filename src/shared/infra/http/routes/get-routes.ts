@@ -1,10 +1,12 @@
-import { existsSync, readdir, readdirSync } from 'fs'
-import { join } from 'path'
+import { existsSync, readdir, readdirSync } from 'node:fs'
+import { join } from 'node:path'
 
 type Output = string[] | null | undefined
 
 export async function getRoutes(): Promise<Output> {
   const directoryPath = join(__dirname, '..', '..', '..', '..', 'modules')
+  // ? join(__dirname, '..', '..', '..', 'modules') // production
+  // : join(__dirname, '..', '..', '..', '..', 'modules') // development
 
   const modulesRoutes = await new Promise((resolve) => {
     readdir(directoryPath, { withFileTypes: true }, (err, files) => {

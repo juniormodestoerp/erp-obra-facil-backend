@@ -1,7 +1,7 @@
 import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-respository'
 import { PrismaUserTokensRepository } from '@modules/users/repositories/prisma/repositories/user-tokens-respository'
 
-import { ResetForgotPasswordUseCase } from '@modules/users/use-cases/reset-forgot-password'
+import { ResetForgotPasswordUseCase } from '@modules/users/use-cases/reset-forgot-password-use-case'
 
 import { Bcrypt } from '@shared/infra/providers/hash/bcrypt'
 

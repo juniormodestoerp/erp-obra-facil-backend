@@ -3,14 +3,19 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "v20.12.2"
+  },
   "scripts": {
-    "dev": "tsx watch --env-file .env ./src/shared/infra/http/server.ts",
-    "queue:dev": "tsx src/shared/infra/queue/queue.ts",
-    "queue": "node build/shared/infra/queue/queue.js",
-    "database:seed": "tsx src/shared/infra/database/seed.ts",
-    "start": "node ./dist/shared/infra/http/server.js",
-    "build": "tsup src --out-dir dist",
-    "lint": "eslint src --ext .ts --fix"
+    "lint": "sh tools/lint.sh",
+    "build": "sh tools/build.sh",
+    "prisma:prep": "sh tools/prisma-prep.sh",
+    "database:seed": "sh tools/database-seed.sh",
+    "postbuild": "sh tools/postbuild.sh",
+    "start:dev": "sh tools/start-dev.sh",
+    "queue:dev": "sh tools/queue-dev.sh",
+    "start:prod": "sh tools/start-prod.sh",
+    "queue:prod": "sh tools/queue-prod.sh"
   },
   "prisma": {
     "seed": "tsx --env-file .env ./prisma/seed.ts"
@@ -19,8 +24,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-s3": "3.567.0",
-    "@aws-sdk/s3-request-presigner": "3.567.0",
+    "@aws-sdk/client-s3": "3.568.0",
+    "@aws-sdk/s3-request-presigner": "3.568.0",
     "@fastify/cookie": "9.3.1",
     "@fastify/cors": "9.0.1",
     "@fastify/helmet": "11.1.1",
@@ -39,6 +44,7 @@
     "fastify-multer": "2.0.3",
     "ioredis": "5.4.1",
     "nanoid": "5.0.7",
+    "react": "18.3.1",
     "react-email": "2.1.2",
     "resend": "3.2.0",
     "zod": "3.23.5"

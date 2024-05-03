@@ -1,11 +1,12 @@
+import { IFindManyDTO } from '@modules/users/dtos/find-many-dto'
 import { User } from '@modules/users/entities/user'
 
 export interface UsersRepository {
-  findById(userId: string): Promise<User | undefined>
-  findByDocument(document: string): Promise<User | undefined>
-  findByEmail(email: string): Promise<User | undefined>
-  findByPhone(phone: string): Promise<User | undefined>
-  create(user: User): Promise<void>
+  findById(id: string): Promise<User | null>
+  findByDocument(document: string): Promise<User | null>
+  findByEmail(email: string): Promise<User | null>
+  findByPhone(phone: string): Promise<User | null>
+  findMany({ pageIndex, role }: IFindManyDTO): Promise<User[]>
   save(user: User): Promise<void>
-  // delete(userId: string): Promise<void>
+  remove(id: string): Promise<void>
 }

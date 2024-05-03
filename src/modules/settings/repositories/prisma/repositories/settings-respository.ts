@@ -38,7 +38,6 @@ export class PrismaSettingsRepository implements SettingsRepository {
     const settings = await this.repository.setting.findMany({
       where: {
         userId,
-        deletedAt: null,
       },
       skip,
       take: env.PER_PAGE,

@@ -22,7 +22,7 @@ export async function removeSetting(
 
   await removeSettingUseCase.execute({
     id,
-    userId: request.user.sub,
+    userId: 'eb15bdac-beec-4a37-b749-5a05b7fbc10c',
   })
 
   return reply.status(204).send()

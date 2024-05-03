@@ -1,17 +1,17 @@
 import { User } from '@modules/users/entities/user'
 
 export class UserViewModel {
-  static async toHTTP(user: User) {
+  static toHTTP(user: User) {
     return {
       id: user.id,
-      document: user.document.value,
       name: user.name,
+      document: user.document.value,
       email: user.email.value,
       phone: user.phone,
+      birthDate: user.birthDate,
       role: user.role,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-      deletedAt: user.deletedAt,
+      status: user.status,
+      createdAt: user.createdAt.toISOString(),
     }
   }
 }

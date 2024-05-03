@@ -33,5 +33,6 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "jsx": "react"
-  }
+  },
+  "include": ["src", "prisma/seed.ts"]
 }

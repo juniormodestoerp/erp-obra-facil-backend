@@ -1,7 +1,7 @@
 import { Setting } from '@modules/settings/entities/setting'
 
 export class SettingViewModel {
-  static async toHTTP(setting: Setting) {
+  static toHTTP(setting: Setting) {
     return {
       id: setting.id,
       userId: setting.userId,

@@ -24,10 +24,10 @@ const bodySchema = z.object({
   isFieldRequired: z.boolean(boolMessage('campo obrigatório')),
   title: z.string(strMessage('título')),
   description: z.string(strMessage('descrição')),
-  createdAt: z.date(dateMessage('data de criação')),
+  createdAt: z.coerce.date(dateMessage('data de criação')),
 })
 
-export async function createSetting(
+export async function saveSetting(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -39,7 +39,7 @@ export async function createSetting(
 
   const { setting } = await saveSettingUseCase.execute({
     id,
-    userId: request.user.sub,
+    userId: 'eb15bdac-beec-4a37-b749-5a05b7fbc10c',
     fieldName,
     isFieldEnable,
     isFieldRequired,

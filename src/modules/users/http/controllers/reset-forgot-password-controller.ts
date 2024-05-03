@@ -3,7 +3,7 @@ import z from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { makeResetForgotPasswordUseCase } from '@modules/users/use-cases/factories/make-reset-forgot-password'
+import { makeResetForgotPasswordUseCase } from '@modules/users/use-cases/factories/make-reset-forgot-password-factory'
 
 const schema = z.object({
   token: z
@@ -23,7 +23,7 @@ const schema = z.object({
     }),
 })
 
-export async function resetForgotPassword(
+export async function resetForgotPasswordController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -37,5 +37,5 @@ export async function resetForgotPassword(
     password,
   })
 
-  return reply.status(200).send()
+  return reply.status(204).send()
 }

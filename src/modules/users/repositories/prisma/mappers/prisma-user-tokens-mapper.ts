@@ -27,7 +27,7 @@ export class PrismaUserTokenMapper {
         usage: raw.usage,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
-        deletedAt: raw.deletedAt ?? undefined,
+        deletedAt: raw.deletedAt,
       },
       new UniqueEntityID(raw.id),
     )

@@ -18,36 +18,29 @@ interface Input {
   email: string | undefined
 }
 
-type Output = void
-
 export class SendForgotPasswordCodeUseCase {
   constructor(
-    private readonly userRepository: UsersRepository,
+    private readonly usersRepository: UsersRepository,
     private readonly userTokenRepository: UserTokensRepository,
     private readonly queueProvider: Queue,
   ) {}
 
-  async execute({
-    protocol,
-    hostname,
-    document,
-    email,
-  }: Input): Promise<Output> {
+  async execute({ protocol, document, email }: Input): Promise<void> {
     if ((document && email) || (!document && !email)) {
       throw new AppError({
         code: 'authenticate.invalid_credentials',
       })
     }
 
-    let user: User | undefined
+    let user: User | null = null
 
     if (document && !email) {
-      user = await this.userRepository.findByDocument(document)
+      user = await this.usersRepository.findByDocument(document)
     } else if (email && !document) {
-      user = await this.userRepository.findByEmail(email)
+      user = await this.usersRepository.findByEmail(email)
     }
 
-    if (!user) {
+    if (user === null) {
       throw new AppError({
         code: 'user.not_found',
       })
@@ -74,7 +67,7 @@ export class SendForgotPasswordCodeUseCase {
     await this.userTokenRepository.create(userToken)
 
     const resetPasswordLink = new URL(
-      `${protocol}://${hostname}/reset-password`,
+      `${protocol}://localhost:3000/reset-password`,
     )
     resetPasswordLink.searchParams.set('token', userToken.token)
     resetPasswordLink.searchParams.set('code', userToken.code)

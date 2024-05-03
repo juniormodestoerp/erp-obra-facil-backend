@@ -25,7 +25,7 @@ export async function fetchSettings(
 
   const { settings, totalCount } = await fetchSettingsUseCase.execute({
     pageIndex,
-    userId: request.user.sub,
+    userId: 'eb15bdac-beec-4a37-b749-5a05b7fbc10c',
   })
 
   return reply.status(200).send({

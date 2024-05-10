@@ -30,7 +30,7 @@ const prismaConfig: Options = {
   splitting: false,
   sourcemap: true,
   clean: true,
-  format: ['cjs'],
+  format: ['esm'],
   loader: {
     '.prisma': 'copy',
   },

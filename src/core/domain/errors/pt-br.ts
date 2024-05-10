@@ -164,6 +164,12 @@ export const errors = {
     message: 'O arquivo ter no máximo 10MB de tamanho.',
     status: StatusCode.BAD_REQUEST,
   },
+
+  'transaction.not_found': {
+    error: 'Transaction not found!',
+    message: 'O lançamento solicitado não foi encontrado.',
+    status: StatusCode.BAD_REQUEST,
+  },
 }
 
 export type ErrorKeys = keyof typeof errors

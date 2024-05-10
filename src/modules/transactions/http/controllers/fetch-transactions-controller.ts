@@ -3,8 +3,8 @@ import z from 'zod'
 
 import { numbMessage } from '@core/utils/custom-zod-error'
 
-import { makeFetchSettingsUseCase } from '@modules/settings/use-cases/factories/make-fetch-settings'
-import { SettingViewModel } from '@modules/settings/http/view-models/setting-view-model'
+import { makeFetchTransactionsUseCase } from '@modules/transactions/use-cases/factories/make-fetch-transactions-factory'
+import { TransactionViewModel } from '@modules/transactions/http/view-models/transaction-view-model'
 
 import { env } from '@shared/infra/config/env'
 
@@ -15,21 +15,23 @@ const querySchema = z.object({
     .default(1),
 })
 
-export async function fetchSettings(
+export async function fetchTransactions(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   const { pageIndex } = querySchema.parse(request.query)
 
-  const fetchSettingsUseCase = makeFetchSettingsUseCase()
+  const fetchTransactionsUseCase = makeFetchTransactionsUseCase()
 
-  const { settings, totalCount } = await fetchSettingsUseCase.execute({
+  const { transactions, totalCount } = await fetchTransactionsUseCase.execute({
     pageIndex,
     userId: request.user.sub,
   })
 
   return reply.status(200).send({
-    settings: settings.map((setting) => SettingViewModel.toHTTP(setting) ?? []),
+    transactions: transactions.map(
+      (transaction) => TransactionViewModel.toHTTP(transaction) ?? [],
+    ),
     meta: {
       pageIndex,
       perPage: env.PER_PAGE,

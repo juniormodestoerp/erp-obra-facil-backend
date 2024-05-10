@@ -1,16 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { join } from 'node:path'
+import path from 'path'
 import { existsSync, mkdirSync } from 'node:fs'
 import multer from 'fastify-multer'
+import { env } from '@shared/infra/config/env'
 
-const basePath = join(__dirname, '..', '..', '..', '..', 'uploads')
-if (!existsSync(basePath)) {
-  mkdirSync(basePath, { recursive: true })
+/**
+ * Check if the environment is production
+ * If it is, the basePath will be the root of the project
+ * If it is not, the basePath will be the root of the dist folder
+ *
+ * node: __dirname: /usr/src/app/dist/shared/infra/http
+ * tsx: __dirname: /usr/src/app/src/shared/infra/http/routes
+ */
+const isProduction = env.NODE_ENV === 'production'
+const basePath = isProduction
+  ? path.join(__dirname, '..', '..', '..')
+  : path.join(__dirname, '..', '..', '..', '..')
+const directoryPath = path.join(basePath, 'uploads')
+
+if (!existsSync(directoryPath)) {
+  mkdirSync(directoryPath, { recursive: true })
 }
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, basePath)
+    cb(null, directoryPath)
   },
   filename: (req, file, cb) => {
     const uniqueIdentifier = import('nanoid')

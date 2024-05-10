@@ -16,7 +16,7 @@ services:
         - BUILD_ENV=${BUILD_ENV:-dev}
         - NODE_ENV=${NODE_ENV:-development}
       dockerfile: Containerfile
-    image: registry.gitlab.com/brunovilefort/obrafacil/obrafacil-server:${NODE_ENV}
+    image: ghcr.io/juniormodestoerp/erp-obra-facil-backend:${NODE_ENV}
     container_name: obrafacil-app
     env_file:
       - .env
@@ -44,7 +44,7 @@ services:
       - postgres
 
   queue:
-    image: registry.gitlab.com/brunovilefort/obrafacil/obrafacil-server:${NODE_ENV}
+    image: ghcr.io/juniormodestoerp/erp-obra-facil-backend:${NODE_ENV}
     container_name: obrafacil-queue
     command: ["npm", "run", "queue:${BUILD_ENV}"]
     restart: always

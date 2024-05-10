@@ -26,8 +26,10 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  userTokens UserToken[]
-  settings   Setting[]
+  userTokens  UserToken[]
+  settings    Setting[]
+  categories  Category[]
+  Transaction Transaction[]
 
   @@map("users")
 }
@@ -74,4 +76,46 @@ model Setting {
   User User @relation(fields: [userId], references: [id])
 
   @@map("settings")
+}
+
+model Category {
+  id          String    @id @default(uuid())
+  categoryId  String?   @map("categories_id")
+  userId      String    @map("user_id")
+  name        String
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  relatedCategories Category[] @relation("ParentChild")
+
+  user        User          @relation(fields: [userId], references: [id])
+  categories  Category?     @relation("ParentChild", fields: [categoryId], references: [id])
+  Transaction Transaction[]
+
+  @@map("categories")
+}
+
+model Transaction {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  transactionId String? @map("transaction_id")
+  categoryId  String    @map("category_id")
+  name        String
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  // description String
+  // value       Float
+  // type        String
+  // createdAt   DateTime  @default(now()) @map("created_at")
+  // updatedAt   DateTime  @updatedAt @map("updated_at")
+  // deletedAt   DateTime? @map("deleted_at")
+
+  user     User     @relation(fields: [userId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@map("transactions")
 }

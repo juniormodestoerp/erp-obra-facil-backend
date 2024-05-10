@@ -6,6 +6,6 @@ export interface SettingsRepository {
   findById({ id, userId }: IFindByIdDTO): Promise<Setting | null>
   findMany({ pageIndex, userId }: IFindManyDTO): Promise<Setting[]>
   count(): Promise<number>
-  save(contact: Setting): Promise<Setting>
+  save(contact: Setting): Promise<void>
   remove(id: string): Promise<void>
 }

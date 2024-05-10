@@ -53,6 +53,7 @@ COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/.npmrc ./
 COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/dist ./dist
 COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/tools ./tools
 COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/prisma ./prisma
+COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/uploads ./uploads
 COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/package*.json ./
 COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/node_modules ./node_modules
 

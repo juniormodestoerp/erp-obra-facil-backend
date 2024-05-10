@@ -1,7 +1,7 @@
 import { resend } from '@shared/infra/providers/mail/resend'
-import { jobs } from '@shared/infra/queue/jobs'
-import { SendForgotPasswordTemplate } from '@shared/infra/providers/template'
 import { QueueProps, Runnable } from '@shared/infra/providers/queue'
+import { SendForgotPasswordTemplate } from '@shared/infra/providers/template'
+import { jobs } from '@shared/infra/queue/jobs'
 
 interface DataJob {
   email: string
@@ -19,9 +19,9 @@ export class SendForgotPasswordCode extends Runnable {
 
     ;(async function () {
       const { error } = await resend.emails.send({
-        from: 'marcos.soares@hadrontech.com.br',
+        from: 'bruno.clara@yahoo.com',
         to: email,
-        subject: '[Odonto Mais] Link para recuperação de senha',
+        subject: '[Obra Fácil] Link para recuperação de senha',
         react: SendForgotPasswordTemplate({
           name,
           userEmail: email,

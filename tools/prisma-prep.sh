@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export DATABASE_URL="${DB_CONNECTION}://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_DATABASE}?schema=public"
+
 # Espera até que o banco de dados esteja pronto (opcional)
 echo "Aguardando o banco de dados estar pronto..."
 sleep 2
@@ -28,13 +30,26 @@ prisma_db_push() {
     npx prisma db push
 }
 
+# Função para executar as migrations do Prisma para o banco de dados
+prisma_migrate_deploy() {
+    echo "Executando as migrations do Prisma para o banco de dados..."
+    npx prisma migrate deploy
+}
+
 # Função para popular o banco de dados
 seed_database() {
     echo "Populando banco de dados..."
     npm run database:seed
 }
 
+#
 # Executar funções
+#
+
 prisma_generate
-prisma_db_push
+#
+# Desabilitado pois está sendo utilizado o Prisma Migration Deploy
+# prisma_db_push
+#
+prisma_migrate_deploy
 seed_database

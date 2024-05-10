@@ -8,7 +8,7 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('production'),
   PER_PAGE: z.coerce
     .number(numbMessage('quantidade de itens por página'))
-    .default(20),
+    .default(12),
   PORT: z.coerce.number(numbMessage('porta da api')).default(3333),
   JWT_SECRET: z.string(strMessage('segredo jwt')),
   DATABASE_URL: z.string(strMessage('url do banco de dados')),

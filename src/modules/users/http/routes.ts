@@ -1,5 +1,6 @@
 import { FastifyInstance } from 'fastify'
 
+import { authGuardController } from '@modules/users/http/controllers/auth-guard-controller'
 import { authenticateUserController } from '@modules/users/http/controllers/authenticate-user-controller'
 import { logoutUserController } from '@modules/users/http/controllers/logout-user-controller'
 import { removeUserController } from '@modules/users/http/controllers/remove-user-controller'
@@ -11,6 +12,7 @@ import { showUserProfileController } from '@modules/users/http/controllers/show-
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
 export async function Router(app: FastifyInstance) {
+  app.get('/auth-guard', { onRequest: [verifyJwt] }, authGuardController)
   app.get(
     '/users/profile',
     { onRequest: [verifyJwt] },

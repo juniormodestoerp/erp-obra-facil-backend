@@ -1,17 +1,112 @@
-version: '3.8'
+version: '3'
+
+networks:
+  obrafacil:
+    driver: bridge
+
+volumes:
+  redis-data:
+  postgres-data:
 
 services:
-  database-pg:
-    image: bitnami/postgresql
-    ports:
-      - 5432:5432
+  app:
+    build:
+      context: .
+      args:
+        - BUILD_ENV=${BUILD_ENV:-dev}
+        - NODE_ENV=${NODE_ENV:-development}
+      dockerfile: Containerfile
+    image: registry.gitlab.com/brunovilefort/obrafacil/obrafacil-server:${NODE_ENV}
+    container_name: obrafacil-app
+    env_file:
+      - .env
     environment:
-      - POSTGRESQL_USERNAME=postgres
-      - POSTGRESQL_PASSWORD=docker
-      - POSTGRESQL_DATABASE=obra-facil
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      BUILD_ENV: "${BUILD_ENV:-dev}"
+      NODE_ENV: "${NODE_ENV:-development}"
+    user: "1000"
+    ports:
+      - "${PORT:-8080}:8080"
+      - "${PORT_SSL:-8443}:8443"
+    networks:
+      - obrafacil
+    volumes:
+      - ./:/usr/src/app:z
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT:-8080}/docs/static/index.html"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      - redis
+      - postgres
+
+  queue:
+    image: registry.gitlab.com/brunovilefort/obrafacil/obrafacil-server:${NODE_ENV}
+    container_name: obrafacil-queue
+    command: ["npm", "run", "queue:${BUILD_ENV}"]
+    restart: always
+    environment:
+      DB_HOST: postgres
+      REDIS_HOST: redis
+      BUILD_ENV: "${BUILD_ENV:-dev}"
+      NODE_ENV: "${NODE_ENV:-development}"
+    user: "1000"
+    networks:
+      - obrafacil
+    depends_on:
+      - redis
+      - postgres
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: obrafacil-postgres
+    shm_size: 1gb
+    command: [
+      "postgres",
+      "-c", "listen_addresses=*",
+      "-c", "max_connections=200",
+      "-c", "shared_buffers=256MB"
+    ]
+    ports:
+      - "${DB_EXTERNAL_PORT:-5432}:5432"
+    environment:
+      LANG: pt_BR.utf8
+      POSTGRES_INITDB_ARGS: "--locale-provider=icu --icu-locale=pt_BR"
+      POSTGRES_DB: "${DB_DATABASE:-obrafacil}"
+      POSTGRES_USER: "${DB_USERNAME:-obrafacil}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD:-obrafacil}"
+    volumes:
+      - type: volume
+        source: postgres-data
+        target: /var/lib/postgresql/data
+    networks:
+      - obrafacil
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ${DB_DATABASE:-obrafacil}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   redis:
-    image: redis:latest
-    command: redis-server --requirepass redispw
+    image: redis:alpine
+    container_name: obrafacil-redis
+    command: ["redis-server", "--requirepass", "${REDIS_PASS:-obrafacil}", "--maxmemory", "256mb", "--maxmemory-policy", "allkeys-lru"]
+    restart: always
     ports:
-      - 6379:6379
+      - "${REDIS_EXTERNAL_PORT:-6379}:6379"
+    volumes:
+      - type: volume
+        source: redis-data
+        target: /data
+    networks:
+      - obrafacil
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s

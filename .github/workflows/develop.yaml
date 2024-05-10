@@ -1,0 +1,100 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - develop
+
+env:
+  BUILD_ENV: dev
+  NODE_ENV: development
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        node-version: ['20.12.2']
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    # - name: Download artifacts from test job
+    #   uses: actions/download-artifact@v3
+    #   with:
+    #     name: test-artifacts
+    #     path: path/to/downloaded/artifacts
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Run tests
+      run: echo "// TODO add npm test \\"
+
+    # - name: Archive production artifacts
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: test-artifacts
+    #     path: path/to/test/output
+
+  build_and_deploy_registry:
+    needs: test
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      attestations: write
+
+    strategy:
+      matrix:
+        node-version: ['20.12.2']
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Log in to the Container registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        #images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+        
+    - name: Build and push Docker image
+      id: push
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        build-args: |
+          NODE_ENV=${{ env.NODE_ENV }}
+          BUILD_ENV=${{ env.BUILD_ENV }}
+        file: ./Containerfile
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+
+    # - name: Generate artifact attestation
+    #   uses: actions/attest-build-provenance@v1
+    #   with:
+    #     subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+    #     subject-digest: ${{ steps.push.outputs.digest }}
+    #     push-to-registry: true

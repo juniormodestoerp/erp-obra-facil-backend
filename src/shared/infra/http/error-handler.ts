@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify'
 import { ZodError } from 'zod'
 import { MulterError } from 'fastify-multer'
 
+// import { app } from '@shared/infra/http/app'
 import { env } from '@shared/infra/config/env'
 import { AppError } from '@core/domain/errors/app-error'
 

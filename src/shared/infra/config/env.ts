@@ -9,7 +9,7 @@ const envSchema = z.object({
   PER_PAGE: z.coerce
     .number(numbMessage('quantidade de itens por página'))
     .default(12),
-  PORT: z.coerce.number(numbMessage('porta da api')).default(3333),
+  PORT: z.coerce.number(numbMessage('porta da api')).default(8080),
   JWT_SECRET: z.string(strMessage('segredo jwt')),
   DATABASE_URL: z.string(strMessage('url do banco de dados')),
   REDIS_PORT: z.coerce.number(numbMessage('porta do redis')),

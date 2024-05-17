@@ -2,8 +2,6 @@ import { Entity } from '@core/domain/entities/entity'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { Optional } from '@core/domain/types/opcional'
 
-import { User } from '@modules/users/entities/user'
-
 interface Props {
   userId: string
   fieldName: string
@@ -13,9 +11,7 @@ interface Props {
   description: string
   createdAt: Date
   updatedAt: Date
-  deletedAt?: Date | null
-
-  user?: User
+  deletedAt: Date | null
 }
 
 export class Setting extends Entity<Props> {
@@ -83,20 +79,12 @@ export class Setting extends Entity<Props> {
     this.props.updatedAt = updatedAt
   }
 
-  get deletedAt(): Date | null | undefined {
+  get deletedAt(): Date | null {
     return this.props.deletedAt
   }
 
-  set deletedAt(deletedAt: Date | null | undefined) {
+  set deletedAt(deletedAt: Date | null) {
     this.props.deletedAt = deletedAt
-  }
-
-  get user(): User | undefined {
-    return this.props.user
-  }
-
-  set user(user: User | undefined) {
-    this.props.user = user
   }
 
   static create(

@@ -5,8 +5,8 @@ import { Setting } from '@modules/settings/entities/setting'
 import { SettingsRepository } from '@modules/settings/repositories/settings-repository'
 import { UsersRepository } from '@modules/users/repositories/user-repository'
 
-type Input = {
-  id?: string
+interface Input {
+  id: string
   userId: string
   fieldName: string
   isFieldEnable: boolean
@@ -15,7 +15,7 @@ type Input = {
   description: string
 }
 
-type Output = {
+interface Output {
   setting: Setting
 }
 
@@ -34,10 +34,24 @@ export class SaveSettingUseCase {
     title,
     description,
   }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById(userId)
+    const user = await this.usersRepository.findById({
+      id: userId,
+    })
+
     if (!user) {
       throw new AppError({
         code: 'user.not_found',
+      })
+    }
+
+    const previusSetting = await this.settingsRepository.findById({
+      userId,
+      id,
+    })
+
+    if (!previusSetting) {
+      throw new AppError({
+        code: 'setting.not_found',
       })
     }
 
@@ -52,6 +66,7 @@ export class SaveSettingUseCase {
       },
       new UniqueEntityID(id),
     )
+
     await this.settingsRepository.save(setting)
 
     return {

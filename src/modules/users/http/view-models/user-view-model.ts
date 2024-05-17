@@ -5,10 +5,10 @@ export class UserViewModel {
     return {
       id: user.id,
       name: user.name,
-      document: user.document.value,
-      email: user.email.value,
+      document: user.document,
+      email: user.email,
       phone: user.phone,
-      birthDate: user.birthDate,
+      birthDate: user.birthDate.toISOString(),
       role: user.role,
       status: user.status,
       createdAt: user.createdAt.toISOString(),

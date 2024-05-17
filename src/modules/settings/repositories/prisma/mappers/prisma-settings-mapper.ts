@@ -30,18 +30,10 @@ export class PrismaSettingsMapper {
         title: raw.title,
         description: raw.description,
         createdAt: raw.createdAt,
-        updatedAt: raw.updatedAt,
-        deletedAt: raw.deletedAt,
+        updatedAt: raw.createdAt,
+        deletedAt: raw.createdAt ?? undefined,
       },
       new UniqueEntityID(raw.id),
     )
-  }
-
-  static toPrismaArray(settings: Setting[]): RawSetting[] {
-    return settings.map(this.toPrisma)
-  }
-
-  static toDomainArray(rawSettings: RawSetting[]): Setting[] {
-    return rawSettings.map(this.toDomain)
   }
 }

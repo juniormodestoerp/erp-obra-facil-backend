@@ -170,6 +170,12 @@ export const errors = {
     message: 'O lançamento solicitado não foi encontrado.',
     status: StatusCode.BAD_REQUEST,
   },
+
+  'category.not_found': {
+    error: 'Category not found!',
+    message: 'A categoria solicitada não foi encontrada.',
+    status: StatusCode.BAD_REQUEST,
+  },
 }
 
 export type ErrorKeys = keyof typeof errors

@@ -4,12 +4,12 @@ import { Transaction } from '@modules/transactions/entities/transaction'
 import { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
 import { UsersRepository } from '@modules/users/repositories/user-repository'
 
-type Input = {
+interface Input {
   pageIndex: number
   userId: string
 }
 
-type Output = {
+interface Output {
   transactions: Transaction[]
   totalCount: number
 }

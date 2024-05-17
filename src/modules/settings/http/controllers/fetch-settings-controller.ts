@@ -23,8 +23,6 @@ export async function fetchSettings(
 
   const fetchSettingsUseCase = makeFetchSettingsUseCase()
 
-  console.log('fetchSettingsUseCase', 'CHEGOUUUUUUU')
-
   const { settings, totalCount } = await fetchSettingsUseCase.execute({
     pageIndex,
     userId: request.user.sub,

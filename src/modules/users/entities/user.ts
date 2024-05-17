@@ -1,8 +1,8 @@
 import { Entity } from '@core/domain/entities/entity'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
+import { Document } from '@core/domain/entities/value-object/document'
+import { Email } from '@core/domain/entities/value-object/email'
 import { Optional } from '@core/domain/types/opcional'
-
-import { Setting } from '@modules/settings/entities/setting'
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -11,8 +11,8 @@ export enum UserRole {
 
 interface Props {
   name: string
-  document: string
-  email: string
+  document: Document
+  email: Email
   phone: string
   birthDate: Date
   password: string
@@ -20,9 +20,7 @@ interface Props {
   status: string
   createdAt: Date
   updatedAt: Date
-  deletedAt: Date | null
-
-  settings: Setting[]
+  deletedAt?: Date | null
 }
 
 export class User extends Entity<Props> {
@@ -34,19 +32,19 @@ export class User extends Entity<Props> {
     this.props.name = name
   }
 
-  get document(): string {
+  get document(): Document {
     return this.props.document
   }
 
-  set document(document: string) {
+  set document(document: Document) {
     this.props.document = document
   }
 
-  get email(): string {
+  get email(): Email {
     return this.props.email
   }
 
-  set email(email: string) {
+  set email(email: Email) {
     this.props.email = email
   }
 
@@ -102,20 +100,12 @@ export class User extends Entity<Props> {
     this.props.updatedAt = updatedAt
   }
 
-  get deletedAt(): Date | null {
+  get deletedAt(): Date | null | undefined {
     return this.props.deletedAt
   }
 
-  set deletedAt(deletedAt: Date | null) {
+  set deletedAt(deletedAt: Date | null | undefined) {
     this.props.deletedAt = deletedAt
-  }
-
-  get settings(): Setting[] {
-    return this.props.settings
-  }
-
-  set settings(settings: Setting[]) {
-    this.props.settings = settings
   }
 
   static create(

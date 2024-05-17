@@ -14,7 +14,8 @@ const paramsSchema = z.object({
   id: z
     .string(strMessage('id das configurações'))
     .uuid({ message: 'O campo id das configurações deve ser um UUID válido.' })
-    .min(1, 'O campo id das configurações é obrigatório.'),
+    .min(1, 'O campo id das configurações é obrigatório.')
+    .optional(),
 })
 
 const bodySchema = z.object({
@@ -38,7 +39,7 @@ export async function saveSetting(
 
   const { setting } = await saveSettingUseCase.execute({
     id,
-    userId: request.user.sub,
+    userId: 'eb15bdac-beec-4a37-b749-5a05b7fbc10c',
     fieldName,
     isFieldEnable,
     isFieldRequired,

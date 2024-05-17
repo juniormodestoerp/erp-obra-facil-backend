@@ -65,7 +65,7 @@ export class Transaction extends Entity<Props> {
     return this.props.deletedAt
   }
 
-  set deletedAt(deletedAt: Date | null | undefined) {
+  set deletedAt(deletedAt: Date | null) {
     this.props.deletedAt = deletedAt
   }
 

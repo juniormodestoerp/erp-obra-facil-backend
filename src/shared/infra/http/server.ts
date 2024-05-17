@@ -9,3 +9,8 @@ app
   .then(() => {
     console.log('🔥 HTTP server running! - pid:', process.pid)
   })
+  .catch((error) => {
+    console.error('Error running HTTP server.', error)
+    // app.Sentry.captureException(error)
+    process.exit(1)
+  })

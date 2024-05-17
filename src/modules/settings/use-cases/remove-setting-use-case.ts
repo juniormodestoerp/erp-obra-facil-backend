@@ -2,12 +2,12 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import { SettingsRepository } from '@modules/settings/repositories/settings-repository'
 
-type Input = {
+interface Input {
   id: string
   userId: string
 }
 
-type Output = void
+interface Output void
 
 export class RemoveSettingUseCase {
   constructor(private readonly settingsRepository: SettingsRepository) {}

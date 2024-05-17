@@ -1,12 +1,11 @@
-import { IFindSettingByIdDTO } from '@modules/settings/dtos/find-setting-by-id-dto'
-import { IFindSettingsByUserIdDTO } from '@modules/settings/dtos/find-settings-by-userid-dto'
-import { IFindManySettingsDTO } from '@modules/settings/dtos/find-many-settings-dto'
+import { IFindByIdDTO } from '@modules/settings/dtos/find-by-id-dto'
+import { IFindManyDTO } from '@modules/settings/dtos/find-many-dto'
 import { Setting } from '@modules/settings/entities/setting'
 
 export interface SettingsRepository {
-  findById({ userId, id }: IFindSettingByIdDTO): Promise<Setting | null>
-  findMany({ pageIndex, userId }: IFindManySettingsDTO): Promise<Setting[]>
+  findById({ id, userId }: IFindByIdDTO): Promise<Setting | null>
+  findMany({ pageIndex, userId }: IFindManyDTO): Promise<Setting[]>
   count(): Promise<number>
-  save(settings: Setting): Promise<void>
-  remove({ userId }: IFindSettingsByUserIdDTO): Promise<void>
+  save(contact: Setting): Promise<void>
+  remove(id: string): Promise<void>
 }

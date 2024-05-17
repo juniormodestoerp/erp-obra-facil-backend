@@ -53,7 +53,6 @@ COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/.npmrc ./
 COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/dist ./dist
 COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/tools ./tools
 COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/prisma ./prisma
-COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/uploads ./uploads
 COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/package*.json ./
 COPY --chown=${USER_UID}:${USER_UID} --from=build /usr/src/app/node_modules ./node_modules
 
@@ -67,7 +66,7 @@ CMD npm run start:$BUILD_ENV
 
 # --------------> The runtime image
 FROM ${NODE_ENV} AS runtime
-LABEL maintainer="Bruno Vilefort <bruno.clara@yahoo.com>"
+LABEL maintainer="ObraFacil <contato@obrafacil.com.br>"
 EXPOSE 8080 8443
 RUN chown -R ${USER_UID}:${USER_UID} ${HOME} ${APP_HOME} && \
     chmod -R 755 ${HOME} ${APP_HOME}

@@ -1,11 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 
-import { IFindSettingByIdDTO } from '@modules/settings/dtos/find-setting-by-id-dto'
-import { IFindSettingsByUserIdDTO } from '@modules/settings/dtos/find-settings-by-userid-dto'
-import { IFindManySettingsDTO } from '@modules/settings/dtos/find-many-settings-dto'
+import { IFindByIdDTO } from '@modules/settings/dtos/find-by-id-dto'
+import { IFindManyDTO } from '@modules/settings/dtos/find-many-dto'
 import { Setting } from '@modules/settings/entities/setting'
-import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
 import { SettingsRepository } from '@modules/settings/repositories/settings-repository'
+import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
 
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
@@ -17,11 +16,11 @@ export class PrismaSettingsRepository implements SettingsRepository {
     this.repository = prisma
   }
 
-  async findById({ userId, id }: IFindSettingByIdDTO): Promise<Setting | null> {
+  async findById({ id, userId }: IFindByIdDTO): Promise<Setting | null> {
     const setting = await this.repository.setting.findUnique({
       where: {
-        userId,
         id,
+        userId,
         deletedAt: null,
       },
     })
@@ -33,10 +32,7 @@ export class PrismaSettingsRepository implements SettingsRepository {
     return PrismaSettingsMapper.toDomain(setting)
   }
 
-  async findMany({
-    pageIndex,
-    userId,
-  }: IFindManySettingsDTO): Promise<Setting[]> {
+  async findMany({ pageIndex, userId }: IFindManyDTO): Promise<Setting[]> {
     const skip = (pageIndex - 1) * env.PER_PAGE
 
     const settings = await this.repository.setting.findMany({
@@ -61,24 +57,25 @@ export class PrismaSettingsRepository implements SettingsRepository {
     return await this.repository.setting.count()
   }
 
-  async save(setting: Setting): Promise<void> {
+  async save(setting: Setting): Promise<Setting> {
     const prismaSettingData = PrismaSettingsMapper.toPrisma(setting)
 
-    await prisma.$transaction(async (trx) => {
-      await trx.setting.update({
-        where: {
-          userId: prismaSettingData.userId,
-          id: prismaSettingData.id,
-        },
-        data: prismaSettingData,
-      })
+    const prismaSetting = await this.repository.setting.upsert({
+      where: {
+        id: setting.id,
+        userId: setting.userId,
+      },
+      create: prismaSettingData,
+      update: prismaSettingData,
     })
+
+    return PrismaSettingsMapper.toDomain(prismaSetting)
   }
 
-  async remove({ userId }: IFindSettingsByUserIdDTO): Promise<void> {
-    await this.repository.setting.updateMany({
+  async remove(id: string): Promise<void> {
+    await this.repository.setting.update({
       where: {
-        userId,
+        id,
       },
       data: {
         deletedAt: new Date(),

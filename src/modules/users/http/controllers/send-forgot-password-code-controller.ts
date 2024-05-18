@@ -18,9 +18,13 @@ const schema = z
       .optional(),
     email: z
       .string(strMessage('e-mail'))
-      .email('O campo e-mail deve conter um endereço de email válido.')
-      .min(1, 'O campo e-mail é obrigatório.')
-      .optional(),
+      .optional()
+      .refine(
+        (data) => data === '' || z.string().email().safeParse(data).success,
+        {
+          message: 'O e-mail é inválido',
+        },
+      ),
   })
   .superRefine((data, ctx) => {
     if (data.document && data.email) {

@@ -36,7 +36,7 @@ model User {
 
 model Setting {
   id              String    @id @default(uuid())
-  userId          String?   @map("user_id")
+  userId          String    @map("user_id")
   fieldName       String    @map("field_name")
   isFieldEnable   Boolean   @map("is_field_enable")
   isFieldRequired Boolean   @map("is_field_required")
@@ -46,7 +46,7 @@ model Setting {
   updatedAt       DateTime  @updatedAt @map("updated_at")
   deletedAt       DateTime? @map("deleted_at")
 
-  User User? @relation(fields: [userId], references: [id])
+  User User @relation(fields: [userId], references: [id])
 
   @@map("settings")
 }
@@ -69,6 +69,47 @@ model Category {
 
   @@map("categories")
 }
+
+model Transaction {
+  id                String   @id @default(uuid())
+  userId            String   @map("user_id")
+  transactionId     String?  @map("transaction_id")
+  categoryId        String   @map("category_id")
+  name              String
+  description       String?
+  transactionDate   DateTime @map("transaction_date")
+  status            String
+  establishmentName String   @map("establishment_name")
+  bankName          String   @map("bank_name")
+  paymentMethod     String   @map("payment_method")
+  previousBalance   Float    @map("previous_balance")
+  totalAmount       Float    @map("total_amount")
+  currentBalance    Float    @map("current_balance")
+
+  // Optional configuration settings
+  competencyDate                   DateTime? @map("competency_date") // Define o momento específico do direito ao recebimento de uma receita
+  costCenter                       String?   @map("cost_center") // Centros de custo e lucros
+  tags                             String?   @map("tags") // Categoriza lançamentos para organização e facilidade de acesso
+  enablePasswordProtection         Boolean   @default(false) @map("enable_password_protection")
+  installmentConfiguration         Boolean   @default(false) @map("installment_configuration")
+  includeResidualBalancesInReports Boolean   @default(false) @map("include_residual_balances_in_reports")
+  documentNumber                   String?   @map("document_number") // Número de documento para rastreamento
+  enableReceiptExpenseGoals        Boolean   @default(false) @map("enable_receipt_expense_goals")
+  associatedContracts              String?   @map("associated_contracts")
+  associatedProjects               String?   @map("associated_projects")
+  additionalComments               String?   @map("additional_comments")
+  // Optional configuration settings
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  user     User     @relation(fields: [userId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@map("transactions")
+}
+
 
 model UserToken {
   id        String    @id @default(uuid())
@@ -97,25 +138,3 @@ model File {
   @@map("files")
 }
 
-model Transaction {
-  id            String    @id @default(uuid())
-  userId        String    @map("user_id")
-  transactionId String?   @map("transaction_id")
-  categoryId    String    @map("category_id")
-  name          String
-  description   String?
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
-  deletedAt     DateTime? @map("deleted_at")
-  // description String
-  // value       Float
-  // type        String
-  // createdAt   DateTime  @default(now()) @map("created_at")
-  // updatedAt   DateTime  @updatedAt @map("updated_at")
-  // deletedAt   DateTime? @map("deleted_at")
-
-  user     User     @relation(fields: [userId], references: [id])
-  category Category @relation(fields: [categoryId], references: [id])
-
-  @@map("transactions")
-}

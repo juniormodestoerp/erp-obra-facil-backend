@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 
-import { IFindManyDTO } from '@modules/transactions/dtos/find-many-transactions-dto'
-import { IFindByIdDTO } from '@modules/transactions/dtos/find-transaction-by-id-dto'
+import { IFindTransactionByIdDTO } from '@modules/transactions/dtos/find-transaction-by-id-dto'
+import { IFindManyTransactionsDTO } from '@modules/transactions/dtos/find-many-transactions-dto'
 import { Transaction } from '@modules/transactions/entities/transaction'
-import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
 import { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
 
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
@@ -16,7 +16,10 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     this.repository = prisma
   }
 
-  async findById({ id, userId }: IFindByIdDTO): Promise<Transaction | null> {
+  async findById({
+    userId,
+    id,
+  }: IFindTransactionByIdDTO): Promise<Transaction | null> {
     const transaction = await this.repository.transaction.findUnique({
       where: {
         id,
@@ -32,7 +35,10 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     return PrismaTransactionsMapper.toDomain(transaction)
   }
 
-  async findMany({ pageIndex, userId }: IFindManyDTO): Promise<Transaction[]> {
+  async findMany({
+    pageIndex,
+    userId,
+  }: IFindManyTransactionsDTO): Promise<Transaction[]> {
     const skip = (pageIndex - 1) * env.PER_PAGE
 
     const transactions = await this.repository.transaction.findMany({
@@ -59,22 +65,30 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     return await this.repository.transaction.count()
   }
 
-  async save(transaction: Transaction): Promise<void> {
+  async create(transaction: Transaction): Promise<void> {
     const prismaTransactionData = PrismaTransactionsMapper.toPrisma(transaction)
 
-    await this.repository.transaction.upsert({
-      where: {
-        id: transaction.id,
-        userId: transaction.userId,
-      },
-      create: prismaTransactionData,
-      update: prismaTransactionData,
+    await this.repository.transaction.create({
+      data: prismaTransactionData,
     })
   }
 
-  async remove(id: string): Promise<void> {
+  async save(transaction: Transaction): Promise<void> {
+    const prismaTransactionData = PrismaTransactionsMapper.toPrisma(transaction)
+
     await this.repository.transaction.update({
       where: {
+        userId: transaction.userId,
+        id: transaction.id,
+      },
+      data: prismaTransactionData,
+    })
+  }
+
+  async remove({ userId, id }: IFindTransactionByIdDTO): Promise<void> {
+    await this.repository.transaction.update({
+      where: {
+        userId,
         id,
       },
       data: {

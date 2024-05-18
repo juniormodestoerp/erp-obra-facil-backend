@@ -1,6 +1,5 @@
 // import { readFileSync } from 'node:fs'
 // import { join } from 'node:path'
-import * as React from 'react'
 import {
   Body,
   Button,
@@ -14,6 +13,7 @@ import {
   Tailwind,
   Text,
 } from '@react-email/components'
+import * as React from 'react'
 
 import { ISendForgotPasswordVariables } from '@shared/infra/providers/template'
 
@@ -22,7 +22,7 @@ export function SendForgotPasswordTemplate({
   userEmail,
   resetPasswordLink,
 }: ISendForgotPasswordVariables) {
-  const previewText = 'Odonto Mais | Recupere sua senha Odonto Mais'
+  const previewText = 'Obra Fácil | Recupere sua senha Obra Fácil'
 
   return (
     <Html lang="pt-BR">
@@ -34,7 +34,7 @@ export function SendForgotPasswordTemplate({
         <Body className="bg-white my-auto mx-auto font-sans">
           <Container className="border border-solid border-gray-300 bg-sky-100/50 rounded my-[40px] mx-auto p-[20px] w-[465px]">
             <Section className="mt-[32px] flex justify-center w-full text-center">
-              <span className="text-2xl mx-axuto text-center">Odonto Mais</span>
+              <span className="text-2xl mx-axuto text-center">Obra fácil</span>
             </Section>
 
             <Text className="text-black text-xl font-normal text-center flex justify-center p-0 my-[30px] mx-auto">
@@ -43,7 +43,7 @@ export function SendForgotPasswordTemplate({
 
             <Text className="text-black text-[14px] leading-[24px]">
               Olá {name}! Você solicitou um link para recuperar sua senha no
-              Odonto Mais através do email
+              Obra Fácil através do email
               <span className="ml-1">{userEmail}</span>.
             </Text>
             <Section className="text-center mt-[32px] mb-[32px]">

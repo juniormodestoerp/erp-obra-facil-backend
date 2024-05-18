@@ -10,7 +10,7 @@ import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 export async function Router(app: FastifyInstance) {
   app.addHook('onRequest', verifyJwt)
 
-  app.get('/settings', showSetting)
+  app.get('/settings:id', showSetting)
   app.get('/settings', fetchSettings)
   app.put('/settings/:id', saveSetting)
   app.delete('/settings/:id', removeSetting)

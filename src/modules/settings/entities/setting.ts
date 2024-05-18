@@ -5,7 +5,7 @@ import { Optional } from '@core/domain/types/opcional'
 import { User } from '@modules/users/entities/user'
 
 interface Props {
-  userId: string | null
+  userId: string
   fieldName: string
   isFieldEnable: boolean
   isFieldRequired: boolean
@@ -19,11 +19,11 @@ interface Props {
 }
 
 export class Setting extends Entity<Props> {
-  get userId(): string | null {
+  get userId(): string {
     return this.props.userId
   }
 
-  set userId(userId: string | null) {
+  set userId(userId: string) {
     this.props.userId = userId
   }
 

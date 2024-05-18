@@ -8,6 +8,7 @@ import { UsersRepository } from '@modules/users/repositories/user-repository'
 
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
+import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
 
 export class PrismaUsersRepository implements UsersRepository {
   private repository: PrismaClient
@@ -101,11 +102,23 @@ export class PrismaUsersRepository implements UsersRepository {
   async create(user: User): Promise<void> {
     const prismaUserData = PrismaUserMapper.toPrisma(user)
 
-    await this.repository.user.create({
-      data: prismaUserData,
-      include: {
-        settings: true,
+    const prismaSettingsData = user.settings.map((setting) => {
+      return PrismaSettingsMapper.toPrisma(setting)
+    })
+
+    const userDataWithSettings = {
+      ...prismaUserData,
+      settings: {
+        create: [],
       },
+    }
+
+    await this.repository.user.create({
+      data: userDataWithSettings,
+    })
+
+    await this.repository.setting.createMany({
+      data: prismaSettingsData,
     })
   }
 

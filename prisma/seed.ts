@@ -34,16 +34,18 @@ async function seed() {
       password: passwordHashed,
       role: UserRole.ADMIN,
       status: 'active',
-      settings: settingsOptions.map((option) => {
-        return Setting.create({
-          userId: null,
-          fieldName: option.fieldName,
-          isFieldEnable: option.isFieldEnable,
-          isFieldRequired: option.isFieldRequired,
-          title: option.title,
-          description: option.description,
-        })
-      }),
+      settings: [],
+    })
+
+    user.settings = settingsOptions.map((option) => {
+      return Setting.create({
+        userId: user.id,
+        fieldName: option.fieldName,
+        isFieldEnable: option.isFieldEnable,
+        isFieldRequired: option.isFieldRequired,
+        title: option.title,
+        description: option.description,
+      })
     })
 
     await usersRepository.create(user)

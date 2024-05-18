@@ -3,7 +3,7 @@ import z from 'zod'
 
 import { numbMessage } from '@core/utils/custom-zod-error'
 
-import { makeFetchSettingsUseCase } from '@modules/settings/use-cases/factories/make-fetch-settings'
+import { makeFetchSettingsUseCase } from '@modules/settings/use-cases/factories/make-fetch-settings-factory'
 import { SettingViewModel } from '@modules/settings/http/view-models/setting-view-model'
 
 import { env } from '@shared/infra/config/env'

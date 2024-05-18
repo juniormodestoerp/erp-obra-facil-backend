@@ -1,4 +1,4 @@
-export interface IFindManyDTO {
+export interface IFindManySettingsDTO {
   pageIndex: number
   userId: string
 }

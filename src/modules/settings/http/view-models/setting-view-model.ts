@@ -10,7 +10,7 @@ export class SettingViewModel {
       isFieldRequired: setting.isFieldRequired,
       title: setting.title,
       description: setting.description,
-      createdAt: setting.createdAt,
+      createdAt: setting.createdAt.toISOString(),
     }
   }
 }

@@ -36,6 +36,7 @@ async function seed() {
       status: 'active',
       settings: settingsOptions.map((option) => {
         return Setting.create({
+          userId: null,
           fieldName: option.fieldName,
           isFieldEnable: option.isFieldEnable,
           isFieldRequired: option.isFieldRequired,

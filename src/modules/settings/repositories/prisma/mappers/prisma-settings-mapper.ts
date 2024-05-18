@@ -21,7 +21,7 @@ export class PrismaSettingsMapper {
   static toDomain(raw: RawSetting): Setting {
     return Setting.create(
       {
-        userId: raw.userId,
+        userId: raw.userId ?? null,
         fieldName: raw.fieldName,
         isFieldEnable: raw.isFieldEnable,
         isFieldRequired: raw.isFieldRequired,

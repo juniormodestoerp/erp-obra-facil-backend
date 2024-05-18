@@ -36,7 +36,7 @@ model User {
 
 model Setting {
   id              String    @id @default(uuid())
-  userId          String    @map("user_id")
+  userId          String?   @map("user_id")
   fieldName       String    @map("field_name")
   isFieldEnable   Boolean   @map("is_field_enable")
   isFieldRequired Boolean   @map("is_field_required")
@@ -46,11 +46,10 @@ model Setting {
   updatedAt       DateTime  @updatedAt @map("updated_at")
   deletedAt       DateTime? @map("deleted_at")
 
-  User User @relation(fields: [userId], references: [id])
+  User User? @relation(fields: [userId], references: [id])
 
   @@map("settings")
 }
-
 
 model Category {
   id          String    @id @default(uuid())
@@ -98,19 +97,16 @@ model File {
   @@map("files")
 }
 
-
-
-
 model Transaction {
-  id          String    @id @default(uuid())
-  userId      String    @map("user_id")
-  transactionId String? @map("transaction_id")
-  categoryId  String    @map("category_id")
-  name        String
-  description String?
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-  deletedAt   DateTime? @map("deleted_at")
+  id            String    @id @default(uuid())
+  userId        String    @map("user_id")
+  transactionId String?   @map("transaction_id")
+  categoryId    String    @map("category_id")
+  name          String
+  description   String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  deletedAt     DateTime? @map("deleted_at")
   // description String
   // value       Float
   // type        String

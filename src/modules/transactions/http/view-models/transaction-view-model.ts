@@ -1,7 +1,7 @@
-import {} from '@modules/transactions/entities/transaction'
+import { Transaction } from '@modules/transactions/entities/transaction'
 
 export class TransactionViewModel {
-  static toHTTP(setting: Setting) {
+  static toHTTP(setting: Transaction) {
     return {
       id: setting.id,
       userId: setting.userId,

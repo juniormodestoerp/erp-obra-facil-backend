@@ -1,4 +1,4 @@
-export interface IFindByIdDTO {
-  id: string
+export interface IFindSettingByIdDTO {
   userId: string
+  id: string
 }

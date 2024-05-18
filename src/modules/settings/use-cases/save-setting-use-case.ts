@@ -34,7 +34,9 @@ export class SaveSettingUseCase {
     title,
     description,
   }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById({})
+    const user = await this.usersRepository.findById({
+      userId,
+    })
 
     if (!user) {
       throw new AppError({

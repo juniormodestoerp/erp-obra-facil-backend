@@ -7,7 +7,7 @@ import {
   strMessage,
 } from '@core/utils/custom-zod-error'
 
-import { makeSaveSettingUseCase } from '@modules/settings/use-cases/factories/make-save-setting'
+import { makeSaveSettingUseCase } from '@modules/settings/use-cases/factories/make-save-setting-factory'
 import { SettingViewModel } from '@modules/settings/http/view-models/setting-view-model'
 
 const paramsSchema = z.object({
@@ -32,6 +32,7 @@ export async function saveSetting(
   reply: FastifyReply,
 ) {
   const { id } = paramsSchema.parse(request.params)
+
   const { fieldName, isFieldEnable, isFieldRequired, title, description } =
     bodySchema.parse(request.body)
 
@@ -39,7 +40,7 @@ export async function saveSetting(
 
   const { setting } = await saveSettingUseCase.execute({
     id,
-    userId: 'eb15bdac-beec-4a37-b749-5a05b7fbc10c',
+    userId: request.user.sub,
     fieldName,
     isFieldEnable,
     isFieldRequired,

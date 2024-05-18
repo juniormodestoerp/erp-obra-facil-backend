@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { User as RawUser, Setting as RawSetting } from '@prisma/client'
+
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { Document } from '@core/domain/entities/value-object/document'
 import { Email } from '@core/domain/entities/value-object/email'

@@ -3,7 +3,7 @@ import z from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { makeRemoveSettingUseCase } from '@modules/settings/use-cases/factories/make-remove-setting'
+import { makeRemoveSettingUseCase } from '@modules/settings/use-cases/factories/make-remove-setting-factory'
 
 const paramsSchema = z.object({
   id: z
@@ -21,8 +21,8 @@ export async function removeSetting(
   const removeSettingUseCase = makeRemoveSettingUseCase()
 
   await removeSettingUseCase.execute({
+    userId: request.user.sub,
     id,
-    userId: 'eb15bdac-beec-4a37-b749-5a05b7fbc10c',
   })
 
   return reply.status(204).send()

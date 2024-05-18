@@ -3,7 +3,8 @@ import z from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { makeRemoveSettingUseCase } from '@modules/settings/use-cases/factories/make-remove-setting'
+import { makeShowSettingUseCase } from '@modules/settings/use-cases/factories/make-show-setting-factory'
+import { SettingViewModel } from '../view-models/setting-view-model'
 
 const paramsSchema = z.object({
   id: z
@@ -18,12 +19,12 @@ export async function showSetting(
 ) {
   const { id } = paramsSchema.parse(request.params)
 
-  const removeSettingUseCase = makeRemoveSettingUseCase()
+  const showSettingUseCase = makeShowSettingUseCase()
 
-  await removeSettingUseCase.execute({
+  const { setting } = await showSettingUseCase.execute({
+    userId: request.user.sub,
     id,
-    userId: 'eb15bdac-beec-4a37-b749-5a05b7fbc10c',
   })
 
-  return reply.status(204).send()
+  return reply.status(204).send(SettingViewModel.toHTTP(setting))
 }

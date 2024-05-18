@@ -1,5 +1,6 @@
 import { AppError } from '@core/domain/errors/app-error'
 
+import { Setting } from '@modules/settings/entities/setting'
 import { SettingsRepository } from '@modules/settings/repositories/settings-repository'
 
 interface Input {
@@ -7,20 +8,27 @@ interface Input {
   userId: string
 }
 
-export class RemoveSettingUseCase {
+interface Output {
+  setting: Setting
+}
+
+export class ShowSettingUseCase {
   constructor(private readonly settingsRepository: SettingsRepository) {}
 
-  async execute({ id, userId }: Input): Promise<void> {
-    const clinic = await this.settingsRepository.findById({
+  async execute({ id, userId }: Input): Promise<Output> {
+    const setting = await this.settingsRepository.findById({
       id,
       userId,
     })
-    if (!clinic) {
+
+    if (!setting) {
       throw new AppError({
         code: 'setting.not_found',
       })
     }
 
-    await this.settingsRepository.remove(id)
+    return {
+      setting,
+    }
   }
 }

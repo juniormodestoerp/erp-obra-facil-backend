@@ -4,6 +4,7 @@ import z from 'zod'
 import { strMessage } from '@core/utils/custom-zod-error'
 
 import { makeShowCategoryUseCase } from '@modules/categories/use-cases/factories/make-show-category-factory'
+import { CategoriesViewModel } from '@modules/categories/http/view-models/categories-view-model'
 
 const paramsSchema = z.object({
   id: z
@@ -20,10 +21,10 @@ export async function showCategoryController(
 
   const showCategoryUseCase = makeShowCategoryUseCase()
 
-  await showCategoryUseCase.execute({
+  const { category } = await showCategoryUseCase.execute({
     userId: request.user.sub,
     id,
   })
 
-  return reply.status(204).send()
+  return reply.status(200).send(CategoriesViewModel.toHTTP(category))
 }

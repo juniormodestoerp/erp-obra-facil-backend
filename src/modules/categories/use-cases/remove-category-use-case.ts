@@ -22,6 +22,9 @@ export class RemoveCategoryUseCase {
       })
     }
 
-    await this.categoriesRepository.remove(id)
+    await this.categoriesRepository.remove({
+      userId,
+      id,
+    })
   }
 }

@@ -1,7 +1,7 @@
 import { Category } from '@modules/categories/entities/category'
 import { UserViewModel } from '@modules/users/http/view-models/user-view-model'
 
-export class CategoryViewModel {
+export class CategoriesViewModel {
   static toHTTP(category: Category) {
     return {
       id: category.id,
@@ -15,11 +15,11 @@ export class CategoryViewModel {
       user: category.user ? UserViewModel.toHTTP(category.user) : undefined,
       relatedCategories: category.relatedCategories
         ? category.relatedCategories.map((relatedCategory) =>
-            CategoryViewModel.mapCategory(relatedCategory),
+            CategoriesViewModel.mapCategory(relatedCategory),
           )
         : undefined,
       categories: category.categories
-        ? CategoryViewModel.mapCategory(category.categories)
+        ? CategoriesViewModel.mapCategory(category.categories)
         : undefined,
     }
   }

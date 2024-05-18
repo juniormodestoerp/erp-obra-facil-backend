@@ -1,27 +1,50 @@
 import { AppError } from '@core/domain/errors/app-error'
 
 import { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
+import { Category } from '../entities/category'
 
 interface Input {
-  id: string
   userId: string
+  categoryId?: string
+  name: string
+  description: string
+}
+
+interface Output {
+  category: Category
 }
 
 export class CreateCategoryUseCase {
   constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
-  async execute({ id, userId }: Input): Promise<void> {
-    const clinic = await this.categoriesRepository.findById({
-      id,
+  async execute({
+    userId,
+    categoryId,
+    name,
+    description,
+  }: Input): Promise<Output> {
+    const existsCategory = await this.categoriesRepository.findByName({
       userId,
+      name,
     })
 
-    if (!clinic) {
+    if (!existsCategory) {
       throw new AppError({
-        code: 'category.not_found',
+        code: 'category.already_exists',
       })
     }
 
-    await this.categoriesRepository.remove(id)
+    const category = Category.create({
+      userId,
+      categoryId,
+      name,
+      description,
+    })
+
+    await this.categoriesRepository.create(category)
+
+    return {
+      category,
+    }
   }
 }

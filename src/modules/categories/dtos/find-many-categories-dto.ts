@@ -1,4 +1,4 @@
-export interface IFindManyDTO {
+export interface IFindManyCategoriesDTO {
   pageIndex: number
   userId: string
 }

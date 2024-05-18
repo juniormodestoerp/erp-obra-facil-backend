@@ -176,6 +176,12 @@ export const errors = {
     message: 'A categoria solicitada não foi encontrada.',
     status: StatusCode.BAD_REQUEST,
   },
+
+  'category.already_exists': {
+    error: 'Category already exists!',
+    message: 'A categoria informada já está registrada no sistema.',
+    status: StatusCode.BAD_REQUEST,
+  },
 }
 
 export type ErrorKeys = keyof typeof errors

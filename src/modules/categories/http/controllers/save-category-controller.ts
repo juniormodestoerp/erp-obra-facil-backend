@@ -1,51 +1,45 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
 
-import {
-  boolMessage,
-  dateMessage,
-  strMessage,
-} from '@core/utils/custom-zod-error'
+import { strMessage } from '@core/utils/custom-zod-error'
 
-import { CategoryViewModel } from '@modules/categories/http/view-models/category-view-model'
-import { makeSaveCategoryUseCase } from '@modules/categories/use-cases/factories/make-save-category'
+import { makeSaveCategoryUseCase } from '@modules/categories/use-cases/factories/make-save-category-factory'
+import { CategoriesViewModel } from '@modules/categories/http/view-models/categories-view-model'
 
 const paramsSchema = z.object({
   id: z
     .string(strMessage('id das configurações'))
     .uuid({ message: 'O campo id das configurações deve ser um UUID válido.' })
-    .min(1, 'O campo id das configurações é obrigatório.')
-    .optional(),
+    .min(1, 'O campo id das configurações é obrigatório.'),
 })
 
 const bodySchema = z.object({
-  fieldName: z.string(strMessage('nome do campo')),
-  isFieldEnable: z.boolean(boolMessage('campo habilitado')),
-  isFieldRequired: z.boolean(boolMessage('campo obrigatório')),
-  title: z.string(strMessage('título')),
-  description: z.string(strMessage('descrição')),
-  createdAt: z.coerce.date(dateMessage('data de criação')),
+  categoryId: z.string(strMessage('id da categoria')).optional(),
+  categoryName: z.string(strMessage('nome da categoria')),
+  categoryDescripion: z.string(strMessage('descrição da categoria')),
 })
 
-export async function saveCategory(
+export async function saveCategoryController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
   const { id } = paramsSchema.parse(request.params)
-  const { fieldName, isFieldEnable, isFieldRequired, title, description } =
-    bodySchema.parse(request.body)
+
+  const {
+    categoryId,
+    categoryName: name,
+    categoryDescripion: description,
+  } = bodySchema.parse(request.body)
 
   const saveCategoryUseCase = makeSaveCategoryUseCase()
 
   const { category } = await saveCategoryUseCase.execute({
     id,
-    userId: 'eb15bdac-beec-4a37-b749-5a05b7fbc10c',
-    fieldName,
-    isFieldEnable,
-    isFieldRequired,
-    title,
+    userId: request.user.sub,
+    categoryId,
+    name,
     description,
   })
 
-  return reply.status(201).send(CategoryViewModel.toHTTP(category))
+  return reply.status(200).send(CategoriesViewModel.toHTTP(category))
 }

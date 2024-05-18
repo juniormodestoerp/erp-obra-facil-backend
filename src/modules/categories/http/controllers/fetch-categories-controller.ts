@@ -3,8 +3,8 @@ import z from 'zod'
 
 import { numbMessage } from '@core/utils/custom-zod-error'
 
-import { makeFetchCategoriesUseCase } from '@modules/categories/use-cases/factories/make-fetch-categories'
-import { CategoryViewModel } from '@modules/categories/http/view-models/category-view-model'
+import { makeFetchCategoriesUseCase } from '@modules/categories/use-cases/factories/make-fetch-categories-factory'
+import { CategoriesViewModel } from '@modules/categories/http/view-models/categories-view-model'
 
 import { env } from '@shared/infra/config/env'
 
@@ -15,7 +15,7 @@ const querySchema = z.object({
     .default(1),
 })
 
-export async function fetchCategories(
+export async function fetchCategoriesController(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
@@ -30,7 +30,7 @@ export async function fetchCategories(
 
   return reply.status(200).send({
     categories: categories.map(
-      (category) => CategoryViewModel.toHTTP(category) ?? [],
+      (category) => CategoriesViewModel.toHTTP(category) ?? [],
     ),
     meta: {
       pageIndex,

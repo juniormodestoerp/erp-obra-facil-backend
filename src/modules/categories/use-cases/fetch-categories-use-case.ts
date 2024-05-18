@@ -21,7 +21,10 @@ export class FetchCategoriesUseCase {
   ) {}
 
   async execute({ pageIndex, userId }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById(userId)
+    const user = await this.usersRepository.findById({
+      userId,
+    })
+
     if (!user) {
       throw new AppError({
         code: 'user.not_found',
@@ -32,6 +35,7 @@ export class FetchCategoriesUseCase {
       pageIndex,
       userId,
     })
+
     if (categories.length === 0) {
       throw new AppError({
         code: 'category.not_found',

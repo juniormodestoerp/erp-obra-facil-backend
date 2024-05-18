@@ -8,10 +8,8 @@ import { UsersRepository } from '@modules/users/repositories/user-repository'
 interface Input {
   id: string
   userId: string
-  fieldName: string
-  isFieldEnable: boolean
-  isFieldRequired: boolean
-  title: string
+  categoryId?: string
+  name: string
   description: string
 }
 
@@ -28,13 +26,14 @@ export class SaveCategoryUseCase {
   async execute({
     id,
     userId,
-    fieldName,
-    isFieldEnable,
-    isFieldRequired,
-    title,
+    categoryId,
+    name,
     description,
   }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById(userId)
+    const user = await this.usersRepository.findById({
+      userId,
+    })
+
     if (!user) {
       throw new AppError({
         code: 'user.not_found',
@@ -44,14 +43,13 @@ export class SaveCategoryUseCase {
     const category = Category.create(
       {
         userId,
-        fieldName,
-        isFieldEnable,
-        isFieldRequired,
-        title,
+        categoryId,
+        name,
         description,
       },
       new UniqueEntityID(id),
     )
+
     await this.categoriesRepository.save(category)
 
     return {

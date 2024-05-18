@@ -7,12 +7,10 @@ interface Input {
   userId: string
 }
 
-interface Output void
-
 export class CreateCategoryUseCase {
   constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
-  async execute({ id, userId }: Input): Promise<Output> {
+  async execute({ id, userId }: Input): Promise<void> {
     const clinic = await this.categoriesRepository.findById({
       id,
       userId,

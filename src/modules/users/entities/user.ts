@@ -1,8 +1,8 @@
 import { Entity } from '@core/domain/entities/entity'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
-import { Document } from '@core/domain/entities/value-object/document'
-import { Email } from '@core/domain/entities/value-object/email'
 import { Optional } from '@core/domain/types/opcional'
+
+import { Setting } from '@modules/settings/entities/setting'
 
 export enum UserRole {
   ADMIN = 'ADMIN',
@@ -11,8 +11,8 @@ export enum UserRole {
 
 interface Props {
   name: string
-  document: Document
-  email: Email
+  document: string
+  email: string
   phone: string
   birthDate: Date
   password: string
@@ -20,7 +20,8 @@ interface Props {
   status: string
   createdAt: Date
   updatedAt: Date
-  deletedAt?: Date | null
+  deletedAt: Date | null
+  settings: Setting[]
 }
 
 export class User extends Entity<Props> {
@@ -32,19 +33,19 @@ export class User extends Entity<Props> {
     this.props.name = name
   }
 
-  get document(): Document {
+  get document(): string {
     return this.props.document
   }
 
-  set document(document: Document) {
+  set document(document: string) {
     this.props.document = document
   }
 
-  get email(): Email {
+  get email(): string {
     return this.props.email
   }
 
-  set email(email: Email) {
+  set email(email: string) {
     this.props.email = email
   }
 
@@ -92,6 +93,10 @@ export class User extends Entity<Props> {
     return this.props.createdAt
   }
 
+  set createdAt(createdAt: Date) {
+    this.props.createdAt = createdAt
+  }
+
   get updatedAt(): Date {
     return this.props.updatedAt
   }
@@ -100,24 +105,36 @@ export class User extends Entity<Props> {
     this.props.updatedAt = updatedAt
   }
 
-  get deletedAt(): Date | null | undefined {
+  get deletedAt(): Date | null {
     return this.props.deletedAt
   }
 
-  set deletedAt(deletedAt: Date | null | undefined) {
+  set deletedAt(deletedAt: Date | null) {
     this.props.deletedAt = deletedAt
   }
 
+  get settings(): Setting[] {
+    return this.props.settings
+  }
+
+  set settings(settings: Setting[]) {
+    this.props.settings = settings
+  }
+
   static create(
-    props: Optional<Props, 'createdAt' | 'updatedAt' | 'deletedAt'>,
+    props: Optional<
+      Props,
+      'createdAt' | 'updatedAt' | 'deletedAt' | 'settings'
+    >,
     id?: UniqueEntityID,
   ): User {
     return new User(
       {
+        ...props,
         createdAt: props.createdAt ?? new Date(),
         updatedAt: props.updatedAt ?? new Date(),
         deletedAt: props.deletedAt ?? null,
-        ...props,
+        settings: props.settings ?? [],
       },
       id,
     )

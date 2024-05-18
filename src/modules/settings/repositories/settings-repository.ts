@@ -1,5 +1,5 @@
-import { IFindByIdDTO } from '@modules/settings/dtos/find-by-id-dto'
-import { IFindManyDTO } from '@modules/settings/dtos/find-many-dto'
+import { IFindManyDTO } from '@modules/settings/dtos/find-many-settings-dto'
+import { IFindByIdDTO } from '@modules/settings/dtos/find-setting-by-id-dto'
 import { Setting } from '@modules/settings/entities/setting'
 
 export interface SettingsRepository {

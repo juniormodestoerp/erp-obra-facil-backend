@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 
-import { IFindByIdDTO } from '@modules/transactions/dtos/find-by-id-dto'
-import { IFindManyDTO } from '@modules/transactions/dtos/find-many-dto'
+import { IFindManyDTO } from '@modules/transactions/dtos/find-many-transactions-dto'
+import { IFindByIdDTO } from '@modules/transactions/dtos/find-transaction-by-id-dto'
 import { Transaction } from '@modules/transactions/entities/transaction'
-import { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
 import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
+import { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
 
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'

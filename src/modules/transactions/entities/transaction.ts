@@ -2,8 +2,6 @@ import { Entity } from '@core/domain/entities/entity'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { Optional } from '@core/domain/types/opcional'
 
-import { User } from '@modules/users/entities/user'
-
 interface Props {
   transactionId?: string
   userId: string
@@ -12,8 +10,6 @@ interface Props {
   createdAt: Date
   updatedAt: Date
   deletedAt?: Date | null
-
-  user?: User
 }
 
 export class Transaction extends Entity<Props> {
@@ -67,14 +63,6 @@ export class Transaction extends Entity<Props> {
 
   set deletedAt(deletedAt: Date | null) {
     this.props.deletedAt = deletedAt
-  }
-
-  get user(): User | undefined {
-    return this.props.user
-  }
-
-  set user(user: User | undefined) {
-    this.props.user = user
   }
 
   static create(

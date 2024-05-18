@@ -10,7 +10,9 @@ export class RemoveUserUseCase {
   constructor(private usersRepository: UsersRepository) {}
 
   async execute({ userId }: Input): Promise<void> {
-    const user = await this.usersRepository.findById(userId)
+    const user = await this.usersRepository.findById({
+      userId,
+    })
 
     if (!user) {
       throw new AppError({
@@ -18,6 +20,8 @@ export class RemoveUserUseCase {
       })
     }
 
-    await this.usersRepository.remove(userId)
+    await this.usersRepository.remove({
+      userId,
+    })
   }
 }

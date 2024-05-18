@@ -1,4 +1,4 @@
-import {  } from '@modules/transactions/entities/transaction'
+import {} from '@modules/transactions/entities/transaction'
 
 export class TransactionViewModel {
   static toHTTP(setting: Setting) {

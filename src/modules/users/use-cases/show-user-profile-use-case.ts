@@ -15,7 +15,9 @@ export class ShowUserProfileUseCase {
   constructor(private usersRepository: UsersRepository) {}
 
   async execute({ userId }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById(userId)
+    const user = await this.usersRepository.findById({
+      userId,
+    })
 
     if (!user) {
       throw new AppError({

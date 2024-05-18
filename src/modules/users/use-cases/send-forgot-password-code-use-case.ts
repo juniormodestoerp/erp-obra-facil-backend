@@ -47,8 +47,8 @@ export class SendForgotPasswordCodeUseCase {
     }
 
     if (
-      (email && user.email.value !== email) ||
-      (document && user.document.value !== document)
+      (email && user.email !== email) ||
+      (document && user.document !== document)
     ) {
       throw new AppError({
         code: 'user.not_found',
@@ -73,7 +73,7 @@ export class SendForgotPasswordCodeUseCase {
     resetPasswordLink.searchParams.set('code', userToken.code)
 
     this.queueProvider.add(jobs.SendForgotPasswordCode.key, {
-      email: user.email.value,
+      email: user.email,
       name: user.name,
       resetPasswordLink,
     })

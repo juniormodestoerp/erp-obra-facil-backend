@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
-import { IFindManyDTO } from '@modules/users/dtos/find-many-dto'
+import { IFindUserByIdDTO } from '@modules/users/dtos/find-user-by-id-dto'
+import { IFindManyUsersDTO } from '@modules/users/dtos/find-many-users-dto'
 import { User } from '@modules/users/entities/user'
 import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
 import { UsersRepository } from '@modules/users/repositories/user-repository'
@@ -15,10 +16,10 @@ export class PrismaUsersRepository implements UsersRepository {
     this.repository = prisma
   }
 
-  async findById(id: string): Promise<User | null> {
+  async findById({ userId }: IFindUserByIdDTO): Promise<User | null> {
     const user = await this.repository.user.findUnique({
       where: {
-        id,
+        id: userId,
         deletedAt: null,
       },
     })
@@ -75,19 +76,14 @@ export class PrismaUsersRepository implements UsersRepository {
     return PrismaUserMapper.toDomain(user)
   }
 
-  async findMany({ pageIndex, role }: IFindManyDTO): Promise<User[]> {
-    const whereClauses: IFindManyDTO = {
-      pageIndex,
-      deletedAt: null,
-    }
-    if (role !== undefined) {
-      whereClauses.role = role
-    }
-
+  async findMany({ pageIndex, role }: IFindManyUsersDTO): Promise<User[]> {
     const skip = (pageIndex - 1) * env.PER_PAGE
 
     const users = await this.repository.user.findMany({
-      where: whereClauses,
+      where: {
+        role,
+        deletedAt: null,
+      },
       skip,
       take: env.PER_PAGE,
       orderBy: {
@@ -102,22 +98,33 @@ export class PrismaUsersRepository implements UsersRepository {
     return users.map((user) => PrismaUserMapper.toDomain(user))
   }
 
-  async save(user: User): Promise<void> {
+  async create(user: User): Promise<void> {
     const prismaUserData = PrismaUserMapper.toPrisma(user)
 
-    await this.repository.user.upsert({
-      where: {
-        id: user.id,
+    await this.repository.user.create({
+      data: prismaUserData,
+      include: {
+        settings: true,
       },
-      create: prismaUserData,
-      update: prismaUserData,
     })
   }
 
-  async remove(id: string): Promise<void> {
+  async save(user: User): Promise<void> {
+    const prismaUserData = PrismaUserMapper.toPrisma(user)
+
     await this.repository.user.update({
       where: {
-        id,
+        id: user.id.toString(),
+      },
+      data: prismaUserData,
+    })
+  }
+
+  async remove({ userId }: IFindUserByIdDTO): Promise<void> {
+    await this.repository.user.update({
+      where: {
+        id: userId,
+        deletedAt: null,
       },
       data: {
         deletedAt: new Date(),

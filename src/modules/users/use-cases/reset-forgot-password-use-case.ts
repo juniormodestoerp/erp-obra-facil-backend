@@ -51,7 +51,9 @@ export class ResetForgotPasswordUseCase {
       })
     }
 
-    const user = await this.usersRepository.findById(userToken.userId)
+    const user = await this.usersRepository.findById({
+      userId: userToken.userId,
+    })
     if (!user) {
       throw new AppError({
         code: 'user.not_found',

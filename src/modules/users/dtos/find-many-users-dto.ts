@@ -1,7 +1,7 @@
 import { UserRole } from '@modules/users/entities/user'
 
-export interface IFindManyDTO {
+export interface IFindManyUsersDTO {
   pageIndex: number
   role?: UserRole
-  deletedAt?: Date | null
+  deletedAt?: boolean
 }

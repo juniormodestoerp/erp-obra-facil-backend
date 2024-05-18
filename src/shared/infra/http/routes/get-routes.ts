@@ -1,7 +1,7 @@
 import { existsSync, readdir, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 
-interface Output string[] | null | undefined
+type Output = string[] | undefined | null
 
 export async function getRoutes(): Promise<Output> {
   const directoryPath = join(__dirname, '..', '..', '..', '..', 'modules')

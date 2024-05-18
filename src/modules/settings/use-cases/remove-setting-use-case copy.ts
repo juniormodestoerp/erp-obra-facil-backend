@@ -7,12 +7,10 @@ interface Input {
   userId: string
 }
 
-interface Output void
-
 export class RemoveSettingUseCase {
   constructor(private readonly settingsRepository: SettingsRepository) {}
 
-  async execute({ id, userId }: Input): Promise<Output> {
+  async execute({ id, userId }: Input): Promise<void> {
     const clinic = await this.settingsRepository.findById({
       id,
       userId,

@@ -1,11 +1,15 @@
-import { IFindByIdDTO } from '@modules/transactions/dtos/find-by-id-dto'
-import { IFindManyDTO } from '@modules/transactions/dtos/find-many-dto'
+import { IFindTransactionByIdDTO } from '@modules/transactions/dtos/find-transaction-by-id-dto'
+import { IFindManyTransactionsDTO } from '@modules/transactions/dtos/find-many-transactions-dto'
 import { Transaction } from '@modules/transactions/entities/transaction'
 
 export interface TransactionsRepository {
-  findById({ id, userId }: IFindByIdDTO): Promise<Transaction | null>
-  findMany({ pageIndex, userId }: IFindManyDTO): Promise<Transaction[]>
+  findById({ userId, id }: IFindTransactionByIdDTO): Promise<Transaction | null>
+  findMany({
+    pageIndex,
+    userId,
+  }: IFindManyTransactionsDTO): Promise<Transaction[]>
   count(): Promise<number>
-  save(contact: Transaction): Promise<void>
-  remove(id: string): Promise<void>
+  create(transaction: Transaction): Promise<void>
+  save(transaction: Transaction): Promise<void>
+  remove({ userId, id }: IFindTransactionByIdDTO): Promise<void>
 }

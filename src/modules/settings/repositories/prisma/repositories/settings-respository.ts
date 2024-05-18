@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 
-import { IFindByIdDTO } from '@modules/settings/dtos/find-by-id-dto'
-import { IFindManyDTO } from '@modules/settings/dtos/find-many-dto'
+import { IFindManyDTO } from '@modules/settings/dtos/find-many-settings-dto'
+import { IFindByIdDTO } from '@modules/settings/dtos/find-setting-by-id-dto'
 import { Setting } from '@modules/settings/entities/setting'
-import { SettingsRepository } from '@modules/settings/repositories/settings-repository'
 import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
+import { SettingsRepository } from '@modules/settings/repositories/settings-repository'
 
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'

@@ -1,13 +1,11 @@
 import { Setting as RawSetting } from '@prisma/client'
-
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
-
 import { Setting } from '@modules/settings/entities/setting'
 
 export class PrismaSettingsMapper {
-  static toPrisma(setting: Setting) {
+  static toPrisma(setting: Setting): RawSetting {
     return {
-      id: setting.id,
+      id: setting.id.toString(),
       userId: setting.userId,
       fieldName: setting.fieldName,
       isFieldEnable: setting.isFieldEnable,
@@ -30,8 +28,8 @@ export class PrismaSettingsMapper {
         title: raw.title,
         description: raw.description,
         createdAt: raw.createdAt,
-        updatedAt: raw.createdAt,
-        deletedAt: raw.createdAt ?? undefined,
+        updatedAt: raw.updatedAt,
+        deletedAt: raw.deletedAt,
       },
       new UniqueEntityID(raw.id),
     )

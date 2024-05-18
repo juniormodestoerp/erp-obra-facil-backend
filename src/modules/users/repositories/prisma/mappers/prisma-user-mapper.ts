@@ -1,18 +1,23 @@
-import { User as RawUser } from '@prisma/client'
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { User as RawUser, Setting as RawSetting } from '@prisma/client'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { Document } from '@core/domain/entities/value-object/document'
 import { Email } from '@core/domain/entities/value-object/email'
 
 import { User, UserRole } from '@modules/users/entities/user'
+import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
+
+type RawUserWithSettings = RawUser & {
+  settings?: RawSetting[]
+}
 
 export class PrismaUserMapper {
-  static toPrisma(user: User) {
+  static toPrisma(user: User): RawUser & { settings?: any } {
     return {
-      id: user.id,
+      id: user.id.toString(),
       name: user.name,
-      document: user.document.value,
-      email: user.email.value,
+      document: user.document,
+      email: user.email,
       phone: user.phone,
       birthDate: user.birthDate,
       password: user.password,
@@ -21,23 +26,34 @@ export class PrismaUserMapper {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
       deletedAt: user.deletedAt,
+      settings: user.settings
+        ? {
+            create: user.settings.map((setting) =>
+              PrismaSettingsMapper.toPrisma(setting),
+            ),
+          }
+        : undefined,
     }
   }
 
-  static toDomain(raw: RawUser): User {
+  static toDomain(raw: RawUserWithSettings): User {
+    const settings = raw.settings
+      ? raw.settings.map(PrismaSettingsMapper.toDomain)
+      : []
     return User.create(
       {
         name: raw.name,
-        document: new Document(raw.document, 'CPF'),
-        email: new Email(raw.email),
+        document: new Document(raw.document, 'CPF').value,
+        email: new Email(raw.email).value,
         phone: raw.phone,
         birthDate: raw.birthDate,
         password: raw.password,
         role: raw.role as UserRole,
         status: raw.status,
         createdAt: raw.createdAt,
-        updatedAt: raw.createdAt,
-        deletedAt: raw.createdAt ?? undefined,
+        updatedAt: raw.updatedAt,
+        deletedAt: raw.deletedAt ?? null,
+        settings,
       },
       new UniqueEntityID(raw.id),
     )

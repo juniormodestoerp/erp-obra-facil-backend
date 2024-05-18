@@ -34,7 +34,8 @@ export class SaveSettingUseCase {
     title,
     description,
   }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById(userId)
+    const user = await this.usersRepository.findById({})
+
     if (!user) {
       throw new AppError({
         code: 'user.not_found',
@@ -52,6 +53,7 @@ export class SaveSettingUseCase {
       },
       new UniqueEntityID(id),
     )
+
     await this.settingsRepository.save(setting)
 
     return {

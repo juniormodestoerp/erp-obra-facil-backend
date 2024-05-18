@@ -5,7 +5,7 @@ import { Optional } from '@core/domain/types/opcional'
 import { User } from '@modules/users/entities/user'
 
 interface Props {
-  userId: string
+  userId?: string
   fieldName: string
   isFieldEnable: boolean
   isFieldRequired: boolean
@@ -13,17 +13,17 @@ interface Props {
   description: string
   createdAt: Date
   updatedAt: Date
-  deletedAt?: Date | null
+  deletedAt: Date | null
 
   user?: User
 }
 
 export class Setting extends Entity<Props> {
-  get userId(): string {
+  get userId(): string | undefined {
     return this.props.userId
   }
 
-  set userId(userId: string) {
+  set userId(userId: string | undefined) {
     this.props.userId = userId
   }
 
@@ -83,11 +83,11 @@ export class Setting extends Entity<Props> {
     this.props.updatedAt = updatedAt
   }
 
-  get deletedAt(): Date | null | undefined {
+  get deletedAt(): Date | null {
     return this.props.deletedAt
   }
 
-  set deletedAt(deletedAt: Date | null | undefined) {
+  set deletedAt(deletedAt: Date | null) {
     this.props.deletedAt = deletedAt
   }
 
@@ -100,7 +100,7 @@ export class Setting extends Entity<Props> {
   }
 
   static create(
-    props: Optional<Props, 'createdAt' | 'updatedAt' | 'deletedAt'>,
+    props: Optional<Props, 'createdAt' | 'updatedAt' | 'deletedAt' | 'user'>,
     id?: UniqueEntityID,
   ): Setting {
     return new Setting(
@@ -109,6 +109,7 @@ export class Setting extends Entity<Props> {
         createdAt: props.createdAt ?? new Date(),
         updatedAt: props.updatedAt ?? new Date(),
         deletedAt: props.deletedAt ?? null,
+        user: props.user,
       },
       id,
     )

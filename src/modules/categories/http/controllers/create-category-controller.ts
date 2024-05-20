@@ -9,7 +9,9 @@ import { CategoriesViewModel } from '../view-models/categories-view-model'
 const bodySchema = z.object({
   categoryId: z.string(strMessage('id da categoria')).optional(),
   categoryName: z.string(strMessage('nome da categoria')),
-  categoryDescripion: z.string(strMessage('descrição da categoria')),
+  subcategoryName: z.string(strMessage('nome da subcategoria')).optional(),
+  model: z.string(strMessage('modelo')),
+  type: z.string(strMessage('tipo')),
 })
 
 export async function createCategoryController(
@@ -19,7 +21,9 @@ export async function createCategoryController(
   const {
     categoryId,
     categoryName: name,
-    categoryDescripion: description,
+    subcategoryName: subcategory,
+    model,
+    type,
   } = bodySchema.parse(request.body)
 
   const createCategoryUseCase = makeCreateCategoryUseCase()
@@ -28,7 +32,9 @@ export async function createCategoryController(
     userId: request.user.sub,
     categoryId,
     name,
-    description,
+    subcategory,
+    model,
+    type,
   })
 
   return reply.status(201).send(CategoriesViewModel.toHTTP(category))

@@ -55,6 +55,25 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
     return PrismaCategoriesMapper.toDomain(category)
   }
 
+  async findBySubcategoryName({
+    userId,
+    name,
+  }: IFindCategoryByNameDTO): Promise<Category | null> {
+    const category = await this.repository.category.findFirst({
+      where: {
+        userId,
+        subcategory: name,
+        deletedAt: null,
+      },
+    })
+
+    if (!category) {
+      return null
+    }
+
+    return PrismaCategoriesMapper.toDomain(category)
+  }
+
   async findMany({
     pageIndex,
     userId,
@@ -64,6 +83,7 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
     const categories = await this.repository.category.findMany({
       where: {
         userId,
+        deletedAt: null,
       },
       skip,
       take: env.PER_PAGE,
@@ -107,15 +127,15 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
   }
 
   async remove({ userId, id }: IFindCategoryByIdDTO): Promise<void> {
-    await this.repository.category.update({
+    await this.repository.category.delete({
       where: {
         userId,
         id,
         deletedAt: null,
       },
-      data: {
-        deletedAt: new Date(),
-      },
+      // data: {
+      //   deletedAt: new Date(),
+      // },
     })
   }
 }

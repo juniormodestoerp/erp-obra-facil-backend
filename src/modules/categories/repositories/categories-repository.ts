@@ -6,6 +6,10 @@ import { Category } from '@modules/categories/entities/category'
 export interface CategoriesRepository {
   findById({ userId, id }: IFindCategoryByIdDTO): Promise<Category | null>
   findByName({ userId, name }: IFindCategoryByNameDTO): Promise<Category | null>
+  findBySubcategoryName({
+    userId,
+    name,
+  }: IFindCategoryByNameDTO): Promise<Category | null>
   findMany({ pageIndex, userId }: IFindManyCategoriesDTO): Promise<Category[]>
   count(): Promise<number>
   create(contact: Category): Promise<void>

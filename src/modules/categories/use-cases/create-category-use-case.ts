@@ -1,13 +1,15 @@
 import { AppError } from '@core/domain/errors/app-error'
 
+import { Category } from '@modules/categories/entities/category'
 import { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
-import { Category } from '../entities/category'
 
 interface Input {
   userId: string
   categoryId?: string
   name: string
-  description: string
+  subcategory?: string
+  model: string
+  type: string
 }
 
 interface Output {
@@ -21,24 +23,49 @@ export class CreateCategoryUseCase {
     userId,
     categoryId,
     name,
-    description,
+    subcategory,
+    model,
+    type,
   }: Input): Promise<Output> {
-    const existsCategory = await this.categoriesRepository.findByName({
+    if (!subcategory) {
+      const existsCategory = await this.categoriesRepository.findByName({
+        userId,
+        name,
+      })
+
+      if (existsCategory) {
+        throw new AppError({
+          code: 'category.already_exists',
+        })
+      }
+    } else {
+      const subcategoryExists =
+        await this.categoriesRepository.findBySubcategoryName({
+          userId,
+          name: subcategory,
+        })
+
+      if (subcategoryExists) {
+        throw new AppError({
+          code: 'subcategory.already_exists',
+        })
+      }
+    }
+
+    const parentId = await this.categoriesRepository.findByName({
       userId,
       name,
     })
 
-    if (!existsCategory) {
-      throw new AppError({
-        code: 'category.already_exists',
-      })
-    }
+    const id = parentId?.id ?? categoryId
 
     const category = Category.create({
       userId,
-      categoryId,
-      name,
-      description,
+      categoryId: id ?? undefined,
+      name: subcategory || name,
+      subcategory: subcategory ? name : null,
+      model,
+      type,
     })
 
     await this.categoriesRepository.create(category)

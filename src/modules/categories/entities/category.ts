@@ -12,7 +12,9 @@ interface Props {
   userId: string
   categoryId?: string | null
   name: string
-  description?: string | null
+  subcategory?: string | null
+  type: string
+  model: string
   createdAt: Date
   updatedAt: Date
   deletedAt?: Date | null
@@ -46,12 +48,28 @@ export class Category extends Entity<Props> {
     this.props.name = name
   }
 
-  get description(): string | null | undefined {
-    return this.props.description
+  get subcategory(): string | null | undefined {
+    return this.props.subcategory
   }
 
-  set description(description: string | null | undefined) {
-    this.props.description = description
+  set subcategory(subcategory: string | null | undefined) {
+    this.props.subcategory = subcategory
+  }
+
+  get type(): string {
+    return this.props.type
+  }
+
+  set type(type: string) {
+    this.props.type = type
+  }
+
+  get model(): string {
+    return this.props.model
+  }
+
+  set model(model: string) {
+    this.props.model = model
   }
 
   get createdAt(): Date {

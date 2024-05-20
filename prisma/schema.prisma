@@ -56,7 +56,9 @@ model Category {
   categoryId  String?   @map("categories_id")
   userId      String    @map("user_id")
   name        String    @unique
-  description String?
+  subcategory String?
+  type        String
+  model       String
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at")
@@ -73,13 +75,12 @@ model Category {
 model Transaction {
   id                String   @id @default(uuid())
   userId            String   @map("user_id")
-  transactionId     String?  @map("transaction_id")
   categoryId        String   @map("category_id")
   name              String
   description       String?
+  establishmentName String   @map("establishment_name")
   transactionDate   DateTime @map("transaction_date")
   status            String
-  establishmentName String   @map("establishment_name")
   bankName          String   @map("bank_name")
   paymentMethod     String   @map("payment_method")
   previousBalance   Float    @map("previous_balance")
@@ -87,13 +88,13 @@ model Transaction {
   currentBalance    Float    @map("current_balance")
 
   // Optional configuration settings
-  competencyDate                   DateTime? @map("competency_date") // Define o momento específico do direito ao recebimento de uma receita
-  costCenter                       String?   @map("cost_center") // Centros de custo e lucros
-  tags                             String?   @map("tags") // Categoriza lançamentos para organização e facilidade de acesso
+  competencyDate                   DateTime? @map("competency_date")
+  costCenter                       String?   @map("cost_center")
+  tags                             String?   @map("tags")
   enablePasswordProtection         Boolean   @default(false) @map("enable_password_protection")
   installmentConfiguration         Boolean   @default(false) @map("installment_configuration")
   includeResidualBalancesInReports Boolean   @default(false) @map("include_residual_balances_in_reports")
-  documentNumber                   String?   @map("document_number") // Número de documento para rastreamento
+  documentNumber                   String?   @map("document_number")
   enableReceiptExpenseGoals        Boolean   @default(false) @map("enable_receipt_expense_goals")
   associatedContracts              String?   @map("associated_contracts")
   associatedProjects               String?   @map("associated_projects")
@@ -109,7 +110,6 @@ model Transaction {
 
   @@map("transactions")
 }
-
 
 model UserToken {
   id        String    @id @default(uuid())
@@ -137,4 +137,3 @@ model File {
 
   @@map("files")
 }
-

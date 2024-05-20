@@ -11,16 +11,20 @@ export class RemoveCategoryUseCase {
   constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
   async execute({ id, userId }: Input): Promise<void> {
-    const clinic = await this.categoriesRepository.findById({
+    const category = await this.categoriesRepository.findById({
       userId,
       id,
     })
 
-    if (!clinic) {
+    console.log(id, category)
+
+    if (!category) {
       throw new AppError({
         code: 'category.not_found',
       })
     }
+
+    console.log(id)
 
     await this.categoriesRepository.remove({
       userId,

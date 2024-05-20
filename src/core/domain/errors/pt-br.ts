@@ -182,6 +182,12 @@ export const errors = {
     message: 'A categoria informada já está registrada no sistema.',
     status: StatusCode.BAD_REQUEST,
   },
+
+  'subcategory.already_exists': {
+    error: 'Subcategory already exists!',
+    message: 'A subcategoria informada já está registrada no sistema.',
+    status: StatusCode.BAD_REQUEST,
+  },
 }
 
 export type ErrorKeys = keyof typeof errors

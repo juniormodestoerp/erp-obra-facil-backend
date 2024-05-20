@@ -10,7 +10,7 @@ export interface ISettingOption {
 export const settingsOptions: ISettingOption[] = [
   {
     id: '1d132d36-ee83-47c3-aeaa-de9c6a68e575',
-    fieldName: 'competenceDate',
+    fieldName: 'competencyDate',
     isFieldEnable: true,
     isFieldRequired: false,
     title: 'Data de competência',
@@ -19,7 +19,7 @@ export const settingsOptions: ISettingOption[] = [
   },
   {
     id: 'b7cffeb2-3038-4950-9feb-5efd9ced0cb3',
-    fieldName: 'costAndProfitCenters',
+    fieldName: 'costCenter',
     isFieldEnable: true,
     isFieldRequired: false,
     title: 'Centros de custo e lucros',
@@ -37,7 +37,7 @@ export const settingsOptions: ISettingOption[] = [
   },
   {
     id: 'ef5502fe-053b-4b96-ab6a-e29bac122550',
-    fieldName: 'enablePassword',
+    fieldName: 'enablePasswordProtection',
     isFieldEnable: true,
     isFieldRequired: false,
     title: 'Habilitar senha para exclusão de cadastros',
@@ -55,7 +55,7 @@ export const settingsOptions: ISettingOption[] = [
   },
   {
     id: 'c850fd74-4086-4958-b5a1-2283dfae3955',
-    fieldName: 'includeResidualBalances',
+    fieldName: 'includeResidualBalancesInReports',
     isFieldEnable: true,
     isFieldRequired: false,
     title: 'Inclusão de saldos residuais nos relatórios de caixa',
@@ -64,7 +64,7 @@ export const settingsOptions: ISettingOption[] = [
   },
   {
     id: 'cfdaee47-ae55-45bc-83e1-39cbc81a6d78',
-    fieldName: 'paymentMethods',
+    fieldName: 'paymentMethod',
     isFieldEnable: true,
     isFieldRequired: false,
     title: 'Formas de pagamento',
@@ -82,7 +82,7 @@ export const settingsOptions: ISettingOption[] = [
   },
   {
     id: 'c37a86ce-246e-4623-aa81-624abccaea50',
-    fieldName: 'goals',
+    fieldName: 'enableReceiptExpenseGoals',
     isFieldEnable: true,
     isFieldRequired: false,
     title: 'Metas de receitas e despesas',
@@ -91,7 +91,7 @@ export const settingsOptions: ISettingOption[] = [
   },
   {
     id: '2036cac2-365c-408c-be4c-91fc4b4fb2b3',
-    fieldName: 'contracts',
+    fieldName: 'associatedContracts',
     isFieldEnable: true,
     isFieldRequired: false,
     title: 'Contratos',
@@ -100,7 +100,7 @@ export const settingsOptions: ISettingOption[] = [
   },
   {
     id: '354e3be6-fb8a-4127-9125-9bd623b53452',
-    fieldName: 'projects',
+    fieldName: 'associatedProjects',
     isFieldEnable: true,
     isFieldRequired: false,
     title: 'Projetos',
@@ -109,7 +109,7 @@ export const settingsOptions: ISettingOption[] = [
   },
   {
     id: '4a4a60f1-2118-4a14-918c-d41d3488894c',
-    fieldName: 'observations',
+    fieldName: 'additionalComments',
     isFieldEnable: true,
     isFieldRequired: false,
     title: 'Observações',

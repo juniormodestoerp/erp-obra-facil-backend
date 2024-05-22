@@ -39,7 +39,7 @@ export async function authenticateUserController(
   })
 
   const signOptions: SignOptions = {
-    expiresIn: '30d',
+    expiresIn: '10d',
     sub: user.id,
     notBefore: 0,
   }
@@ -55,7 +55,7 @@ export async function authenticateUserController(
     {
       sub: user.id,
     },
-    { ...signOptions, expiresIn: '90d' },
+    { ...signOptions, expiresIn: '28d' },
   )
 
   request.user = {

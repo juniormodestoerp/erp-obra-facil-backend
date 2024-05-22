@@ -18,10 +18,9 @@ export class PrismaUsersRepository implements UsersRepository {
   }
 
   async findById({ userId }: IFindUserByIdDTO): Promise<User | null> {
-    const user = await this.repository.user.findUnique({
+    const user = await this.repository.user.findFirst({
       where: {
         id: userId,
-        deletedAt: null,
       },
     })
 

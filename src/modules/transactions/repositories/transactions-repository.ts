@@ -8,7 +8,7 @@ export interface TransactionsRepository {
     pageIndex,
     userId,
   }: IFindManyTransactionsDTO): Promise<Transaction[]>
-  count(): Promise<number>
+  count(searchTerm?: string): Promise<number>
   create(transaction: Transaction): Promise<void>
   save(transaction: Transaction): Promise<void>
   remove({ userId, id }: IFindTransactionByIdDTO): Promise<void>

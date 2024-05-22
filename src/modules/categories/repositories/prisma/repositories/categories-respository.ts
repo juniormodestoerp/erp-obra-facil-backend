@@ -133,9 +133,6 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
         id,
         deletedAt: null,
       },
-      // data: {
-      //   deletedAt: new Date(),
-      // },
     })
   }
 }

@@ -1,7 +1,5 @@
 import { Transaction as RawTransaction } from '@prisma/client'
-
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
-
 import { Transaction } from '@modules/transactions/entities/transaction'
 
 export class PrismaTransactionsMapper {
@@ -9,63 +7,60 @@ export class PrismaTransactionsMapper {
     return {
       id: transaction.id,
       userId: transaction.userId,
-      transactionId: transaction.transactionId,
-      categoryId: transaction.categoryId,
       name: transaction.name,
       description: transaction.description,
-      transactionDate: transaction.transactionDate,
-      status: transaction.status,
+      categoryId: transaction.categoryId,
       establishmentName: transaction.establishmentName,
       bankName: transaction.bankName,
-      paymentMethod: transaction.paymentMethod,
+      transactionDate: transaction.transactionDate,
       previousBalance: transaction.previousBalance,
       totalAmount: transaction.totalAmount,
       currentBalance: transaction.currentBalance,
+      paymentMethod: transaction.paymentMethod,
       competencyDate: transaction.competencyDate,
-      costCenter: transaction.costCenter,
+      costAndProfitCenters: transaction.costAndProfitCenters,
       tags: transaction.tags,
-      enablePasswordProtection: transaction.enablePasswordProtection,
-      installmentConfiguration: transaction.installmentConfiguration,
-      includeResidualBalancesInReports:
-        transaction.includeResidualBalancesInReports,
       documentNumber: transaction.documentNumber,
-      enableReceiptExpenseGoals: transaction.enableReceiptExpenseGoals,
       associatedContracts: transaction.associatedContracts,
       associatedProjects: transaction.associatedProjects,
       additionalComments: transaction.additionalComments,
+      status: transaction.status,
       createdAt: transaction.createdAt,
       updatedAt: transaction.updatedAt,
       deletedAt: transaction.deletedAt,
     }
   }
 
-  static toDomain(raw: RawTransaction): Transaction {
+  static toDomain(
+    raw: RawTransaction & {
+      category?: {
+        id: string
+        name: string
+      }
+    },
+  ): Transaction {
     return Transaction.create(
       {
         userId: raw.userId,
-        transactionId: raw.transactionId,
-        categoryId: raw.categoryId,
         name: raw.name,
         description: raw.description,
-        transactionDate: raw.transactionDate,
-        status: raw.status,
+        categoryId: raw.categoryId,
+        categoryName: raw.category?.name,
         establishmentName: raw.establishmentName,
         bankName: raw.bankName,
-        paymentMethod: raw.paymentMethod,
+        transactionDate: raw.transactionDate,
         previousBalance: raw.previousBalance,
         totalAmount: raw.totalAmount,
         currentBalance: raw.currentBalance,
+        paymentMethod: raw.paymentMethod,
         competencyDate: raw.competencyDate,
-        costCenter: raw.costCenter,
+        costAndProfitCenters: raw.costAndProfitCenters,
         tags: raw.tags,
-        enablePasswordProtection: raw.enablePasswordProtection,
-        installmentConfiguration: raw.installmentConfiguration,
-        includeResidualBalancesInReports: raw.includeResidualBalancesInReports,
         documentNumber: raw.documentNumber,
-        enableReceiptExpenseGoals: raw.enableReceiptExpenseGoals,
         associatedContracts: raw.associatedContracts,
         associatedProjects: raw.associatedProjects,
         additionalComments: raw.additionalComments,
+        status: raw.status,
         createdAt: raw.createdAt,
         updatedAt: raw.updatedAt,
         deletedAt: raw.deletedAt,

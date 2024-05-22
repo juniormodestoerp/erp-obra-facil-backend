@@ -16,15 +16,11 @@ export class RemoveCategoryUseCase {
       id,
     })
 
-    console.log(id, category)
-
     if (!category) {
       throw new AppError({
         code: 'category.not_found',
       })
     }
-
-    console.log(id)
 
     await this.categoriesRepository.remove({
       userId,

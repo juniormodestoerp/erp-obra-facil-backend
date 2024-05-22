@@ -75,27 +75,23 @@ model Category {
 model Transaction {
   id                String   @id @default(uuid())
   userId            String   @map("user_id")
-  categoryId        String   @map("category_id")
   name              String
-  description       String?
+  description       String
+  categoryId        String   @map("category_id")
   establishmentName String   @map("establishment_name")
-  transactionDate   DateTime @map("transaction_date")
-  status            String
   bankName          String   @map("bank_name")
-  paymentMethod     String   @map("payment_method")
+  transactionDate   DateTime @map("transaction_date")
   previousBalance   Float    @map("previous_balance")
   totalAmount       Float    @map("total_amount")
   currentBalance    Float    @map("current_balance")
+  paymentMethod     String   @map("payment_method")
+  status            String
 
   // Optional configuration settings
   competencyDate                   DateTime? @map("competency_date")
-  costCenter                       String?   @map("cost_center")
+  costAndProfitCenters             String?   @map("cost_center")
   tags                             String?   @map("tags")
-  enablePasswordProtection         Boolean   @default(false) @map("enable_password_protection")
-  installmentConfiguration         Boolean   @default(false) @map("installment_configuration")
-  includeResidualBalancesInReports Boolean   @default(false) @map("include_residual_balances_in_reports")
   documentNumber                   String?   @map("document_number")
-  enableReceiptExpenseGoals        Boolean   @default(false) @map("enable_receipt_expense_goals")
   associatedContracts              String?   @map("associated_contracts")
   associatedProjects               String?   @map("associated_projects")
   additionalComments               String?   @map("additional_comments")

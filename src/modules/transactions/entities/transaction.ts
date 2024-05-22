@@ -2,41 +2,33 @@ import { Entity } from '@core/domain/entities/entity'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { Optional } from '@core/domain/types/opcional'
 
-import { User } from '@modules/users/entities/user'
 import { Category } from '@modules/categories/entities/category'
+import { User } from '@modules/users/entities/user'
 
 interface Props {
   userId: string
-  transactionId: string | null
-  categoryId: string
   name: string
-  description: string | null
-  transactionDate: Date
-  status: string
+  description: string
+  categoryId: string
+  categoryName?: string
   establishmentName: string
   bankName: string
-  paymentMethod: string
+  transactionDate: Date
   previousBalance: number
   totalAmount: number
   currentBalance: number
-  createdAt: Date
-  updatedAt: Date
-  deletedAt: Date | null
-
-  // Additional optional configurations
+  paymentMethod: string
   competencyDate: Date | null
-  costCenter: string | null
+  costAndProfitCenters: string | null
   tags: string | null
-  enablePasswordProtection?: boolean
-  installmentConfiguration?: boolean
-  includeResidualBalancesInReports?: boolean
   documentNumber: string | null
-  enableReceiptExpenseGoals?: boolean
   associatedContracts: string | null
   associatedProjects: string | null
   additionalComments: string | null
-  // Additional optional configurations
-
+  status: string
+  createdAt: Date
+  updatedAt: Date
+  deletedAt?: Date | null
   user?: User
   category?: Category
 }
@@ -50,12 +42,20 @@ export class Transaction extends Entity<Props> {
     this.props.userId = value
   }
 
-  get transactionId(): string | null {
-    return this.props.transactionId
+  get name(): string {
+    return this.props.name
   }
 
-  set transactionId(value: string | null) {
-    this.props.transactionId = value
+  set name(value: string) {
+    this.props.name = value
+  }
+
+  get description(): string {
+    return this.props.description
+  }
+
+  set description(value: string) {
+    this.props.description = value
   }
 
   get categoryId(): string {
@@ -66,36 +66,12 @@ export class Transaction extends Entity<Props> {
     this.props.categoryId = value
   }
 
-  get name(): string {
-    return this.props.name
+  get categoryName(): string | undefined {
+    return this.props.categoryName
   }
 
-  set name(value: string) {
-    this.props.name = value
-  }
-
-  get description(): string | null {
-    return this.props.description
-  }
-
-  set description(value: string | null) {
-    this.props.description = value
-  }
-
-  get transactionDate(): Date {
-    return this.props.transactionDate
-  }
-
-  set transactionDate(value: Date) {
-    this.props.transactionDate = value
-  }
-
-  get status(): string {
-    return this.props.status
-  }
-
-  set status(value: string) {
-    this.props.status = value
+  set categoryName(value: string | undefined) {
+    this.props.categoryName = value
   }
 
   get establishmentName(): string {
@@ -114,12 +90,12 @@ export class Transaction extends Entity<Props> {
     this.props.bankName = value
   }
 
-  get paymentMethod(): string {
-    return this.props.paymentMethod
+  get transactionDate(): Date {
+    return this.props.transactionDate
   }
 
-  set paymentMethod(value: string) {
-    this.props.paymentMethod = value
+  set transactionDate(value: Date) {
+    this.props.transactionDate = value
   }
 
   get previousBalance(): number {
@@ -146,44 +122,12 @@ export class Transaction extends Entity<Props> {
     this.props.currentBalance = value
   }
 
-  get createdAt(): Date {
-    return this.props.createdAt
+  get paymentMethod(): string {
+    return this.props.paymentMethod
   }
 
-  set createdAt(value: Date) {
-    this.props.createdAt = value
-  }
-
-  get updatedAt(): Date {
-    return this.props.updatedAt
-  }
-
-  set updatedAt(value: Date) {
-    this.props.updatedAt = value
-  }
-
-  get deletedAt(): Date | null {
-    return this.props.deletedAt
-  }
-
-  set deletedAt(value: Date | null) {
-    this.props.deletedAt = value
-  }
-
-  get user(): User | undefined {
-    return this.props.user
-  }
-
-  set user(value: User | undefined) {
-    this.props.user = value
-  }
-
-  get category(): Category | undefined {
-    return this.props.category
-  }
-
-  set category(value: Category | undefined) {
-    this.props.category = value
+  set paymentMethod(value: string) {
+    this.props.paymentMethod = value
   }
 
   get competencyDate(): Date | null {
@@ -194,12 +138,12 @@ export class Transaction extends Entity<Props> {
     this.props.competencyDate = value
   }
 
-  get costCenter(): string | null {
-    return this.props.costCenter
+  get costAndProfitCenters(): string | null {
+    return this.props.costAndProfitCenters
   }
 
-  set costCenter(value: string | null) {
-    this.props.costCenter = value
+  set costAndProfitCenters(value: string | null) {
+    this.props.costAndProfitCenters = value
   }
 
   get tags(): string | null {
@@ -210,44 +154,12 @@ export class Transaction extends Entity<Props> {
     this.props.tags = value
   }
 
-  get enablePasswordProtection(): boolean | undefined {
-    return this.props.enablePasswordProtection
-  }
-
-  set enablePasswordProtection(value: boolean | undefined) {
-    this.props.enablePasswordProtection = value
-  }
-
-  get installmentConfiguration(): boolean | undefined {
-    return this.props.installmentConfiguration
-  }
-
-  set installmentConfiguration(value: boolean | undefined) {
-    this.props.installmentConfiguration = value
-  }
-
-  get includeResidualBalancesInReports(): boolean | undefined {
-    return this.props.includeResidualBalancesInReports
-  }
-
-  set includeResidualBalancesInReports(value: boolean | undefined) {
-    this.props.includeResidualBalancesInReports = value
-  }
-
   get documentNumber(): string | null {
     return this.props.documentNumber
   }
 
   set documentNumber(value: string | null) {
     this.props.documentNumber = value
-  }
-
-  get enableReceiptExpenseGoals(): boolean | undefined {
-    return this.props.enableReceiptExpenseGoals
-  }
-
-  set enableReceiptExpenseGoals(value: boolean | undefined) {
-    this.props.enableReceiptExpenseGoals = value
   }
 
   get associatedContracts(): string | null {
@@ -272,6 +184,54 @@ export class Transaction extends Entity<Props> {
 
   set additionalComments(value: string | null) {
     this.props.additionalComments = value
+  }
+
+  get status(): string {
+    return this.props.status
+  }
+
+  set status(value: string) {
+    this.props.status = value
+  }
+
+  get createdAt(): Date {
+    return this.props.createdAt
+  }
+
+  set createdAt(value: Date) {
+    this.props.createdAt = value
+  }
+
+  get updatedAt(): Date {
+    return this.props.updatedAt
+  }
+
+  set updatedAt(value: Date) {
+    this.props.updatedAt = value
+  }
+
+  get deletedAt(): Date | null | undefined {
+    return this.props.deletedAt
+  }
+
+  set deletedAt(value: Date | null | undefined) {
+    this.props.deletedAt = value
+  }
+
+  get user(): User | undefined {
+    return this.props.user
+  }
+
+  set user(value: User | undefined) {
+    this.props.user = value
+  }
+
+  get category(): Category | undefined {
+    return this.props.category
+  }
+
+  set category(value: Category | undefined) {
+    this.props.category = value
   }
 
   static create(

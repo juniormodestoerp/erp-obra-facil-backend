@@ -1,39 +1,81 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
 
-import { strMessage } from '@core/utils/custom-zod-error'
+import {
+  dateMessage,
+  numbMessage,
+  strMessage,
+} from '@core/utils/custom-zod-error'
 
-import { makeSaveTransactionUseCase } from '@modules/transactions/use-cases/factories/make-save-transaction-factory'
+import { makeCreateTransactionUseCase } from '@modules/transactions/use-cases/factories/make-create-transaction-factory'
 
-const paramsSchema = z.object({
-  id: z
-    .string(strMessage('id das configurações'))
-    .uuid({ message: 'O campo id das configurações deve ser um UUID válido.' })
-    .min(1, 'O campo id das configurações é obrigatório.')
-    .optional(),
-})
-
-const bodySchema = z.object({
-  name: z.string(strMessage('nome')),
+const schema = z.object({
+  name: z.string(strMessage('nome do lançamento')),
   description: z.string(strMessage('descrição')),
-  transactionId: z.string(strMessage('id do lançamento')).optional(),
+  categoryId: z.string(strMessage('categoria')),
+  establishmentName: z.string(strMessage('nome do estabelecimento')),
+  bankName: z.string(strMessage('nome do banco')),
+  transactionDate: z.coerce.date(dateMessage('data da transação')),
+  previousBalance: z.coerce.number(numbMessage('saldo anterior')),
+  totalAmount: z.coerce.number(numbMessage('valor base do procedimento')),
+  currentBalance: z.coerce.number(numbMessage('valor base do procedimento')),
+  paymentMethod: z.string(strMessage('forma de pagamento')),
+
+  // Configurações opcionais adicionais
+  competencyDate: z.coerce.date(dateMessage('data de competência')).nullable(),
+  costAndProfitCenters: z.string(strMessage('centro de custo')).nullable(),
+  tags: z.string(strMessage('tags')).nullable(),
+  documentNumber: z.string(strMessage('número do documento')).nullable(),
+  associatedContracts: z.string(strMessage('contratos assosiados')).nullable(),
+  associatedProjects: z.string(strMessage('projetos assosiados')).nullable(),
+  additionalComments: z.string(strMessage('comentários adicionais')).nullable(),
 })
 
-export async function saveTransaction(
+export async function createTransaction(
   request: FastifyRequest,
   reply: FastifyReply,
 ) {
-  const { id } = paramsSchema.parse(request.params)
-  const { name, description, transactionId } = bodySchema.parse(request.body)
-
-  const saveTransactionUseCase = makeSaveTransactionUseCase()
-
-  await saveTransactionUseCase.execute({
-    id,
-    userId: request.user.sub,
-    transactionId,
+  const {
     name,
     description,
+    categoryId,
+    establishmentName,
+    bankName,
+    transactionDate,
+    previousBalance,
+    totalAmount,
+    currentBalance,
+    paymentMethod,
+    competencyDate,
+    costAndProfitCenters,
+    tags,
+    documentNumber,
+    associatedContracts,
+    associatedProjects,
+    additionalComments,
+  } = schema.parse(request.body)
+
+  const createTransactionUseCase = makeCreateTransactionUseCase()
+
+  await createTransactionUseCase.execute({
+    userId: request.user.sub,
+    name,
+    description,
+    categoryId,
+    establishmentName,
+    bankName,
+    transactionDate,
+    previousBalance,
+    totalAmount,
+    currentBalance,
+    paymentMethod,
+    competencyDate,
+    costAndProfitCenters,
+    tags,
+    documentNumber,
+    associatedContracts,
+    associatedProjects,
+    additionalComments,
   })
 
   return reply.status(201).send()

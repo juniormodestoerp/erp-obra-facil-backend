@@ -1,7 +1,10 @@
 import { PrismaClient } from '@prisma/client'
 
 import { IFindTransactionByIdDTO } from '@modules/transactions/dtos/find-transaction-by-id-dto'
-import { IFindManyTransactionsDTO } from '@modules/transactions/dtos/find-many-transactions-dto'
+import {
+  IFindManyTransactionsDTO,
+  ITransactionsWhereClauses,
+} from '@modules/transactions/dtos/find-many-transactions-dto'
 import { Transaction } from '@modules/transactions/entities/transaction'
 import { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
 import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
@@ -38,17 +41,41 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
   async findMany({
     pageIndex,
     userId,
+    searchTerm,
   }: IFindManyTransactionsDTO): Promise<Transaction[]> {
-    const skip = (pageIndex - 1) * env.PER_PAGE
+    const skip = pageIndex * env.PER_PAGE
+
+    const whereClauses: ITransactionsWhereClauses = {
+      userId,
+      deletedAt: null,
+    }
+
+    if (searchTerm) {
+      whereClauses.OR = [
+        { name: { contains: searchTerm, mode: 'insensitive' } },
+        { description: { contains: searchTerm, mode: 'insensitive' } },
+        { categoryId: { contains: searchTerm, mode: 'insensitive' } },
+        { establishmentName: { contains: searchTerm, mode: 'insensitive' } },
+        { bankName: { contains: searchTerm, mode: 'insensitive' } },
+        { paymentMethod: { contains: searchTerm, mode: 'insensitive' } },
+        { status: { contains: searchTerm, mode: 'insensitive' } },
+      ]
+    }
 
     const transactions = await this.repository.transaction.findMany({
-      where: {
-        userId,
-      },
+      where: whereClauses,
       skip,
       take: env.PER_PAGE,
       orderBy: {
         updatedAt: 'desc',
+      },
+      include: {
+        category: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
       },
     })
 
@@ -61,8 +88,26 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     )
   }
 
-  async count(): Promise<number> {
-    return await this.repository.transaction.count()
+  async count(searchTerm: string): Promise<number> {
+    const whereClauses: ITransactionsWhereClauses = {
+      deletedAt: null,
+    }
+
+    if (searchTerm) {
+      whereClauses.OR = [
+        { name: { contains: searchTerm, mode: 'insensitive' } },
+        { description: { contains: searchTerm, mode: 'insensitive' } },
+        { categoryId: { contains: searchTerm, mode: 'insensitive' } },
+        { establishmentName: { contains: searchTerm, mode: 'insensitive' } },
+        { bankName: { contains: searchTerm, mode: 'insensitive' } },
+        { paymentMethod: { contains: searchTerm, mode: 'insensitive' } },
+        { status: { contains: searchTerm, mode: 'insensitive' } },
+      ]
+    }
+
+    return await this.repository.transaction.count({
+      where: whereClauses,
+    })
   }
 
   async create(transaction: Transaction): Promise<void> {

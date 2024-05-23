@@ -7,8 +7,6 @@ import { User } from '@modules/users/entities/user'
 
 interface Props {
   userId: string
-  fitId: string
-  trnType: string
   name: string
   description: string
   categoryId: string
@@ -31,7 +29,6 @@ interface Props {
   createdAt: Date
   updatedAt: Date
   deletedAt?: Date | null
-
   user?: User
   category?: Category
 }
@@ -43,22 +40,6 @@ export class Transaction extends Entity<Props> {
 
   set userId(value: string) {
     this.props.userId = value
-  }
-
-  get fitId(): string {
-    return this.props.fitId
-  }
-
-  set fitId(value: string) {
-    this.props.fitId = value
-  }
-
-  get trnType(): string {
-    return this.props.trnType
-  }
-
-  set trnType(value: string) {
-    this.props.trnType = value
   }
 
   get name(): string {

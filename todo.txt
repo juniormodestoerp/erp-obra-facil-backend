@@ -14,3 +14,71 @@
 [] - Implement Terraform.
 [] - Implement Ansible.
 [] - Implement AWS.
+
+import { parse } from 'ofx-js';
+import * as fs from 'fs';
+
+async function readOFXFile(filePath) {
+  // aqui pode ser um endpoint tbm que retorna as informações do ofx para o front
+  try {
+    const ofxData = fs.readFileSync(filePath, 'utf-8');
+    const parsedData = await parse(ofxData);
+
+    const account = parsedData.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKACCTFROM;
+    const transactions = parsedData.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKTRANLIST.STMTTRN;
+    return { account, transactions };
+  } catch (error) {
+    console.error('Erro ao ler o arquivo OFX:', error);
+    return [];
+  }
+}
+
+
+async function reconcileTransactions(filePath, userId) {
+  const ofxData = await readOFXFile(filePath);
+
+  for (const ofxTransaction of ofxData.transactions) {
+    // aqui valida se já existe uma transação com o mesmo valor e a mesma data
+    const existingTransaction = await prisma.transaction.findFirst({
+      where: {
+        userId: userId,
+        total: parseFloat(ofxTransaction.TRNAMT),
+        completedAt: new Date(ofxTransaction.DTPOSTED)
+      }
+    });
+
+    if (existingTransaction) {
+      // caso exista, atualiza o status da transação para RECONCILED 
+      // ou alguma outra regra de negocio. Aqui pode ser um endpoint a parte também para fazer de forma manual
+      await prisma.transaction.update({
+        where: { id: existingTransaction.id },
+        data: { status: 'RECONCILED' }
+      });
+    } else {
+      // caso não existe, precisamos criar no banco a transação
+      // aqui tbm pode ser um endpoint separado, pra criar/confirmar a conciliação
+      await prisma.transaction.create({
+        data: {
+          userId: userId,
+          transactionId: ofxTransaction.FITID,
+          categoryId: 'categoria-id',
+          status: 'RECONCILED',
+          bankName: 'Bank Name',
+          paymentMethod: 'Payment Method',
+          previusBalance: 0, // aqui vai precisar de uma lógica para pegar o saldo anterior
+          total: parseFloat(ofxTransaction.TRNAMT),
+          currentBalance: 0, // aqui vai precisar de uma lógica para pegar o saldo atual
+          completedAt: new Date(ofxTransaction.DTPOSTED),
+          name: "", // nome não existe no OFX de exemplo
+          establishment: "", //não existe no OFX de exemplo
+          description: ofxTransaction.MEMO,
+          createdAt: new Date(),
+          updatedAt: new Date()
+
+        }
+      })
+    }
+  }
+}
+
+ reconcileTransactions('./file.ofx', 'user_id');

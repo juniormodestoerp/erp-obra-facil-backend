@@ -8,9 +8,12 @@ import { PrismaUsersRepository } from '@modules/users/repositories/prisma/reposi
 import { settingsOptions } from '@shared/infra/database/data'
 import { Bcrypt } from '@shared/infra/providers/hash/bcrypt'
 import { prisma } from '@shared/infra/database/prisma'
+import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/categories-respository'
+import { Category } from '@modules/categories/entities/category'
 
 async function seed() {
   const usersRepository = new PrismaUsersRepository()
+  const categoriesRepository = new PrismaCategoriesRepository()
 
   const hash = new Bcrypt()
 
@@ -49,6 +52,17 @@ async function seed() {
     })
 
     await usersRepository.create(user)
+
+    const category = Category.create({
+      userId: user.id,
+      name: 'padrão',
+      type: 'padrão',
+      model: 'padrão',
+    })
+
+    category.categoryId = category.id
+
+    await categoriesRepository.create(category)
 
     console.log(`
 User created with success 🎉

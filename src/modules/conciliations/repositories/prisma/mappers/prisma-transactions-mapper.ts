@@ -7,8 +7,6 @@ export class PrismaTransactionsMapper {
     return {
       id: transaction.id,
       userId: transaction.userId,
-      fitId: transaction.fitId,
-      trnType: transaction.trnType,
       name: transaction.name,
       description: transaction.description,
       categoryId: transaction.categoryId,
@@ -39,16 +37,11 @@ export class PrismaTransactionsMapper {
         id: string
         name: string
       }
-      user?: {
-        id: string
-      }
     },
   ): Transaction {
     return Transaction.create(
       {
         userId: raw.userId,
-        fitId: raw.fitId,
-        trnType: raw.trnType,
         name: raw.name,
         description: raw.description,
         categoryId: raw.categoryId,

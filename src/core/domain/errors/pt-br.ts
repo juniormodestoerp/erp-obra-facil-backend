@@ -165,6 +165,18 @@ export const errors = {
     status: StatusCode.BAD_REQUEST,
   },
 
+  'file.cannot_download': {
+    error: 'File cannot be downloaded!',
+    message: 'O arquivo não pode ser baixado devido a um erro.',
+    status: StatusCode.BAD_REQUEST,
+  },
+
+  'file.cannot_read_ofx': {
+    error: 'Cannot read OFX file!',
+    message: 'Não foi possível ler o arquivo OFX devido a um erro.',
+    status: StatusCode.BAD_REQUEST,
+  },
+
   'transaction.not_found': {
     error: 'Transaction not found!',
     message: 'O lançamento solicitado não foi encontrado.',

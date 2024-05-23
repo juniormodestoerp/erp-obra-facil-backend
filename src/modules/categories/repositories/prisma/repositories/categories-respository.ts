@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client'
 import { IFindCategoryByIdDTO } from '@modules/categories/dtos/find-category-by-id-dto'
 import { IFindCategoryByNameDTO } from '@modules/categories/dtos/find-category-by-name-dto'
 import { IFindManyCategoriesDTO } from '@modules/categories/dtos/find-many-categories-dto'
+import { ISelectInputDTO } from '@modules/categories/dtos/select-input-dto'
 import { Category } from '@modules/categories/entities/category'
 import { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
 import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
@@ -99,6 +100,32 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
     return categories.map((category) =>
       PrismaCategoriesMapper.toDomain(category),
     )
+  }
+
+  async selectInput(): Promise<ISelectInputDTO[]> {
+    const categories = await this.repository.category.findMany({
+      where: {
+        deletedAt: null,
+      },
+      orderBy: {
+        updatedAt: 'desc',
+      },
+      select: {
+        id: true,
+        name: true,
+      },
+    })
+
+    if (!categories) {
+      return []
+    }
+
+    return categories.map((category) => {
+      return {
+        field: category.name,
+        value: category.id,
+      }
+    })
   }
 
   async count(): Promise<number> {

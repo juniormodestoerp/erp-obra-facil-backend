@@ -37,6 +37,10 @@ function FormatPhone(phone: string): string {
   }
 }
 
+function NormalizeName(name: string): string {
+  return name.trim().toLowerCase().replace(/\s+/g, '-')
+}
+
 function GenerateRandomCode(length: number): string {
   const min = 10 ** (length - 1)
   const max = 10 ** length - 1
@@ -46,5 +50,6 @@ function GenerateRandomCode(length: number): string {
 export const Utils = {
   FormatDocument,
   FormatPhone,
+  NormalizeName,
   GenerateRandomCode,
 }

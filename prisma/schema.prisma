@@ -75,6 +75,8 @@ model Category {
 model Transaction {
   id                String   @id @default(uuid())
   userId            String   @map("user_id")
+  fitId             String   @map("fit_id")
+  trnType           String   @map("trn_type")
   name              String
   description       String
   categoryId        String   @map("category_id")
@@ -87,15 +89,13 @@ model Transaction {
   paymentMethod     String   @map("payment_method")
   status            String
 
-  // Optional configuration settings
-  competencyDate                   DateTime? @map("competency_date")
-  costAndProfitCenters             String?   @map("cost_center")
-  tags                             String?   @map("tags")
-  documentNumber                   String?   @map("document_number")
-  associatedContracts              String?   @map("associated_contracts")
-  associatedProjects               String?   @map("associated_projects")
-  additionalComments               String?   @map("additional_comments")
-  // Optional configuration settings
+  competencyDate       DateTime? @map("competency_date")
+  costAndProfitCenters String?   @map("cost_center")
+  tags                 String?   @map("tags")
+  documentNumber       String?   @map("document_number")
+  associatedContracts  String?   @map("associated_contracts")
+  associatedProjects   String?   @map("associated_projects")
+  additionalComments   String?   @map("additional_comments")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")

@@ -32,7 +32,7 @@ export async function fetchSettings(
     settings: settings.map((setting) => SettingViewModel.toHTTP(setting) ?? []),
     meta: {
       pageIndex,
-      perPage: env.PER_PAGE,
+      perPage: 20 ?? env.PER_PAGE,
       totalCount,
     },
   })

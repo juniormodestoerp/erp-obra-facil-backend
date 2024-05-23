@@ -88,34 +88,6 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
     )
   }
 
-  async fetchAll({ userId }: { userId: string }): Promise<Transaction[]> {
-    const transactions = await this.repository.transaction.findMany({
-      where: {
-        userId,
-        deletedAt: null,
-      },
-      orderBy: {
-        updatedAt: 'desc',
-      },
-      include: {
-        category: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    })
-
-    if (!transactions) {
-      return []
-    }
-
-    return transactions.map((transaction) =>
-      PrismaTransactionsMapper.toDomain(transaction),
-    )
-  }
-
   async count(searchTerm: string): Promise<number> {
     const whereClauses: ITransactionsWhereClauses = {
       deletedAt: null,

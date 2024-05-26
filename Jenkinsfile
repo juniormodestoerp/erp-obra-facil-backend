@@ -2,6 +2,7 @@ pipeline {
     agent any
     tools {
         nodejs "node"
+        git 'Default'
     }
     environment {
         // Variáveis de ambiente que são definidas como credenciais no Jenkins

@@ -82,3 +82,5 @@ async function reconcileTransactions(filePath, userId) {
 }
 
  reconcileTransactions('./file.ofx', 'user_id');
+
+ teste

@@ -1,6 +1,8 @@
 pipeline {
-    agent any  // Define que o pipeline pode rodar em qualquer agente disponível
-
+    agent any
+    tools {
+        nodejs "node"
+    }
     environment {
         // Variáveis de ambiente que são definidas como credenciais no Jenkins
         DATABASE_URL = credentials('DATABASE_URL')

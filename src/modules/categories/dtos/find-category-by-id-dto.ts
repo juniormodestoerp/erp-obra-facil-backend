@@ -1,4 +1,4 @@
 export interface IFindCategoryByIdDTO {
-  id: string
-  userId: string
+	id: string
+	userId: string
 }

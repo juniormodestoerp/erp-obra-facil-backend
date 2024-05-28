@@ -4,8 +4,8 @@ import { PrismaUsersRepository } from '@modules/users/repositories/prisma/reposi
 import { FetchCategoriesUseCase } from '@modules/categories/use-cases/fetch-categories-use-case'
 
 export function makeFetchCategoriesUseCase() {
-  const categoriesRepository = new PrismaCategoriesRepository()
-  const usersRepository = new PrismaUsersRepository()
+	const categoriesRepository = new PrismaCategoriesRepository()
+	const usersRepository = new PrismaUsersRepository()
 
-  return new FetchCategoriesUseCase(categoriesRepository, usersRepository)
+	return new FetchCategoriesUseCase(categoriesRepository, usersRepository)
 }

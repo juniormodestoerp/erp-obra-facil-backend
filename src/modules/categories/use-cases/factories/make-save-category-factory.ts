@@ -4,8 +4,8 @@ import { PrismaUsersRepository } from '@modules/users/repositories/prisma/reposi
 import { SaveCategoryUseCase } from '@modules/categories/use-cases/save-category-use-case'
 
 export function makeSaveCategoryUseCase() {
-  const categoriesRepository = new PrismaCategoriesRepository()
-  const usersRepository = new PrismaUsersRepository()
+	const categoriesRepository = new PrismaCategoriesRepository()
+	const usersRepository = new PrismaUsersRepository()
 
-  return new SaveCategoryUseCase(categoriesRepository, usersRepository)
+	return new SaveCategoryUseCase(categoriesRepository, usersRepository)
 }

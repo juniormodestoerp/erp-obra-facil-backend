@@ -1,4 +1,4 @@
 export interface IFindTransactionByIdDTO {
-  userId: string
-  id: string
+	userId: string
+	id: string
 }

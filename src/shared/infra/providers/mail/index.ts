@@ -1,19 +1,19 @@
 import { SendGrid } from './sendgrid'
 
 interface IMailContact {
-  name: string
-  email: string
+	name: string
+	email: string
 }
 
 export interface ISendMail {
-  to: IMailContact
-  from: IMailContact
-  subject: string
-  email: string
+	to: IMailContact
+	from: IMailContact
+	subject: string
+	email: string
 }
 
 export interface Mail {
-  sendMail(data: ISendMail): Promise<void>
+	sendMail(data: ISendMail): Promise<void>
 }
 
 /**

@@ -4,8 +4,8 @@ import { PrismaUsersRepository } from '@modules/users/repositories/prisma/reposi
 import { SaveSettingUseCase } from '@modules/settings/use-cases/save-setting-use-case'
 
 export function makeSaveSettingUseCase() {
-  const settingsRepository = new PrismaSettingsRepository()
-  const usersRepository = new PrismaUsersRepository()
+	const settingsRepository = new PrismaSettingsRepository()
+	const usersRepository = new PrismaUsersRepository()
 
-  return new SaveSettingUseCase(settingsRepository, usersRepository)
+	return new SaveSettingUseCase(settingsRepository, usersRepository)
 }

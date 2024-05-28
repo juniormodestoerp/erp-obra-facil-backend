@@ -4,8 +4,8 @@ import { PrismaUsersRepository } from '@modules/users/repositories/prisma/reposi
 import { FetchSettingsUseCase } from '@modules/settings/use-cases/fetch-settings-use-case'
 
 export function makeFetchSettingsUseCase() {
-  const settingsRepository = new PrismaSettingsRepository()
-  const usersRepository = new PrismaUsersRepository()
+	const settingsRepository = new PrismaSettingsRepository()
+	const usersRepository = new PrismaUsersRepository()
 
-  return new FetchSettingsUseCase(settingsRepository, usersRepository)
+	return new FetchSettingsUseCase(settingsRepository, usersRepository)
 }

@@ -3,7 +3,7 @@ import { PrismaCategoriesRepository } from '@modules/categories/repositories/pri
 import { ShowCategoryUseCase } from '@modules/categories/use-cases/show-category-use-case'
 
 export function makeShowCategoryUseCase() {
-  const categoriesRepository = new PrismaCategoriesRepository()
+	const categoriesRepository = new PrismaCategoriesRepository()
 
-  return new ShowCategoryUseCase(categoriesRepository)
+	return new ShowCategoryUseCase(categoriesRepository)
 }

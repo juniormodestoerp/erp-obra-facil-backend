@@ -3,7 +3,7 @@ import { PrismaCategoriesRepository } from '@modules/categories/repositories/pri
 import { FetchSelectInputCategoriesUseCase } from '@modules/categories/use-cases/fetch-select-input-categories-use-case'
 
 export function makeFetchSelectInputCategoriesUseCase() {
-  const categoriesRepository = new PrismaCategoriesRepository()
+	const categoriesRepository = new PrismaCategoriesRepository()
 
-  return new FetchSelectInputCategoriesUseCase(categoriesRepository)
+	return new FetchSelectInputCategoriesUseCase(categoriesRepository)
 }

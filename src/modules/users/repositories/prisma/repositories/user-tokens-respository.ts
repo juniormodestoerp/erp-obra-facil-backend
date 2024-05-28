@@ -1,50 +1,50 @@
-import { PrismaClient } from '@prisma/client'
+import type { PrismaClient } from '@prisma/client'
 
-import { UserToken } from '@modules/users/entities/user-token'
+import type { UserToken } from '@modules/users/entities/user-token'
 import { PrismaUserTokenMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-tokens-mapper'
-import { UserTokensRepository } from '@modules/users/repositories/user-tokens-respository'
+import type { UserTokensRepository } from '@modules/users/repositories/user-tokens-respository'
 
 import { prisma } from '@shared/infra/database/prisma'
 
 export class PrismaUserTokensRepository implements UserTokensRepository {
-  private repository: PrismaClient
+	private repository: PrismaClient
 
-  constructor() {
-    this.repository = prisma
-  }
+	constructor() {
+		this.repository = prisma
+	}
 
-  async findByToken(token: string): Promise<UserToken | undefined> {
-    const userToken = await this.repository.userToken.findUnique({
-      where: {
-        token,
-      },
-    })
+	async findByToken(token: string): Promise<UserToken | undefined> {
+		const userToken = await this.repository.userToken.findUnique({
+			where: {
+				token,
+			},
+		})
 
-    if (!userToken) {
-      return undefined
-    }
+		if (!userToken) {
+			return undefined
+		}
 
-    return PrismaUserTokenMapper.toDomain(userToken)
-  }
+		return PrismaUserTokenMapper.toDomain(userToken)
+	}
 
-  async create(userToken: UserToken): Promise<void> {
-    const prismaUserToken = PrismaUserTokenMapper.toPrisma(userToken)
+	async create(userToken: UserToken): Promise<void> {
+		const prismaUserToken = PrismaUserTokenMapper.toPrisma(userToken)
 
-    await this.repository.userToken.create({
-      data: {
-        ...prismaUserToken,
-      },
-    })
-  }
+		await this.repository.userToken.create({
+			data: {
+				...prismaUserToken,
+			},
+		})
+	}
 
-  async save(userToken: UserToken): Promise<void> {
-    const prismaUserToken = PrismaUserTokenMapper.toPrisma(userToken)
+	async save(userToken: UserToken): Promise<void> {
+		const prismaUserToken = PrismaUserTokenMapper.toPrisma(userToken)
 
-    await this.repository.userToken.update({
-      where: {
-        id: prismaUserToken.id,
-      },
-      data: prismaUserToken,
-    })
-  }
+		await this.repository.userToken.update({
+			where: {
+				id: prismaUserToken.id,
+			},
+			data: prismaUserToken,
+		})
+	}
 }

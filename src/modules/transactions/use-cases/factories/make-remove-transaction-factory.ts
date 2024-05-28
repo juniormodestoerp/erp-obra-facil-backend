@@ -3,7 +3,7 @@ import { PrismaTransactionsRepository } from '@modules/transactions/repositories
 import { RemoveTransactionUseCase } from '@modules/transactions/use-cases/remove-transaction-use-case'
 
 export function makeRemoveTransactionUseCase() {
-  const transactionsRepository = new PrismaTransactionsRepository()
+	const transactionsRepository = new PrismaTransactionsRepository()
 
-  return new RemoveTransactionUseCase(transactionsRepository)
+	return new RemoveTransactionUseCase(transactionsRepository)
 }

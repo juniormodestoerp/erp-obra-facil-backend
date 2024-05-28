@@ -2,64 +2,64 @@ import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
 import { Setting } from '@modules/settings/entities/setting'
-import { SettingsRepository } from '@modules/settings/repositories/settings-repository'
-import { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { SettingsRepository } from '@modules/settings/repositories/settings-repository'
+import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
-  id?: string
-  userId: string
-  fieldName: string
-  isFieldEnable: boolean
-  isFieldRequired: boolean
-  title: string
-  description: string
+	id?: string
+	userId: string
+	fieldName: string
+	isFieldEnable: boolean
+	isFieldRequired: boolean
+	title: string
+	description: string
 }
 
 interface Output {
-  setting: Setting
+	setting: Setting
 }
 
 export class SaveSettingUseCase {
-  constructor(
-    private readonly settingsRepository: SettingsRepository,
-    private readonly usersRepository: UsersRepository,
-  ) {}
+	constructor(
+		private readonly settingsRepository: SettingsRepository,
+		private readonly usersRepository: UsersRepository,
+	) {}
 
-  async execute({
-    id,
-    userId,
-    fieldName,
-    isFieldEnable,
-    isFieldRequired,
-    title,
-    description,
-  }: Input): Promise<Output> {
-    const user = await this.usersRepository.findById({
-      userId,
-    })
+	async execute({
+		id,
+		userId,
+		fieldName,
+		isFieldEnable,
+		isFieldRequired,
+		title,
+		description,
+	}: Input): Promise<Output> {
+		const user = await this.usersRepository.findById({
+			userId,
+		})
 
-    if (!user) {
-      throw new AppError({
-        code: 'user.not_found',
-      })
-    }
+		if (!user) {
+			throw new AppError({
+				code: 'user.not_found',
+			})
+		}
 
-    const setting = Setting.create(
-      {
-        userId,
-        fieldName,
-        isFieldEnable,
-        isFieldRequired,
-        title,
-        description,
-      },
-      new UniqueEntityID(id),
-    )
+		const setting = Setting.create(
+			{
+				userId,
+				fieldName,
+				isFieldEnable,
+				isFieldRequired,
+				title,
+				description,
+			},
+			new UniqueEntityID(id),
+		)
 
-    await this.settingsRepository.save(setting)
+		await this.settingsRepository.save(setting)
 
-    return {
-      setting,
-    }
-  }
+		return {
+			setting,
+		}
+	}
 }

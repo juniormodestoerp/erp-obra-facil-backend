@@ -1,4 +1,4 @@
-import { FastifyInstance } from 'fastify'
+import type { FastifyInstance } from 'fastify'
 
 import { authenticateUserController } from '@modules/users/http/controllers/authenticate-user-controller'
 import { logoutUserController } from '@modules/users/http/controllers/logout-user-controller'
@@ -11,21 +11,21 @@ import { showUserProfileController } from '@modules/users/http/controllers/show-
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
 export async function Router(app: FastifyInstance) {
-  app.get(
-    '/users/profile',
-    { onRequest: [verifyJwt] },
-    showUserProfileController,
-  )
+	app.get(
+		'/users/profile',
+		{ onRequest: [verifyJwt] },
+		showUserProfileController,
+	)
 
-  app.post('/sessions', authenticateUserController)
+	app.post('/sessions', authenticateUserController)
 
-  app.post('/sessions/logout', logoutUserController)
+	app.post('/sessions/logout', logoutUserController)
 
-  app.post('/password/reset', resetForgotPasswordController)
+	app.post('/password/reset', resetForgotPasswordController)
 
-  app.post('/password/forgot', sendForgotPasswordCodeController)
+	app.post('/password/forgot', sendForgotPasswordCodeController)
 
-  app.put('/users/:id', saveUserController)
+	app.put('/users/:id', saveUserController)
 
-  app.delete('/users/:id', { onRequest: [verifyJwt] }, removeUserController)
+	app.delete('/users/:id', { onRequest: [verifyJwt] }, removeUserController)
 }

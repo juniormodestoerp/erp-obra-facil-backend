@@ -4,8 +4,8 @@ import { PrismaUsersRepository } from '@modules/users/repositories/prisma/reposi
 import { CreateTransactionUseCase } from '@modules/transactions/use-cases/create-transaction-use-case'
 
 export function makeCreateTransactionUseCase() {
-  const transactionsRepository = new PrismaTransactionsRepository()
-  const usersRepository = new PrismaUsersRepository()
+	const transactionsRepository = new PrismaTransactionsRepository()
+	const usersRepository = new PrismaUsersRepository()
 
-  return new CreateTransactionUseCase(transactionsRepository, usersRepository)
+	return new CreateTransactionUseCase(transactionsRepository, usersRepository)
 }

@@ -3,7 +3,7 @@ import { PrismaCategoriesRepository } from '@modules/categories/repositories/pri
 import { RemoveCategoryUseCase } from '@modules/categories/use-cases/remove-category-use-case'
 
 export function makeRemoveCategoryUseCase() {
-  const categoriesRepository = new PrismaCategoriesRepository()
+	const categoriesRepository = new PrismaCategoriesRepository()
 
-  return new RemoveCategoryUseCase(categoriesRepository)
+	return new RemoveCategoryUseCase(categoriesRepository)
 }

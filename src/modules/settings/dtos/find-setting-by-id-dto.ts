@@ -1,4 +1,4 @@
 export interface IFindSettingByIdDTO {
-  userId: string
-  id: string
+	userId: string
+	id: string
 }

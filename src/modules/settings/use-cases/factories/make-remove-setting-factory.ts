@@ -3,7 +3,7 @@ import { PrismaSettingsRepository } from '@modules/settings/repositories/prisma/
 import { RemoveSettingUseCase } from '@modules/settings/use-cases/remove-setting-use-case'
 
 export function makeRemoveSettingUseCase() {
-  const settingsRepository = new PrismaSettingsRepository()
+	const settingsRepository = new PrismaSettingsRepository()
 
-  return new RemoveSettingUseCase(settingsRepository)
+	return new RemoveSettingUseCase(settingsRepository)
 }

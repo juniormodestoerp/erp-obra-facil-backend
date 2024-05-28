@@ -20,7 +20,7 @@
     }
   ],
   "scripts": {
-    "lint": "sh tools/lint.sh",
+    "lint": "npx @biomejs/biome check --apply-unsafe ./src",
     "build": "sh tools/build.sh",
     "prisma:prep": "dotenv -e .env -- sh tools/prisma-prep.sh",
     "database:seed": "dotenv -e .env -- sh tools/database-seed.sh",
@@ -62,9 +62,9 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.7.3",
     "@fastify/swagger": "8.14.0",
     "@fastify/swagger-ui": "3.0.0",
-    "@rocketseat/eslint-config": "2.2.2",
     "@tsconfig/node20": "20.1.4",
     "@types/bcrypt": "5.0.2",
     "@types/node": "20.12.12",
@@ -72,7 +72,6 @@
     "@types/react-dom": "18.3.0",
     "commitizen": "4.3.0",
     "cz-conventional-changelog": "3.3.0",
-    "eslint": "8.57.0",
     "prisma": "5.14.0",
     "tsup": "8.0.2",
     "tsx": "4.10.4",

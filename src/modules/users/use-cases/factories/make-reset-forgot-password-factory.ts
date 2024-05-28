@@ -6,13 +6,13 @@ import { ResetForgotPasswordUseCase } from '@modules/users/use-cases/reset-forgo
 import { Bcrypt } from '@shared/infra/providers/hash/bcrypt'
 
 export function makeResetForgotPasswordUseCase() {
-  const usersRepository = new PrismaUsersRepository()
-  const usersTokenRepository = new PrismaUserTokensRepository()
-  const hash = new Bcrypt()
+	const usersRepository = new PrismaUsersRepository()
+	const usersTokenRepository = new PrismaUserTokensRepository()
+	const hash = new Bcrypt()
 
-  return new ResetForgotPasswordUseCase(
-    usersRepository,
-    usersTokenRepository,
-    hash,
-  )
+	return new ResetForgotPasswordUseCase(
+		usersRepository,
+		usersTokenRepository,
+		hash,
+	)
 }

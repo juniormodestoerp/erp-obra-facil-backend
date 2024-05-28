@@ -5,8 +5,8 @@ import { AuthenticateUserUseCase } from '@modules/users/use-cases/authenticate-u
 import { Bcrypt } from '@shared/infra/providers/hash/bcrypt'
 
 export function makeAuthenticateUserUseCase() {
-  const usersRepository = new PrismaUsersRepository()
-  const hash = new Bcrypt()
+	const usersRepository = new PrismaUsersRepository()
+	const hash = new Bcrypt()
 
-  return new AuthenticateUserUseCase(usersRepository, hash)
+	return new AuthenticateUserUseCase(usersRepository, hash)
 }

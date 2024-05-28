@@ -1,30 +1,30 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
+import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
 
 interface Input {
-  userId: string
-  id: string
+	userId: string
+	id: string
 }
 
 export class RemoveCategoryUseCase {
-  constructor(private readonly categoriesRepository: CategoriesRepository) {}
+	constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
-  async execute({ id, userId }: Input): Promise<void> {
-    const category = await this.categoriesRepository.findById({
-      userId,
-      id,
-    })
+	async execute({ id, userId }: Input): Promise<void> {
+		const category = await this.categoriesRepository.findById({
+			userId,
+			id,
+		})
 
-    if (!category) {
-      throw new AppError({
-        code: 'category.not_found',
-      })
-    }
+		if (!category) {
+			throw new AppError({
+				code: 'category.not_found',
+			})
+		}
 
-    await this.categoriesRepository.remove({
-      userId,
-      id,
-    })
-  }
+		await this.categoriesRepository.remove({
+			userId,
+			id,
+		})
+	}
 }

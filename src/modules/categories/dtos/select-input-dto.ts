@@ -1,4 +1,4 @@
 export interface ISelectInputDTO {
-  field: string
-  value: string
+	field: string
+	value: string
 }

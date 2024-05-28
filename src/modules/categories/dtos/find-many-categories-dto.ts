@@ -1,4 +1,4 @@
 export interface IFindManyCategoriesDTO {
-  pageIndex: number
-  userId: string
+	pageIndex: number
+	userId: string
 }

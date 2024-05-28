@@ -1,21 +1,21 @@
-import fastify from 'fastify'
 import cookies from '@fastify/cookie'
 import cors from '@fastify/cors'
 import helmet from '@fastify/helmet'
 import jwt from '@fastify/jwt'
+import multipart from '@fastify/multipart'
 import swagger from '@fastify/swagger'
 import swaggerUI from '@fastify/swagger-ui'
-import multipart from '@fastify/multipart'
+import fastify from 'fastify'
 
-import HelmetConfig from '@shared/infra/config/helmet'
 import CorsConfig from '@shared/infra/config/cors'
+import HelmetConfig from '@shared/infra/config/helmet'
 import {
-  JwtAccessTokenConfig,
-  JwtRefreshTokenConfig,
+	JwtAccessTokenConfig,
+	JwtRefreshTokenConfig,
 } from '@shared/infra/config/jwt'
 import { SwaggerConfig, SwaggerUIConfig } from '@shared/infra/config/swagger'
-import { AppRoutes } from '@shared/infra/http/routes'
 import { errorHandler } from '@shared/infra/http/error-handler'
+import { AppRoutes } from '@shared/infra/http/routes'
 
 export const app = fastify()
 

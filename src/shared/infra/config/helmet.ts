@@ -1,5 +1,5 @@
-import { FastifyHelmetOptions } from '@fastify/helmet'
+import type { FastifyHelmetOptions } from '@fastify/helmet'
 
 export default {
-  global: true,
+	global: true,
 } as FastifyHelmetOptions

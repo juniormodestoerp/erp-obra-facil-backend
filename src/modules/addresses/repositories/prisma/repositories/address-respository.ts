@@ -54,7 +54,7 @@ export class PrismaAddressesRepository implements AddressesRepository {
 			return PrismaAddressesMapper.toDomain(cachedMainAddress)
 		}
 
-		const address = await this.repository.address.findFirst({
+		const address = await this.repository.address.findUnique({
 			where: {
 				userId,
 				isMain: true,

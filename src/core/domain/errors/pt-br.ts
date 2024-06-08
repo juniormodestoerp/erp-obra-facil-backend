@@ -206,6 +206,12 @@ export const errors = {
 		message: 'O endereço solicitado não foi encontrado.',
 		status: StatusCode.BAD_REQUEST,
 	},
+
+	'request.not_multipart': {
+		error: 'Request is not multipart!',
+		message: 'A solicitação não está no formato multipart.',
+		status: StatusCode.BAD_REQUEST,
+	},
 }
 
 export type ErrorKeys = keyof typeof errors

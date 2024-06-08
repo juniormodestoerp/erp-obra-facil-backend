@@ -26,11 +26,12 @@ model User {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  userTokens  UserToken[]
-  settings    Setting[]
-  categories  Category[]
-  Transaction Transaction[]
-  Address     Address[]
+  userTokens   UserToken[]
+  settings     Setting[]
+  categories   Category[]
+  transactions Transaction[]
+  addresses    Address[]
+  files        File[]
 
   @@map("users")
 }
@@ -125,12 +126,15 @@ model UserToken {
 
 model File {
   id          String    @id @default(cuid())
-  key         String
+  userId      String    @unique
+  path        String
   name        String
   contentType String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
+
+  user User @relation(fields: [userId], references: [id])
 
   @@map("files")
 }
@@ -138,7 +142,7 @@ model File {
 model Address {
   id           String    @id @default(uuid())
   userId       String
-  isMain       Boolean
+  isMain       Boolean   @unique
   zipCode      String
   state        String
   city         String

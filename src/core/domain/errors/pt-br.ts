@@ -200,6 +200,12 @@ export const errors = {
 		message: 'A subcategoria informada já está registrada no sistema.',
 		status: StatusCode.BAD_REQUEST,
 	},
+
+	'address.not_found': {
+		error: 'Address not found!',
+		message: 'O endereço solicitado não foi encontrado.',
+		status: StatusCode.BAD_REQUEST,
+	},
 }
 
 export type ErrorKeys = keyof typeof errors

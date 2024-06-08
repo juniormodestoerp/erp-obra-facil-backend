@@ -30,6 +30,7 @@ model User {
   settings    Setting[]
   categories  Category[]
   Transaction Transaction[]
+  Address     Address[]
 
   @@map("users")
 }
@@ -132,4 +133,24 @@ model File {
   deletedAt   DateTime?
 
   @@map("files")
+}
+
+model Address {
+  id           String    @id @default(uuid())
+  userId       String
+  isMain       Boolean
+  zipCode      String
+  state        String
+  city         String
+  neighborhood String
+  street       String
+  number       String
+  complement   String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("addresses")
 }

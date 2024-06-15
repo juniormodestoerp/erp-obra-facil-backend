@@ -17,8 +17,8 @@ export class SendForgotPasswordCode extends Runnable {
 	async run({ data }: QueueProps): Promise<void> {
 		const { name, email, resetPasswordLink } = data as DataJob
 		;(async () => {
-			const { error } = await resend.emails.send({
-				from: 'bruno.clara@yahoo.com',
+			const { error, data } = await resend.emails.send({
+				from: 'contato@vilefort-dev.com.br',
 				to: email,
 				subject: '[Obra Fácil] Link para recuperação de senha',
 				react: SendForgotPasswordTemplate({

@@ -73,7 +73,6 @@ export class UpdateProfileUseCase {
 
 		const address = Address.create({
 			userId,
-			isMain: true,
 			zipCode,
 			state,
 			city,

@@ -7,9 +7,7 @@ import { Address } from '@modules/addresses/entities/address'
 export class PrismaAddressesMapper {
 	static toPrisma(address: Address) {
 		return {
-			id: address.id,
 			userId: address.userId,
-			isMain: address.isMain,
 			zipCode: address.zipCode,
 			state: address.state,
 			city: address.city,
@@ -27,17 +25,16 @@ export class PrismaAddressesMapper {
 		return Address.create(
 			{
 				userId: raw.userId,
-				isMain: raw.isMain,
 				zipCode: raw.zipCode,
 				state: raw.state,
 				city: raw.city,
 				neighborhood: raw.neighborhood,
 				street: raw.street,
 				number: raw.number,
-				complement: raw.complement ?? undefined,
+				complement: raw.complement ?? null,
 				createdAt: raw.createdAt,
 				updatedAt: raw.createdAt,
-				deletedAt: raw.createdAt,
+				deletedAt: raw.createdAt ?? null,
 			},
 			new UniqueEntityID(raw.id),
 		)

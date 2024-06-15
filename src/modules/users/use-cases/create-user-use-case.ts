@@ -16,6 +16,10 @@ interface Input {
 	password: string
 }
 
+interface Output {
+	user: User
+}
+
 export class CreateUserUseCase {
 	constructor(
 		private readonly usersRepository: UsersRepository,
@@ -29,7 +33,7 @@ export class CreateUserUseCase {
 		email,
 		phone,
 		birthDate,
-	}: Input): Promise<void> {
+	}: Input): Promise<Output> {
 		const [documentExists, emailExists, phoneExists] = await Promise.all([
 			this.usersRepository.findByDocument(document),
 			this.usersRepository.findByEmail(email),
@@ -81,5 +85,9 @@ export class CreateUserUseCase {
 		})
 
 		await this.usersRepository.create(user)
+
+		return {
+			user,
+		}
 	}
 }

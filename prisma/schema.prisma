@@ -14,6 +14,8 @@ enum UserRole {
 
 model User {
   id        String    @id @default(uuid())
+  addressId String?
+  fileId    String?
   name      String
   document  String    @unique
   email     String    @unique
@@ -30,8 +32,8 @@ model User {
   settings     Setting[]
   categories   Category[]
   transactions Transaction[]
-  addresses    Address[]
-  files        File[]
+  address      Address?      @relation(fields: [addressId], references: [id])
+  file         File?         @relation(fields: [fileId], references: [id])
 
   @@map("users")
 }
@@ -48,7 +50,7 @@ model Setting {
   updatedAt       DateTime  @updatedAt @map("updated_at")
   deletedAt       DateTime? @map("deleted_at")
 
-  User User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
   @@map("settings")
 }
@@ -67,9 +69,9 @@ model Category {
 
   relatedCategories Category[] @relation("ParentChild")
 
-  user        User          @relation(fields: [userId], references: [id])
-  categories  Category?     @relation("ParentChild", fields: [categoryId], references: [id])
-  Transaction Transaction[]
+  user         User          @relation(fields: [userId], references: [id])
+  categories   Category?     @relation("ParentChild", fields: [categoryId], references: [id])
+  transactions Transaction[]
 
   @@map("categories")
 }
@@ -133,28 +135,25 @@ model File {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
-
-  user User @relation(fields: [userId], references: [id])
+  User        User[]
 
   @@map("files")
 }
 
 model Address {
   id           String    @id @default(uuid())
-  userId       String
-  isMain       Boolean   @unique
+  userId       String    @unique
   zipCode      String
   state        String
   city         String
   neighborhood String
   street       String
   number       String
-  complement   String?
+  complement   String
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
-
-  user User? @relation(fields: [userId], references: [id])
+  User         User[]
 
   @@map("addresses")
 }

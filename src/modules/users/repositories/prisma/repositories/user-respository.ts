@@ -3,8 +3,8 @@ import type { PrismaClient } from '@prisma/client'
 import type { IFindManyUsersDTO } from '@modules/users/dtos/find-many-users-dto'
 import type { IFindUserByIdDTO } from '@modules/users/dtos/find-user-by-id-dto'
 import type { User } from '@modules/users/entities/user'
-import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
 
 import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
 import { env } from '@shared/infra/config/env'
@@ -18,7 +18,7 @@ export class PrismaUsersRepository implements UsersRepository {
 	}
 
 	async findById({ userId }: IFindUserByIdDTO): Promise<User | null> {
-		const user = await this.repository.user.findFirst({
+		const user = await this.repository.user.findUnique({
 			where: {
 				id: userId,
 			},
@@ -27,6 +27,31 @@ export class PrismaUsersRepository implements UsersRepository {
 		if (!user) {
 			return null
 		}
+
+		return PrismaUserMapper.toDomain(user)
+	}
+
+	async findProfile({ userId }: IFindUserByIdDTO): Promise<User | null> {
+		const user = await this.repository.user.findUnique({
+			where: {
+				id: userId,
+			},
+			include: {
+				address: true,
+			},
+		})
+
+		if (!user) {
+			return null
+		}
+
+		const address = await this.repository.address.findUnique({
+			where: {
+				userId,
+			},
+		})
+
+		user.address = address
 
 		return PrismaUserMapper.toDomain(user)
 	}
@@ -123,13 +148,46 @@ export class PrismaUsersRepository implements UsersRepository {
 
 	async save(user: User): Promise<void> {
 		const prismaUserData = PrismaUserMapper.toPrisma(user)
+		const prismaAddressData = {
+			userId: user.id,
+			zipCode: user?.address?.zipCode ?? '',
+			state: user?.address?.state ?? '',
+			city: user?.address?.city ?? '',
+			neighborhood: user?.address?.neighborhood ?? '',
+			street: user?.address?.street ?? '',
+			number: user?.address?.number ?? '',
+			complement: user?.address?.complement ?? 'Não informado',
+		}
+
+		prismaUserData.address = undefined
+
+		console.log('prismaAddressData', prismaAddressData)
 
 		await this.repository.user.update({
 			where: {
-				id: user.id.toString(),
+				id: user.id,
 			},
 			data: prismaUserData,
 		})
+		console.log('teste:', prismaAddressData.userId)
+
+		const achou = await this.repository.address.upsert({
+			where: {
+				userId: prismaAddressData.userId,
+			},
+			create: prismaAddressData,
+			update: prismaAddressData,
+		})
+
+		console.log(achou);
+		
+
+		// await this.repository.address.update({
+		// 	where: {
+		// 		id: prismaAddressData.userId,
+		// 	},
+		// 	data: prismaAddressData,
+		// })
 	}
 
 	async remove({ userId }: IFindUserByIdDTO): Promise<void> {

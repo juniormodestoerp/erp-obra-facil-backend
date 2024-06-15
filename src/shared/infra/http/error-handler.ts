@@ -20,17 +20,6 @@ export const errorHandler: FastifyErrorHandler = async (
 		// app.Sentry.captureException(error)
 	}
 
-	/* Authorization cookie */
-	if (error.code === 'FST_JWT_NO_AUTHORIZATION_IN_COOKIE') {
-		return reply.status(401).send({
-			code: 'authenticate.missing_authorization_cookie',
-			error: 'Missing authorization cookie!',
-			message: 'Nenhum cookie de autorização foi encontrado na requisição.',
-			status: 401,
-			data: {},
-		})
-	}
-
 	/* Zod */
 	if (error instanceof ZodError) {
 		const zodErrorDetails = error.flatten()

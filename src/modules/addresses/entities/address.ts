@@ -4,14 +4,13 @@ import type { Optional } from '@core/domain/types/opcional'
 
 interface Props {
 	userId: string
-	isMain: boolean
 	zipCode: string
 	state: string
 	city: string
 	neighborhood: string
 	street: string
 	number: string
-	complement?: string
+	complement: string
 	createdAt: Date
 	updatedAt: Date
 	deletedAt?: Date | null
@@ -24,14 +23,6 @@ export class Address extends Entity<Props> {
 
 	set userId(userId: string) {
 		this.props.userId = userId
-	}
-
-	get isMain(): boolean {
-		return this.props.isMain
-	}
-
-	set isMain(isMain: boolean) {
-		this.props.isMain = isMain
 	}
 
 	get zipCode(): string {
@@ -82,11 +73,11 @@ export class Address extends Entity<Props> {
 		this.props.number = number
 	}
 
-	get complement(): string | undefined {
+	get complement(): string {
 		return this.props.complement
 	}
 
-	set complement(complement: string | undefined) {
+	set complement(complement: string) {
 		this.props.complement = complement
 	}
 

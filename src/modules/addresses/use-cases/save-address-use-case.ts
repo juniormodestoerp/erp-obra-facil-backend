@@ -46,16 +46,9 @@ export class SaveAddressUseCase {
 			})
 		}
 
-		const previusAddress = await this.addressRepository.findById({ id })
-
-		if (previusAddress) {
-			previusAddress.isMain = false
-		}
-
 		const address = Address.create(
 			{
 				userId,
-				isMain: true,
 				zipCode,
 				state,
 				city,

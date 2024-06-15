@@ -27,7 +27,7 @@ export class ShowMainAddressUseCase {
 			})
 		}
 
-		const address = await this.addressRepository.findMainAddress({ userId })
+		const address = await this.addressRepository.findByUserId({ userId })
 
 		if (!address || address.deletedAt !== null) {
 			throw new AppError({

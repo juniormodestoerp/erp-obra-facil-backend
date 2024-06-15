@@ -2,7 +2,9 @@ import { Entity } from '@core/domain/entities/entity'
 import type { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import type { Optional } from '@core/domain/types/opcional'
 
+import type { Address } from '@modules/addresses/entities/address'
 import type { Setting } from '@modules/settings/entities/setting'
+import type { File } from '@modules/users/entities/file'
 
 export enum UserRole {
 	ADMIN = 'ADMIN',
@@ -21,7 +23,10 @@ interface Props {
 	createdAt: Date
 	updatedAt: Date
 	deletedAt: Date | null
+
 	settings: Setting[]
+	address?: Address
+	profilePicture?: File
 }
 
 export class User extends Entity<Props> {
@@ -121,10 +126,31 @@ export class User extends Entity<Props> {
 		this.props.settings = settings
 	}
 
+	get address(): Address | undefined {
+		return this.props.address
+	}
+
+	set address(address: Address | undefined) {
+		this.props.address = address
+	}
+
+	get profilePicture(): File | undefined {
+		return this.props.profilePicture
+	}
+
+	set profilePicture(profilePicture: File | undefined) {
+		this.props.profilePicture = profilePicture
+	}
+
 	static create(
 		props: Optional<
 			Props,
-			'createdAt' | 'updatedAt' | 'deletedAt' | 'settings'
+			| 'createdAt'
+			| 'updatedAt'
+			| 'deletedAt'
+			| 'settings'
+			| 'address'
+			| 'profilePicture'
 		>,
 		id?: UniqueEntityID,
 	): User {
@@ -135,6 +161,8 @@ export class User extends Entity<Props> {
 				updatedAt: props.updatedAt ?? new Date(),
 				deletedAt: props.deletedAt ?? null,
 				settings: props.settings ?? [],
+				address: props.address ?? undefined,
+				profilePicture: props.profilePicture ?? undefined,
 			},
 			id,
 		)

@@ -27,12 +27,6 @@ export const errors = {
 		status: StatusCode.BAD_REQUEST,
 	},
 
-	'authenticate.missing_authorization_cookie': {
-		error: 'Missing authorization cookie!',
-		message: 'Nenhum cookie de autorização foi encontrado na requisição.',
-		status: StatusCode.FORBIDDEN,
-	},
-
 	'authenticate.missing_refresh_token_cookie': {
 		error: 'Missing refresh token cookie!',
 		message: 'Nenhum cookie de refresh token foi encontrado na requisição.',

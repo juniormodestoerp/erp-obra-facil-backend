@@ -1,22 +1,31 @@
 import type { SignOptions } from '@fastify/jwt'
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import z from 'zod'
+import { z } from 'zod'
 
 import { Document } from '@core/domain/entities/value-object/document'
+import { Email } from '@core/domain/entities/value-object/email'
 import { strMessage } from '@core/utils/custom-zod-error'
 
+import { makeCreateUserUseCase } from '@modules/users/use-cases/factories/make-create-user-factory'
 import { UserViewModel } from '@modules/users/http/view-models/user-view-model'
-import { makeAuthenticateUserUseCase } from '@modules/users/use-cases/factories/make-authenticate-user-factory'
 
 import { env } from '@shared/infra/config/env'
 
-const schema = z.object({
+const bodySchema = z.object({
+	name: z
+		.string(strMessage('nome'))
+		.min(1, { message: 'O campo nome é obrigatório.' }),
 	document: z
 		.string(strMessage('CPF'))
 		.length(11, { message: 'O campo CPF deve conter 11 caracteres.' })
-		.regex(/^[0-9]+$/, {
+		.regex(/^[0-9.\-/]+$/, {
 			message: 'O campo CPF deve conter apenas números.',
 		}),
+	birthDate: z.coerce.date(strMessage('data de nascimento')),
+	email: z.string(strMessage('e-mail')).email('O campo e-mail é inválido.'),
+	phone: z
+		.string(strMessage('telefone'))
+		.length(14, { message: 'O campo telefone deve conter 14 caracteres.' }),
 	password: z
 		.string(strMessage('senha'))
 		.regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/, {
@@ -25,16 +34,21 @@ const schema = z.object({
 		}),
 })
 
-export async function authenticateUserController(
+export async function createUserController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const { document, password } = schema.parse(request.body)
+	const { name, document, email, birthDate, phone, password } =
+		bodySchema.parse(request.body)
 
-	const authenticateUserUseCase = makeAuthenticateUserUseCase()
+	const createUserUseCase = makeCreateUserUseCase()
 
-	const { user } = await authenticateUserUseCase.execute({
+	const { user } = await createUserUseCase.execute({
+		name,
 		document: new Document(document, 'CPF').value,
+		email: new Email(email).value,
+		birthDate,
+		phone,
 		password,
 	})
 

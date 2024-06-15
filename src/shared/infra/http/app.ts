@@ -26,7 +26,7 @@ app.register(swagger, SwaggerConfig)
 app.register(swaggerUI, SwaggerUIConfig)
 app.register(jwt, JwtAccessTokenConfig)
 app.register(jwt, JwtRefreshTokenConfig)
-app.register(multipart) // Registrar o multipart aqui
+app.register(multipart)
 
 app.register(AppRoutes, { prefix: 'api/v1' })
 

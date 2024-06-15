@@ -4,6 +4,7 @@ import type { User } from '@modules/users/entities/user'
 
 export interface UsersRepository {
 	findById({ userId }: IFindUserByIdDTO): Promise<User | null>
+	findProfile({ userId }: IFindUserByIdDTO): Promise<User | null>
 	findByDocument(document: string): Promise<User | null>
 	findByEmail(email: string): Promise<User | null>
 	findByPhone(phone: string): Promise<User | null>

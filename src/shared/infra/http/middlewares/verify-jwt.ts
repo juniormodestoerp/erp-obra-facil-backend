@@ -6,7 +6,7 @@ import { prisma } from '@shared/infra/database/prisma'
 
 export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
 	try {
-		await request.accessVerify({ onlyCookie: true })
+		await request.accessVerify()
 
 		const userId = request.user?.sub
 		if (!userId) {
@@ -37,12 +37,11 @@ export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
 
 		reply.status(204)
 	} catch (error) {
-		reply.status(401).send({
-			code: 'authenticate.missing_authorization_cookie',
-			error: 'Unauthorized',
-			message: 'error.message',
-			status: 401,
-			data: {},
+		return reply.status(401).send({
+			code: 'auth.authorization',
+			error: 'unauthorized',
+			message: 'Acesso não autorizado',
+			data: [],
 		})
 	}
 }

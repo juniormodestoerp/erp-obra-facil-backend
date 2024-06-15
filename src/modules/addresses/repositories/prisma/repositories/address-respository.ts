@@ -1,7 +1,7 @@
 import type { PrismaClient, Address as PrismaAddress } from '@prisma/client'
 
 import type { IFindAddressByIdDTO } from '@modules/addresses/dtos/find-address-by-id-dto'
-import type { IFindMainAddressDTO } from '@modules/addresses/dtos/find-main-address-dto'
+import type { IFindAddressByUserIdDTO } from '@modules/addresses/dtos/find-address-by-user-id-dto'
 import type { Address } from '@modules/addresses/entities/address'
 import type { AddressesRepository } from '@modules/addresses/repositories/address-repository'
 import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-address-mapper'
@@ -43,21 +43,19 @@ export class PrismaAddressesRepository implements AddressesRepository {
 		return PrismaAddressesMapper.toDomain(address)
 	}
 
-	async findMainAddress({
-		userId,
-	}: IFindMainAddressDTO): Promise<Address | null> {
+
+	async findByUserId({ userId }: IFindAddressByUserIdDTO): Promise<Address | null> {
 		const cacheKey = `address:${userId}`
 
-		const cachedMainAddress = await this.cache.get<PrismaAddress>(cacheKey)
+		const cachedAddress = await this.cache.get<PrismaAddress>(cacheKey)
 
-		if (cachedMainAddress) {
-			return PrismaAddressesMapper.toDomain(cachedMainAddress)
+		if (cachedAddress) {
+			return PrismaAddressesMapper.toDomain(cachedAddress)
 		}
 
 		const address = await this.repository.address.findUnique({
 			where: {
 				userId,
-				isMain: true,
 				deletedAt: null,
 			},
 		})

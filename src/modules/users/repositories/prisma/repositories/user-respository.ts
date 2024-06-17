@@ -106,7 +106,7 @@ export class PrismaUsersRepository implements UsersRepository {
 			return null
 		}
 
-		return PrismaUserMapper.toDomain(user)
+		return PrismaUserMapper.toDomain(user as any)
 	}
 
 	async findMany({ pageIndex, role }: IFindManyUsersDTO): Promise<User[]> {
@@ -128,7 +128,7 @@ export class PrismaUsersRepository implements UsersRepository {
 			return []
 		}
 
-		return users.map((user) => PrismaUserMapper.toDomain(user))
+		return users.map((user) => PrismaUserMapper.toDomain(user as any))
 	}
 
 	async create(user: User): Promise<void> {
@@ -169,15 +169,12 @@ export class PrismaUsersRepository implements UsersRepository {
 
 		prismaUserData.address = undefined
 
-		console.log('prismaAddressData', prismaAddressData)
-
 		await this.repository.user.update({
 			where: {
 				id: user.id,
 			},
 			data: prismaUserData,
 		})
-		console.log('teste:', prismaAddressData.userId)
 
 		const achou = await this.repository.address.upsert({
 			where: {
@@ -186,16 +183,6 @@ export class PrismaUsersRepository implements UsersRepository {
 			create: prismaAddressData,
 			update: prismaAddressData,
 		})
-
-		console.log(achou);
-		
-
-		// await this.repository.address.update({
-		// 	where: {
-		// 		id: prismaAddressData.userId,
-		// 	},
-		// 	data: prismaAddressData,
-		// })
 	}
 
 	async remove({ userId }: IFindUserByIdDTO): Promise<void> {

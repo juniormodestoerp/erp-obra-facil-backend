@@ -74,8 +74,6 @@ export class SaveUserUseCase {
 			new UniqueEntityID(id),
 		)
 
-		console.log('CHEGOU AQUI COMPLEMENT', complement)
-
 		complement = complement ?? 'Não informado'
 
 		const address = Address.create({

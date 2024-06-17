@@ -52,7 +52,6 @@ export async function sendForgotPasswordCodeController(
 	const sendForgotPasswordCodeUseCase = makeSendForgotPasswordCodeUseCase()
 
 	console.log({ document, email });
-	
 
 	await sendForgotPasswordCodeUseCase.execute({
 		protocol: request.protocol,

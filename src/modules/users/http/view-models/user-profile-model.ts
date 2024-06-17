@@ -2,8 +2,6 @@ import type { User } from '@modules/users/entities/user'
 
 export class UserProfileViewModel {
 	static toHTTP(user: User) {
-		console.log('user view model', JSON.stringify(user, null, 2));
-		
 		return {
 			id: user.id,
 			name: user.name,

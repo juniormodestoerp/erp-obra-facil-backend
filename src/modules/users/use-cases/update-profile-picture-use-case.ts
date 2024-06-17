@@ -53,19 +53,11 @@ export class UpdateProfilePictureUseCase {
 
 		try {
 			await writeFile(filePath, await data.toBuffer())
-			console.log('File written successfully:', filePath)
-
-			// Verificar se o arquivo realmente existe após a escrita
 			if (!existsSync(filePath)) {
 				throw new Error(`File does not exist after writing: ${filePath}`)
 			}
 		} catch (error) {
 			console.error('Error writing file:', error)
-			// throw new AppError({
-			//     code: 'file.write_error',
-			//     message: 'Erro ao salvar a imagem de perfil',
-			//     details: error.message,
-			// });
 		}
 
 		const previusFile = await this.userFilesRepository.findById({ userId })

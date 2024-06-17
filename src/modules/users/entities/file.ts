@@ -11,9 +11,9 @@ interface Props {
 	contentType: string
 	createdAt: Date
 	updatedAt: Date
-	deletedAt?: Date | null
+	deletedAt: Date | null
 
-	user?: User
+	user: User | null
 }
 
 export class File extends Entity<Props> {
@@ -65,27 +65,24 @@ export class File extends Entity<Props> {
 		this.props.updatedAt = updatedAt
 	}
 
-	get deletedAt(): Date | null | undefined {
+	get deletedAt(): Date | null {
 		return this.props.deletedAt
 	}
 
-	set deletedAt(deletedAt: Date | null | undefined) {
+	set deletedAt(deletedAt: Date | null) {
 		this.props.deletedAt = deletedAt
 	}
 
-	get user(): User | undefined {
+	get user(): User | null {
 		return this.props.user
 	}
 
-	set user(user: User | undefined) {
+	set user(user: User | null) {
 		this.props.user = user
 	}
 
 	static create(
-		props: Optional<
-			Props,
-			'createdAt' | 'updatedAt' | 'deletedAt'
-		>,
+		props: Optional<Props, 'createdAt' | 'updatedAt' | 'deletedAt'>,
 		id?: UniqueEntityID,
 	): File {
 		return new File(

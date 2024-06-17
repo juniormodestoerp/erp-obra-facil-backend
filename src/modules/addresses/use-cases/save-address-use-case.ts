@@ -1,9 +1,9 @@
-import { AppError } from '@core/domain/errors/app-error'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
+import { AppError } from '@core/domain/errors/app-error'
 
+import { Address } from '@modules/addresses/entities/address'
 import type { AddressesRepository } from '@modules/addresses/repositories/address-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
-import { Address } from '@modules/addresses/entities/address'
 
 interface Input {
 	id: string
@@ -14,7 +14,7 @@ interface Input {
 	neighborhood: string
 	street: string
 	number: string
-	complement?: string
+	complement: string | null
 }
 
 interface Output {
@@ -55,7 +55,7 @@ export class SaveAddressUseCase {
 				neighborhood,
 				street,
 				number,
-				complement,
+				complement: complement ?? 'Não informado',
 			},
 			new UniqueEntityID(id),
 		)

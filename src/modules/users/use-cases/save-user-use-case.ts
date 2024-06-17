@@ -1,18 +1,11 @@
-// import { createWriteStream, existsSync, mkdirSync } from 'node:fs'
-// import { join } from 'node:path'
-// import { pipeline } from 'node:stream'
-// import util from 'node:util'
-
 import type { MultipartFile } from '@fastify/multipart'
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
-// import { Utils } from '@core/utils/string'
 
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
 import { Address } from '@modules/addresses/entities/address'
-// import { File } from '@modules/users/entities/file'
 import { User } from '@modules/users/entities/user'
+import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
 	id: string
@@ -66,6 +59,8 @@ export class SaveUserUseCase {
 				document: previusUser.document,
 				email: email ?? previusUser.email,
 				phone: phone ?? previusUser.phone,
+				balance: previusUser.balance,
+				profilePicture: previusUser.profilePicture,
 				password: previusUser.password,
 				birthDate: previusUser.birthDate,
 				role: previusUser.role,

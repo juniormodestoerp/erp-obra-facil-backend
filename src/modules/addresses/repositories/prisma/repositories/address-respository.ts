@@ -1,4 +1,4 @@
-import type { PrismaClient, Address as PrismaAddress } from '@prisma/client'
+import type { Address as PrismaAddress, PrismaClient } from '@prisma/client'
 
 import type { IFindAddressByIdDTO } from '@modules/addresses/dtos/find-address-by-id-dto'
 import type { IFindAddressByUserIdDTO } from '@modules/addresses/dtos/find-address-by-user-id-dto'
@@ -43,8 +43,9 @@ export class PrismaAddressesRepository implements AddressesRepository {
 		return PrismaAddressesMapper.toDomain(address)
 	}
 
-
-	async findByUserId({ userId }: IFindAddressByUserIdDTO): Promise<Address | null> {
+	async findByUserId({
+		userId,
+	}: IFindAddressByUserIdDTO): Promise<Address | null> {
 		const cacheKey = `address:${userId}`
 
 		const cachedAddress = await this.cache.get<PrismaAddress>(cacheKey)

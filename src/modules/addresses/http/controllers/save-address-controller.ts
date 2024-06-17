@@ -1,18 +1,17 @@
-import type {
-	FastifyRequest,
-	FastifyReply,
-} from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 import z from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { makeSaveAddressUseCase } from '@modules/addresses/use-cases/factories/make-save-address'
 import { AddressViewModel } from '@modules/addresses/http/view-models/address-view-model'
+import { makeSaveAddressUseCase } from '@modules/addresses/use-cases/factories/make-save-address'
 
 const paramsSchema = z.object({
 	id: z
 		.string(strMessage('identificador do endereço'))
-		.uuid({ message: 'O campo identificador do endereço deve ser um UUID válido.' })
+		.uuid({
+			message: 'O campo identificador do endereço deve ser um UUID válido.',
+		})
 		.min(1, 'O campo identificador do endereço é obrigatório.'),
 })
 
@@ -23,11 +22,13 @@ const schema = z.object({
 	neighborhood: z.string(strMessage('bairro')),
 	street: z.string(strMessage('rua')),
 	number: z.string(strMessage('número')),
-	complement: z.string(strMessage('complemento')).optional(),
+	complement: z.string(strMessage('complemento')).nullable(),
 })
 
-
-export async function saveAddress(request: FastifyRequest, reply: FastifyReply) {
+export async function saveAddress(
+	request: FastifyRequest,
+	reply: FastifyReply,
+) {
 	const { id } = paramsSchema.parse(request.params)
 	const { zipCode, state, city, neighborhood, street, number, complement } =
 		schema.parse(request.body)

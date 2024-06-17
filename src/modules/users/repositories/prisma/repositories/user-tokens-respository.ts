@@ -13,7 +13,7 @@ export class PrismaUserTokensRepository implements UserTokensRepository {
 		this.repository = prisma
 	}
 
-	async findByToken(token: string): Promise<UserToken | undefined> {
+	async findByToken(token: string): Promise<UserToken | null> {
 		const userToken = await this.repository.userToken.findUnique({
 			where: {
 				token,
@@ -21,7 +21,7 @@ export class PrismaUserTokensRepository implements UserTokensRepository {
 		})
 
 		if (!userToken) {
-			return undefined
+			return null
 		}
 
 		return PrismaUserTokenMapper.toDomain(userToken)

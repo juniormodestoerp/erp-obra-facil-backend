@@ -8,6 +8,8 @@ export class UserProfileViewModel {
 			document: user.document,
 			email: user.email,
 			phone: user.phone,
+			balance: user.balance,
+			profilePicture: user?.profilePicture,
 			zipCode: user?.address?.zipCode,
 			state: user?.address?.state,
 			city: user?.address?.city,
@@ -15,7 +17,6 @@ export class UserProfileViewModel {
 			street: user?.address?.street,
 			number: user?.address?.number,
 			complement: user?.address?.complement,
-			profilePicture: user?.profilePicture,
 			createdAt: user.createdAt.toISOString(),
 		}
 	}

@@ -67,6 +67,8 @@ export class CreateUserUseCase {
 			document,
 			email,
 			phone,
+			balance: 0,
+			profilePicture: null,
 			password: passwordHashed,
 			birthDate,
 			role: UserRole.USER,

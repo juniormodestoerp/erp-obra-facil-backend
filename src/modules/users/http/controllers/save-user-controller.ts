@@ -4,8 +4,8 @@ import { z } from 'zod'
 import { Email } from '@core/domain/entities/value-object/email'
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { makeSaveUserUseCase } from '@modules/users/use-cases/factories/make-save-user-factory'
 import { UserProfileViewModel } from '@modules/users/http/view-models/user-profile-model'
+import { makeSaveUserUseCase } from '@modules/users/use-cases/factories/make-save-user-factory'
 
 const bodySchema = z.object({
 	name: z
@@ -41,13 +41,7 @@ export async function saveUserController(
 		complement,
 	} = bodySchema.parse(request.body)
 
-	// const profilePicture = (await request.file({
-	// 	limits: { fileSize: 41943040 }, // 40 MB
-	// })) as MultipartFile
-
-	const saveUserUseCase = makeSaveUserUseCase()	
-
-	
+	const saveUserUseCase = makeSaveUserUseCase()
 
 	const { user } = await saveUserUseCase.execute({
 		id: request.user.sub,

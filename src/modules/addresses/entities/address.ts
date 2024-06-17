@@ -13,7 +13,7 @@ interface Props {
 	complement: string
 	createdAt: Date
 	updatedAt: Date
-	deletedAt?: Date | null
+	deletedAt: Date | null
 }
 
 export class Address extends Entity<Props> {
@@ -93,11 +93,11 @@ export class Address extends Entity<Props> {
 		this.props.updatedAt = updatedAt
 	}
 
-	get deletedAt(): Date | null | undefined {
+	get deletedAt(): Date | null {
 		return this.props.deletedAt
 	}
 
-	set deletedAt(deletedAt: Date | null | undefined) {
+	set deletedAt(deletedAt: Date | null) {
 		this.props.deletedAt = deletedAt
 	}
 

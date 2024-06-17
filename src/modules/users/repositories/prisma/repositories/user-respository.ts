@@ -1,14 +1,16 @@
-import type { PrismaClient } from '@prisma/client'
+import { readFileSync } from 'node:fs'
+import type { PrismaClient, User as RawUser } from '@prisma/client'
 
+import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
 import type { IFindManyUsersDTO } from '@modules/users/dtos/find-many-users-dto'
 import type { IFindUserByIdDTO } from '@modules/users/dtos/find-user-by-id-dto'
 import type { User } from '@modules/users/entities/user'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
 import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
+import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
-import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
+import { PrismaUserFilesMapper } from '../mappers/prisma-user-files-mapper'
 
 export class PrismaUsersRepository implements UsersRepository {
 	private repository: PrismaClient
@@ -38,28 +40,26 @@ export class PrismaUsersRepository implements UsersRepository {
 			},
 			include: {
 				address: true,
+				files: {
+					where: {
+						path: {
+							startsWith: '/src/uploads/profile-pictures',
+						},
+						contentType: {
+							startsWith: 'image/',
+						},
+					},
+					orderBy: {
+						updatedAt: 'desc',
+					},
+					take: 1,
+				},
 			},
 		})
 
 		if (!user) {
 			return null
 		}
-
-		const address = await this.repository.address.findUnique({
-			where: {
-				userId,
-			},
-		})
-
-		user.address = address
-
-		const profilePicture = await this.repository.file.findUnique({
-			where: {
-				userId,
-			},
-		})
-
-		user.profilePicture = profilePicture?.path as string ?? undefined
 
 		return PrismaUserMapper.toDomain(user)
 	}
@@ -167,8 +167,6 @@ export class PrismaUsersRepository implements UsersRepository {
 			complement: user?.address?.complement ?? 'Não informado',
 		}
 
-		prismaUserData.address = undefined
-
 		await this.repository.user.update({
 			where: {
 				id: user.id,
@@ -176,12 +174,17 @@ export class PrismaUsersRepository implements UsersRepository {
 			data: prismaUserData,
 		})
 
-		const achou = await this.repository.address.upsert({
+		const address = await this.repository.address.upsert({
 			where: {
 				userId: prismaAddressData.userId,
 			},
 			create: prismaAddressData,
 			update: prismaAddressData,
+		})
+
+		await this.repository.user.update({
+			where: { id: user.id },
+			data: { addressId: address.id },
 		})
 	}
 

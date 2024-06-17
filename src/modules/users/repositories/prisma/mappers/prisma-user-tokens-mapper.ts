@@ -28,6 +28,7 @@ export class PrismaUserTokenMapper {
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
 				deletedAt: raw.deletedAt,
+				user: null,
 			},
 			new UniqueEntityID(raw.id),
 		)

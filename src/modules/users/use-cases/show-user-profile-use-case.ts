@@ -26,14 +26,14 @@ export class ShowUserProfileUseCase {
 		}
 
 		function getRelativePath(fullPath: string) {
-			const srcIndex = fullPath.indexOf('/src')
+			const srcIndex = fullPath?.indexOf('/src')
 			if (srcIndex === -1) {
 				throw new Error('O caminho não contém "/src"')
 			}
-			return fullPath.substring(srcIndex)
+			return fullPath?.substring(srcIndex)
 		}
 
-		user.profilePicture = getRelativePath(user.profilePicture as any) as any
+		user.profilePicture = getRelativePath(user.files[0].path)
 
 		return {
 			user,

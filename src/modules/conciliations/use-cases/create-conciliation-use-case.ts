@@ -15,9 +15,32 @@ import { parse } from 'ofx-js'
 
 const pump = util.promisify(pipeline)
 
+interface IMapTransactions {
+	categoryId: string
+	file: any
+	userId: string
+}
+
+interface IProcessOFXTransactions {
+	filePath: string
+	existingTransactions: Transaction[]
+}
+
+interface IProcessOFXTransactionsOutput {
+	newTransactions: Transaction[]
+	conflictingTransactions: Transaction[]
+	completedTransactions: Transaction[]
+}
+
 interface Input {
 	user: User
 	file: MultipartFile
+}
+
+interface Output {
+	newTransactions: Transaction[]
+	conflictingTransactions: Transaction[]
+	completedTransactions: Transaction[]
 }
 
 export class CreateConciliationUseCase {
@@ -26,8 +49,17 @@ export class CreateConciliationUseCase {
 		private readonly categoriesRepository: CategoriesRepository,
 	) {}
 
-	async execute({ user, file }: Input): Promise<void> {
-		const UPLOAD_DIR = join(__dirname, '../../../../src/uploads')
+	async execute({ user, file }: Input): Promise<Output> {
+		const UPLOAD_DIR = join(
+			__dirname,
+			'..',
+			'..',
+			'..',
+			'..',
+			'src',
+			'uploads',
+			'ofx-statement',
+		)
 
 		if (!existsSync(UPLOAD_DIR)) {
 			mkdirSync(UPLOAD_DIR, {
@@ -41,9 +73,7 @@ export class CreateConciliationUseCase {
 			})
 		}
 
-		const newFileName = `${Utils.NormalizeName(user.name)}-${user.id}-${
-			file.filename
-		}`
+		const newFileName = `${Utils.NormalizeName(user.name)}-${user.id}-${file.filename}`
 		const filePath = join(UPLOAD_DIR, newFileName)
 
 		await pump(file.file, createWriteStream(filePath))
@@ -59,36 +89,47 @@ export class CreateConciliationUseCase {
 			})
 		}
 
-		// Função auxiliar para mapear transações OFX para a entidade Transaction
-		const mapTransaction = (
-			ofxTransaction: any,
-			userId: string,
-			categoryId: string,
-		): Partial<Transaction> => {
+		const mapTransaction = async ({
+			file,
+			userId,
+			categoryId,
+		}: IMapTransactions): Promise<Partial<Transaction>> => {
 			const datePattern = /(\d{4})(\d{2})(\d{2})\d{6}\[-\d+:BRT\]/
-			const match = ofxTransaction.DTPOSTED.match(datePattern)
+			const match = file.DTPOSTED.match(datePattern)
 			const transactionDate = match
 				? new Date(`${match[1]}-${match[2]}-${match[3]}`)
 				: new Date()
 
+			const ofxData = readFileSync(filePath, 'utf-8')
+			const parsedData = await parse(ofxData)
+			const accountType =
+				parsedData.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKACCTFROM.ACCTTYPE ===
+				'CHECKING'
+					? 'Conta corrente'
+					: parsedData.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKACCTFROM
+								.ACCTTYPE === 'SAVINGS'
+						? 'Conta poupança'
+						: 'Cartão de crédito'
+
 			return {
 				userId,
-				fitId: ofxTransaction.FITID,
-				trnType: ofxTransaction.TRNTYPE,
-				name: ofxTransaction.MEMO.split(' - ')[0],
-				description: ofxTransaction.MEMO,
+				fitId: file.FITID,
+				trnType: file.TRNTYPE,
+				accountType,
+				name: file.MEMO.split(' - ')[0],
+				description: file.MEMO,
 				categoryId,
-				establishmentName: ofxTransaction.MEMO.split(' - ')[1] || '',
-				bankName: ofxTransaction.MEMO.split(' - ')[3] || '',
+				establishmentName: file.MEMO.split(' - ')[1] || '',
+				bankName: file.MEMO.split(' - ')[3] || '',
 				transactionDate,
 				previousBalance: 0, // Ajustar conforme necessário
-				totalAmount: Number.parseFloat(ofxTransaction.TRNAMT),
+				totalAmount: Number.parseFloat(file.TRNAMT),
 				currentBalance: 0, // Ajustar conforme necessário
-				paymentMethod: ofxTransaction.TRNTYPE === 'DEBIT' ? 'debit' : 'credit',
+				paymentMethod: file.TRNTYPE === 'DEBIT' ? 'debit' : 'credit',
 				competencyDate: null,
 				costAndProfitCenters: null,
 				tags: null,
-				documentNumber: ofxTransaction.FITID,
+				documentNumber: file.FITID,
 				associatedContracts: null,
 				associatedProjects: null,
 				additionalComments: null,
@@ -100,15 +141,11 @@ export class CreateConciliationUseCase {
 		}
 
 		// Função principal para processar transações OFX
-		const processOFXTransactions = async (
-			ofxFilePath: string,
-			userId: string,
-			existingTransactions: Transaction[],
-		): Promise<{
-			newTransactions: Transaction[]
-			conflictingTransactions: Transaction[]
-		}> => {
-			const ofxData = readFileSync(ofxFilePath, 'utf-8')
+		const processOFXTransactions = async ({
+			filePath,
+			existingTransactions,
+		}: IProcessOFXTransactions): Promise<IProcessOFXTransactionsOutput> => {
+			const ofxData = readFileSync(filePath, 'utf-8')
 			const parsedData = await parse(ofxData)
 
 			const ofxTransactions =
@@ -116,23 +153,24 @@ export class CreateConciliationUseCase {
 
 			const newTransactions: Transaction[] = []
 			const conflictingTransactions: Transaction[] = []
+			const completedTransactions: Transaction[] = []
 
 			for (const ofxTransaction of ofxTransactions) {
-				const mappedTransaction = mapTransaction(
-					ofxTransaction,
-					userId,
-					category.categoryId as string,
-				)
+				const mappedTransaction = await mapTransaction({
+					categoryId: category?.categoryId as string,
+					file: ofxTransaction,
+					userId: user.id,
+				})
 
 				const existingTransaction = existingTransactions.find(
 					(txn) =>
 						txn.transactionDate.getTime() ===
-							mappedTransaction.transactionDate.getTime() &&
+							mappedTransaction?.transactionDate?.getTime() &&
 						txn.fitId === mappedTransaction.fitId,
 				)
 
 				if (!existingTransaction) {
-					const transaction = Transaction.create(mappedTransaction)
+					const transaction = Transaction.create(mappedTransaction as any)
 					newTransactions.push(transaction)
 					await this.transactionsRepository.create(transaction)
 				} else if (
@@ -140,10 +178,12 @@ export class CreateConciliationUseCase {
 					existingTransaction.description !== mappedTransaction.description
 				) {
 					conflictingTransactions.push(existingTransaction)
+				} else {
+					completedTransactions.push(existingTransaction)
 				}
 			}
 
-			return { newTransactions, conflictingTransactions }
+			return { newTransactions, conflictingTransactions, completedTransactions }
 		}
 
 		const existingTransactions: Transaction[] =
@@ -152,24 +192,18 @@ export class CreateConciliationUseCase {
 			})
 
 		try {
-			const ofxData = readFileSync(filePath, 'utf-8')
-			const parsedData = await parse(ofxData)
-
-			const account = parsedData.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKACCTFROM
-			const transactions =
-				parsedData.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKTRANLIST.STMTTRN
-
-			const result = await processOFXTransactions(
+			const result = await processOFXTransactions({
 				filePath,
-				user.id,
 				existingTransactions,
-			)
+			})
 
-			console.log('New Transactions:', result.newTransactions)
-			console.log('Conflicting Transactions:', result.conflictingTransactions)
-
-			console.log(account, transactions)
+			return {
+				newTransactions: result.newTransactions,
+				conflictingTransactions: result.conflictingTransactions,
+				completedTransactions: result.completedTransactions,
+			}
 		} catch (error) {
+			console.error(error)
 			throw new AppError({
 				code: 'file.cannot_read_ofx',
 			})

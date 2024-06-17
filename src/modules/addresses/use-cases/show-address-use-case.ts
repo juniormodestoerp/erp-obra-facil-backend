@@ -12,7 +12,7 @@ interface Output {
 	address: Address
 }
 
-export class ShowMainAddressUseCase {
+export class ShowAddressUseCase {
 	constructor(
 		private readonly addressRepository: AddressesRepository,
 		private readonly usersRepository: UsersRepository,
@@ -23,7 +23,7 @@ export class ShowMainAddressUseCase {
 
 		if (!user || user.deletedAt !== null) {
 			throw new AppError({
-				code: 'user.not_found'
+				code: 'user.not_found',
 			})
 		}
 
@@ -31,7 +31,7 @@ export class ShowMainAddressUseCase {
 
 		if (!address || address.deletedAt !== null) {
 			throw new AppError({
-				code: 'address.not_found'
+				code: 'address.not_found',
 			})
 		}
 

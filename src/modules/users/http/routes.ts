@@ -1,9 +1,9 @@
 import type { FastifyInstance } from 'fastify'
 
 import { authenticateUserController } from '@modules/users/http/controllers/authenticate-user-controller'
+import { createUserController } from '@modules/users/http/controllers/create-user-controller'
 import { removeUserController } from '@modules/users/http/controllers/remove-user-controller'
 import { resetForgotPasswordController } from '@modules/users/http/controllers/reset-forgot-password-controller'
-import { createUserController } from '@modules/users/http/controllers/create-user-controller'
 import { saveUserController } from '@modules/users/http/controllers/save-user-controller'
 import { sendForgotPasswordCodeController } from '@modules/users/http/controllers/send-forgot-password-code-controller'
 import { showUserProfileController } from '@modules/users/http/controllers/show-user-profile-controller'

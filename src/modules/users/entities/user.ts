@@ -18,15 +18,17 @@ interface Props {
 	phone: string
 	birthDate: Date
 	password: string
+	balance: number
+	profilePicture: string | null
 	role: UserRole
 	status: string
 	createdAt: Date
 	updatedAt: Date
 	deletedAt: Date | null
 
+	address: Address | null
+	files: File[]
 	settings: Setting[]
-	address?: Address
-	profilePicture?: File
 }
 
 export class User extends Entity<Props> {
@@ -78,6 +80,22 @@ export class User extends Entity<Props> {
 		this.props.password = password
 	}
 
+	get balance(): number {
+		return this.props.balance
+	}
+
+	set balance(balance: number) {
+		this.props.balance = balance
+	}
+
+	get profilePicture(): string | null {
+		return this.props.profilePicture
+	}
+
+	set profilePicture(profilePicture: string | null) {
+		this.props.profilePicture = profilePicture
+	}
+
 	get role(): UserRole {
 		return this.props.role
 	}
@@ -126,31 +144,26 @@ export class User extends Entity<Props> {
 		this.props.settings = settings
 	}
 
-	get address(): Address | undefined {
+	get files(): File[] {
+		return this.props.files
+	}
+
+	set files(files: File[]) {
+		this.props.files = files
+	}
+
+	get address(): Address | null {
 		return this.props.address
 	}
 
-	set address(address: Address | undefined) {
+	set address(address: Address | null) {
 		this.props.address = address
-	}
-
-	get profilePicture(): File | undefined {
-		return this.props.profilePicture
-	}
-
-	set profilePicture(profilePicture: File | undefined) {
-		this.props.profilePicture = profilePicture
 	}
 
 	static create(
 		props: Optional<
 			Props,
-			| 'createdAt'
-			| 'updatedAt'
-			| 'deletedAt'
-			| 'settings'
-			| 'address'
-			| 'profilePicture'
+			'createdAt' | 'updatedAt' | 'deletedAt' | 'settings' | 'address' | 'files'
 		>,
 		id?: UniqueEntityID,
 	): User {
@@ -161,8 +174,8 @@ export class User extends Entity<Props> {
 				updatedAt: props.updatedAt ?? new Date(),
 				deletedAt: props.deletedAt ?? null,
 				settings: props.settings ?? [],
-				address: props.address ?? undefined,
-				profilePicture: props.profilePicture ?? undefined,
+				files: props.files ?? [],
+				address: props.address ?? null,
 			},
 			id,
 		)

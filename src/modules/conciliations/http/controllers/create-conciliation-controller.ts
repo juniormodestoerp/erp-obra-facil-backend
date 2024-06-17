@@ -1,7 +1,7 @@
+import type { MultipartFile } from '@fastify/multipart'
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { ZodError } from 'zod'
 
-import type { MultipartFile } from '@fastify/multipart'
 import { makeCreateConciliationUseCase } from '@modules/conciliations/use-cases/factories/make-create-conciliation-factory'
 
 export async function createConciliationController(
@@ -19,12 +19,17 @@ export async function createConciliationController(
 
 		const createConciliationUseCase = makeCreateConciliationUseCase()
 
-		await createConciliationUseCase.execute({
-			user: request.user.data,
-			file: data,
-		})
+		const { completedTransactions, conflictingTransactions, newTransactions } =
+			await createConciliationUseCase.execute({
+				user: request.user.data,
+				file: data,
+			})
 
-		return reply.status(201).send()
+		return reply.status(201).send({
+			completedTransactions,
+			conflictingTransactions,
+			newTransactions,
+		})
 	} catch (error) {
 		if (error instanceof ZodError) {
 			return reply.status(400).send({ error: error.errors })

@@ -1,13 +1,15 @@
+import { existsSync, mkdirSync } from 'node:fs'
 import { writeFile } from 'node:fs/promises'
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
-import { join, extname } from 'node:path'
+import { extname, join } from 'node:path'
+
 import type { MultipartFile } from '@fastify/multipart'
+
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
-import type { UsersFilesRepository } from '@modules/users/repositories/user-files-repository'
-import { File } from '@modules/users/entities/file'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
+import { File } from '@modules/users/entities/file'
+import type { UsersFilesRepository } from '@modules/users/repositories/user-files-repository'
+import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
 	userId: string
@@ -76,6 +78,7 @@ export class UpdateProfilePictureUseCase {
 				path: getRelativePath(filePath),
 				name: fileName,
 				contentType: data.mimetype,
+				user: null,
 			},
 			new UniqueEntityID(previusFile?.id),
 		)

@@ -7,6 +7,7 @@ import { File } from '@modules/users/entities/file'
 export class PrismaUserFilesMapper {
 	static toPrisma(file: File) {
 		return {
+			id: file.id,
 			userId: file.userId,
 			path: file.path,
 			name: file.name,
@@ -27,6 +28,7 @@ export class PrismaUserFilesMapper {
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
 				deletedAt: raw.deletedAt ?? null,
+				user: null,
 			},
 			new UniqueEntityID(raw.id),
 		)

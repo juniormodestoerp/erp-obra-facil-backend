@@ -1,4 +1,4 @@
-import type { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
@@ -9,7 +9,10 @@ const paramsSchema = z.object({
 	address: z.string(strMessage('endereço')).min(1, 'O endereço é obrigatório.'),
 })
 
-export async function showZipCode(request: FastifyRequest, reply: FastifyReply) {
+export async function showZipCode(
+	request: FastifyRequest,
+	reply: FastifyReply,
+) {
 	const { address } = paramsSchema.parse(request.params)
 
 	const showZipCodeUseCase = makeShowZipCodeUseCase()

@@ -4,11 +4,13 @@ import cors from '@fastify/cors'
 import helmet from '@fastify/helmet'
 import jwt from '@fastify/jwt'
 import multipart from '@fastify/multipart'
+import fastifyStatic from '@fastify/static'
 import swagger from '@fastify/swagger'
 import swaggerUI from '@fastify/swagger-ui'
 import fastify from 'fastify'
-import fastifyStatic from '@fastify/static'
 
+import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-respository'
+import { makeShowUserProfileUseCase } from '@modules/users/use-cases/factories/make-show-user-profile-factory'
 import CorsConfig from '@shared/infra/config/cors'
 import HelmetConfig from '@shared/infra/config/helmet'
 import {
@@ -32,12 +34,24 @@ app.register(multipart)
 app.register(fastifyStatic, {
 	root: join(__dirname, '..', '..', '..', 'uploads'),
 	prefix: '/uploads/',
-  setHeaders: (res, path, stat) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-  }
+	setHeaders: (res, path, stat) => {
+		res.setHeader('Access-Control-Allow-Origin', '*')
+	},
 })
 
 // http://localhost:8080/uploads/profile-pictures/bruno-vilefort-fdb8f2f0-ab61-4f36-9372-e7a09eaa10ab.jpeg
+
+app.get('/hello', async (request, reply) => {
+	const showUserProfileUseCase = makeShowUserProfileUseCase()
+
+	const { user } = await showUserProfileUseCase.execute({
+		userId: '2d7b29bb-8625-478c-8091-c09b263167ae',
+	})
+
+	console.log('final user', JSON.stringify(user, null, 2))
+
+	reply.send(user)
+})
 
 app.register(AppRoutes, { prefix: 'api/v1' })
 

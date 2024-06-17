@@ -1,5 +1,5 @@
-import type { FastifyReply, FastifyRequest } from 'fastify'
 import type { MultipartFile } from '@fastify/multipart'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 
 import { AppError } from '@core/domain/errors/app-error'
 
@@ -50,6 +50,6 @@ export async function updateProfilePictureController(
 	})
 
 	return reply.status(200).send({
-		profilePicture
+		profilePicture,
 	})
 }

@@ -13,7 +13,7 @@ interface Props {
 	updatedAt: Date
 	deletedAt: Date | null
 
-	user?: User
+	user: User | null
 }
 
 export class UserToken extends Entity<Props> {
@@ -69,16 +69,12 @@ export class UserToken extends Entity<Props> {
 		this.props.deletedAt = deletedAt
 	}
 
-	getUser(): User | undefined {
+	get user(): User | null {
 		return this.props.user
 	}
 
-	setUser(user: User) {
+	set user(user: User | null) {
 		this.props.user = user
-	}
-
-	get user() {
-		return this.props.user
 	}
 
 	static create(

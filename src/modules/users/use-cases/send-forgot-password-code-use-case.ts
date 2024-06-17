@@ -14,8 +14,8 @@ import { jobs } from '@shared/infra/queue/jobs'
 interface Input {
 	protocol: string
 	hostname: string
-	document: string | undefined
-	email: string | undefined
+	document: string | null
+	email: string | null
 }
 
 export class SendForgotPasswordCodeUseCase {
@@ -62,6 +62,10 @@ export class SendForgotPasswordCodeUseCase {
 			token: randomUUID(),
 			code,
 			usage: false,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			deletedAt: null,
+			user: null,
 		})
 
 		await this.userTokenRepository.create(userToken)

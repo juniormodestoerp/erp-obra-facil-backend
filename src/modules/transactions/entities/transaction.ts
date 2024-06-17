@@ -11,6 +11,7 @@ interface Props {
 	trnType: string
 	name: string
 	description: string
+	accountType: string
 	categoryId: string
 	categoryName?: string
 	establishmentName: string
@@ -51,6 +52,14 @@ export class Transaction extends Entity<Props> {
 
 	set fitId(value: string) {
 		this.props.fitId = value
+	}
+
+	get accountType(): string {
+		return this.props.accountType
+	}
+
+	set accountType(value: string) {
+		this.props.accountType = value
 	}
 
 	get trnType(): string {

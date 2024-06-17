@@ -15,7 +15,7 @@ interface Props {
 	updatedAt: Date
 	deletedAt: Date | null
 
-	user?: User
+	user: User | null
 }
 
 export class Setting extends Entity<Props> {
@@ -91,11 +91,11 @@ export class Setting extends Entity<Props> {
 		this.props.deletedAt = deletedAt
 	}
 
-	get user(): User | undefined {
+	get user(): User | null {
 		return this.props.user
 	}
 
-	set user(user: User | undefined) {
+	set user(user: User | null) {
 		this.props.user = user
 	}
 
@@ -109,7 +109,7 @@ export class Setting extends Entity<Props> {
 				createdAt: props.createdAt ?? new Date(),
 				updatedAt: props.updatedAt ?? new Date(),
 				deletedAt: props.deletedAt ?? null,
-				user: props.user,
+				user: props.user ?? null,
 			},
 			id,
 		)

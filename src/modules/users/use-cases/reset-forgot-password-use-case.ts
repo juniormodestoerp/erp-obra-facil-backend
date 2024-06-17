@@ -39,7 +39,7 @@ export class ResetForgotPasswordUseCase {
 			})
 		}
 
-		let expiredAt: Date | undefined
+		let expiredAt: Date | null
 
 		if (userToken.createdAt) {
 			expiredAt = DateInstance.add({
@@ -48,7 +48,7 @@ export class ResetForgotPasswordUseCase {
 				type: 'hour',
 			})
 		} else {
-			throw new Error('userToken.createdAt is null or undefined')
+			throw new Error('userToken.createdAt is null')
 		}
 
 		if (DateInstance.isAfter({ date: new Date(), dateToCompare: expiredAt })) {

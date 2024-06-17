@@ -6,8 +6,8 @@ import { Document } from '@core/domain/entities/value-object/document'
 import { Email } from '@core/domain/entities/value-object/email'
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { makeCreateUserUseCase } from '@modules/users/use-cases/factories/make-create-user-factory'
 import { UserViewModel } from '@modules/users/http/view-models/user-view-model'
+import { makeCreateUserUseCase } from '@modules/users/use-cases/factories/make-create-user-factory'
 
 import { env } from '@shared/infra/config/env'
 

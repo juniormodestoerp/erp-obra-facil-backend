@@ -1,19 +1,13 @@
-import { writeFile } from 'node:fs/promises'
-import { existsSync, mkdirSync } from 'node:fs'
-import { join, extname } from 'node:path'
-import type { MultipartFile } from '@fastify/multipart'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
-import type { AddressesRepository } from '@modules/addresses/repositories/address-repository'
-import type { UsersFilesRepository } from '@modules/users/repositories/user-files-repository'
-import { User } from '@modules/users/entities/user'
 import { Address } from '@modules/addresses/entities/address'
+import type { AddressesRepository } from '@modules/addresses/repositories/address-repository'
+import { User } from '@modules/users/entities/user'
+import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
 	userId: string
-	data: MultipartFile
 	name: string
 	email: string
 	phone: string
@@ -30,12 +24,10 @@ export class UpdateProfileUseCase {
 	constructor(
 		private readonly usersRepository: UsersRepository,
 		private readonly addressesRepository: AddressesRepository,
-		private readonly userFilesRepository: UsersFilesRepository
 	) {}
 
 	async execute({
 		userId,
-		data,
 		name,
 		email,
 		phone,
@@ -61,6 +53,8 @@ export class UpdateProfileUseCase {
 				document: previusUser.document,
 				email: email ?? previusUser.email,
 				phone: phone ?? previusUser.phone,
+				balance: previusUser.balance,
+				profilePicture: previusUser.profilePicture,
 				password: previusUser.password,
 				birthDate: previusUser.birthDate,
 				role: previusUser.role,
@@ -71,8 +65,7 @@ export class UpdateProfileUseCase {
 
 		await this.usersRepository.save(updatedUser)
 
-		console.log('complement', complement);
-		
+		console.log('complement', complement)
 
 		const address = Address.create({
 			userId,
@@ -86,17 +79,5 @@ export class UpdateProfileUseCase {
 		})
 
 		await this.addressesRepository.save(address)
-
-		const uploadsDirectory = join(__dirname, '..', '..', 'uploads', 'profile')
-
-		if (!existsSync(uploadsDirectory)) {
-			mkdirSync(uploadsDirectory)
-		}
-
-		if (data !== undefined) {
-			const fileName = `${name.replace(' ', '-').toLowerCase()}.${userId}.${extname(data.filename)}`
-			const filePath = join(uploadsDirectory, fileName)
-			await writeFile(filePath, await data.toBuffer())
-		}
 	}
 }

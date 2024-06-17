@@ -66,7 +66,6 @@ export async function authenticateUserController(
 
 	reply.setCookie('accessToken', accessToken, {
 		path: '/',
-		httpOnly: true,
 		secure: env.NODE_ENV === 'production',
 		sameSite: 'strict',
 		maxAge: 3600,
@@ -74,7 +73,6 @@ export async function authenticateUserController(
 
 	reply.setCookie('refreshToken', refreshToken, {
 		path: '/',
-		httpOnly: true,
 		secure: env.NODE_ENV === 'production',
 		sameSite: 'strict',
 		maxAge: 604800,

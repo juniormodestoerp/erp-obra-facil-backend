@@ -14,14 +14,16 @@ enum UserRole {
 
 model User {
   id             String    @id @default(uuid())
-  addressId      String?
+  addressId      String?   @unique
   fileId         String?
   name           String
   document       String    @unique
   email          String    @unique
   phone          String    @unique
   birthDate      DateTime
+  balance        Float     @default(0)
   password       String
+  profilePath    String?
   role           UserRole
   status         String
   profilePicture String?
@@ -29,12 +31,12 @@ model User {
   updatedAt      DateTime  @updatedAt
   deletedAt      DateTime?
 
-  userTokens   UserToken[]
-  settings     Setting[]
-  categories   Category[]
-  transactions Transaction[]
   address      Address?      @relation(fields: [addressId], references: [id])
-  file         File?         @relation(fields: [fileId], references: [id])
+  categories   Category[]
+  files        File[]
+  settings     Setting[]
+  userTokens   UserToken[]
+  transactions Transaction[]
 
   @@map("users")
 }
@@ -82,6 +84,7 @@ model Transaction {
   userId            String   @map("user_id")
   fitId             String   @map("fit_id")
   trnType           String   @map("trn_type")
+  accountType       String   @map("account_type")
   name              String
   description       String
   categoryId        String   @map("category_id")
@@ -137,7 +140,7 @@ model File {
   updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
-  user User[]
+  user User @relation(fields: [userId], references: [id])
 
   @@map("files")
 }
@@ -155,7 +158,8 @@ model Address {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   deletedAt    DateTime?
-  User         User[]
+
+  user User?
 
   @@map("addresses")
 }

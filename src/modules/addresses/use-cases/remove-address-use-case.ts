@@ -4,8 +4,8 @@ import type { AddressesRepository } from '@modules/addresses/repositories/addres
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
-	id: string
 	userId: string
+	id: string
 }
 
 export class RemoveAddressUseCase {
@@ -14,15 +14,12 @@ export class RemoveAddressUseCase {
 		private readonly usersRepository: UsersRepository,
 	) {}
 
-	async execute({
-		id,
-		userId,
-	}: Input): Promise<void> {
+	async execute({ id, userId }: Input): Promise<void> {
 		const user = await this.usersRepository.findById({ userId })
 
 		if (!user || user.deletedAt !== null) {
 			throw new AppError({
-				code: 'user.not_found'
+				code: 'user.not_found',
 			})
 		}
 
@@ -30,7 +27,7 @@ export class RemoveAddressUseCase {
 
 		if (!address || address.deletedAt !== null) {
 			throw new AppError({
-				code: 'address.not_found'
+				code: 'address.not_found',
 			})
 		}
 

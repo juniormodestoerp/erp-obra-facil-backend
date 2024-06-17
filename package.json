@@ -20,7 +20,7 @@
     }
   ],
   "scripts": {
-    "lint": "npx @biomejs/biome check --apply-unsafe ./src",
+    "lint": "npx @biomejs/biome check --write --unsafe ./src",
     "build": "sh tools/build.sh",
     "prisma:prep": "dotenv -e .env -- sh tools/prisma-prep.sh",
     "database:seed": "dotenv -e .env -- sh tools/database-seed.sh",

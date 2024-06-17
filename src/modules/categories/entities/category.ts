@@ -2,42 +2,39 @@ import { Entity } from '@core/domain/entities/entity'
 import type { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import type { Optional } from '@core/domain/types/opcional'
 
-import type {
-	ICategory,
-	IRelatedCategories,
-} from '@modules/categories/dtos/category-dto'
 import type { User } from '@modules/users/entities/user'
 
 interface Props {
 	userId: string
-	categoryId?: string | null
+	categoryId: string | null
 	name: string
-	subcategory?: string | null
+	subcategory: string | null
 	type: string
 	model: string
 	createdAt: Date
 	updatedAt: Date
-	deletedAt?: Date | null
-	user?: User
-	relatedCategories?: IRelatedCategories
-	categories?: ICategory | null
+	deletedAt: Date | null
+
+	user: User | null
+	categories: Category | null
+	relatedCategories: Category[]
 }
 
 export class Category extends Entity<Props> {
-	get categoryId(): string | null | undefined {
-		return this.props.categoryId
-	}
-
-	set categoryId(categoryId: string | null | undefined) {
-		this.props.categoryId = categoryId
-	}
-
 	get userId(): string {
 		return this.props.userId
 	}
 
 	set userId(userId: string) {
 		this.props.userId = userId
+	}
+
+	get categoryId(): string | null {
+		return this.props.categoryId
+	}
+
+	set categoryId(categoryId: string | null) {
+		this.props.categoryId = categoryId
 	}
 
 	get name(): string {
@@ -48,11 +45,11 @@ export class Category extends Entity<Props> {
 		this.props.name = name
 	}
 
-	get subcategory(): string | null | undefined {
+	get subcategory(): string | null {
 		return this.props.subcategory
 	}
 
-	set subcategory(subcategory: string | null | undefined) {
+	set subcategory(subcategory: string | null) {
 		this.props.subcategory = subcategory
 	}
 
@@ -88,36 +85,36 @@ export class Category extends Entity<Props> {
 		this.props.updatedAt = updatedAt
 	}
 
-	get deletedAt(): Date | null | undefined {
+	get deletedAt(): Date | null {
 		return this.props.deletedAt
 	}
 
-	set deletedAt(deletedAt: Date | null | undefined) {
+	set deletedAt(deletedAt: Date | null) {
 		this.props.deletedAt = deletedAt
 	}
 
-	get user(): User | undefined {
+	get user(): User | null {
 		return this.props.user
 	}
 
-	set user(user: User | undefined) {
+	set user(user: User | null) {
 		this.props.user = user
 	}
 
-	get relatedCategories(): IRelatedCategories | undefined {
-		return this.props.relatedCategories
-	}
-
-	set relatedCategories(relatedCategories: IRelatedCategories | undefined) {
-		this.props.relatedCategories = relatedCategories
-	}
-
-	get categories(): ICategory | null | undefined {
+	get categories(): Category | null {
 		return this.props.categories
 	}
 
-	set categories(categories: ICategory | null | undefined) {
+	set categories(categories: Category | null) {
 		this.props.categories = categories
+	}
+
+	get relatedCategories(): Category[] {
+		return this.props.relatedCategories
+	}
+
+	set relatedCategories(relatedCategories: Category[]) {
+		this.props.relatedCategories = relatedCategories
 	}
 
 	static create(

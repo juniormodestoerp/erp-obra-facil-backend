@@ -9,10 +9,12 @@ import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mapp
 import { User, type UserRole } from '@modules/users/entities/user'
 import type { Address } from '@modules/addresses/entities/address'
 import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-address-mapper'
+import type { File } from '@modules/users/entities/file'
 
 type RawUserWithSettings = RawUser & {
 	settings?: RawSetting[]
 	address?: Address
+	profilePicture?: File
 }
 
 export class PrismaUserMapper {
@@ -46,8 +48,7 @@ export class PrismaUserMapper {
 			? raw.settings.map(PrismaSettingsMapper.toDomain)
 			: []
 		const address = raw.address && PrismaAddressesMapper.toDomain(raw.address)
-		console.log('raw address', address);
-		
+
 		return User.create(
 			{
 				name: raw.name,
@@ -62,7 +63,8 @@ export class PrismaUserMapper {
 				updatedAt: raw.updatedAt,
 				deletedAt: raw.deletedAt ?? null,
 				settings,
-				address
+				address,
+				profilePicture: raw.profilePicture,
 			},
 			new UniqueEntityID(raw.id),
 		)

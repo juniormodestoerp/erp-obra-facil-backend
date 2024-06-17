@@ -58,7 +58,7 @@ export class SaveUserUseCase {
 			throw new AppError({
 				code: 'user.not_found',
 			})
-		}		
+		}
 
 		const updatedUser = User.create(
 			{
@@ -74,31 +74,9 @@ export class SaveUserUseCase {
 			new UniqueEntityID(id),
 		)
 
-		// if (profilePicture) {
-		// 	const UPLOAD_DIR = join(__dirname, '../../../../src/uploads')
+		console.log('CHEGOU AQUI COMPLEMENT', complement)
 
-		// 	if (!existsSync(UPLOAD_DIR)) {
-		// 		mkdirSync(UPLOAD_DIR, {
-		// 			recursive: true,
-		// 		})
-		// 	}
-
-		// 	const pictureProfileName = `${Utils.NormalizeName(name)}-${id}-${profilePicture.filename}`
-		// 	const pictureProfilePath = join(UPLOAD_DIR, pictureProfileName)
-
-		// 	const pump = util.promisify(pipeline)
-
-		// 	await pump(profilePicture.file, createWriteStream(pictureProfilePath))
-
-		// 	const newProfilePicture = File.create({
-		// 		userId: id,
-		// 		name: pictureProfileName,
-		// 		path: pictureProfilePath,
-		// 		contentType: profilePicture.mimetype,
-		// 	})
-
-		// 	updatedUser.profilePicture = newProfilePicture
-		// }
+		complement = complement ?? 'Não informado'
 
 		const address = Address.create({
 			userId: id,

@@ -41,6 +41,7 @@
     "@fastify/jwt": "8.0.1",
     "@fastify/multipart": "8.3.0",
     "@fastify/rate-limit": "9.1.0",
+    "@fastify/static": "7.0.4",
     "@immobiliarelabs/fastify-sentry": "8.0.1",
     "@prisma/client": "5.15.0",
     "@react-email/components": "0.0.19",

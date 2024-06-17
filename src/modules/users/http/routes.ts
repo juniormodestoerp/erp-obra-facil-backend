@@ -7,6 +7,7 @@ import { createUserController } from '@modules/users/http/controllers/create-use
 import { saveUserController } from '@modules/users/http/controllers/save-user-controller'
 import { sendForgotPasswordCodeController } from '@modules/users/http/controllers/send-forgot-password-code-controller'
 import { showUserProfileController } from '@modules/users/http/controllers/show-user-profile-controller'
+import { updateProfilePictureController } from '@modules/users/http/controllers/update-profile-picture-controller'
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
@@ -15,6 +16,12 @@ export async function Router(app: FastifyInstance) {
 		'/users/profile',
 		{ onRequest: [verifyJwt] },
 		showUserProfileController,
+	)
+
+	app.post(
+		'/users/profile-picture',
+		{ onRequest: [verifyJwt] },
+		updateProfilePictureController,
 	)
 
 	app.post('/sessions', authenticateUserController)

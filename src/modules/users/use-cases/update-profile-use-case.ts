@@ -71,6 +71,9 @@ export class UpdateProfileUseCase {
 
 		await this.usersRepository.save(updatedUser)
 
+		console.log('complement', complement);
+		
+
 		const address = Address.create({
 			userId,
 			zipCode,
@@ -79,7 +82,7 @@ export class UpdateProfileUseCase {
 			neighborhood,
 			street,
 			number,
-			complement,
+			complement: complement ?? 'Não informado',
 		})
 
 		await this.addressesRepository.save(address)

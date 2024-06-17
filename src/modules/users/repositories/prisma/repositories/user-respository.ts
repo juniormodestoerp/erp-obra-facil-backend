@@ -53,6 +53,14 @@ export class PrismaUsersRepository implements UsersRepository {
 
 		user.address = address
 
+		const profilePicture = await this.repository.file.findUnique({
+			where: {
+				userId,
+			},
+		})
+
+		user.profilePicture = profilePicture?.path as string ?? undefined
+
 		return PrismaUserMapper.toDomain(user)
 	}
 

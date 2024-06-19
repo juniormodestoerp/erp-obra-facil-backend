@@ -1,11 +1,9 @@
-import type { MultipartFile } from '@fastify/multipart'
-
-import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
+import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 
+import type { UsersRepository } from '@modules/users/repositories/user-repository'
 import { Address } from '@modules/addresses/entities/address'
 import { User } from '@modules/users/entities/user'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
 	id: string
@@ -18,8 +16,7 @@ interface Input {
 	street: string
 	neighborhood: string
 	number: string
-	complement?: string
-	profilePicture?: MultipartFile
+	complement: string
 }
 
 interface Output {
@@ -41,7 +38,6 @@ export class SaveUserUseCase {
 		street,
 		number,
 		complement,
-		profilePicture,
 	}: Input): Promise<Output> {
 		const previusUser = await this.usersRepository.findProfile({
 			userId: id,

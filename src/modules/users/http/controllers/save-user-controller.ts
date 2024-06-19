@@ -21,7 +21,7 @@ const bodySchema = z.object({
 	neighborhood: z.string(strMessage('bairro')),
 	street: z.string(strMessage('rua')),
 	number: z.string(strMessage('número')),
-	complement: z.string(strMessage('complemento')).optional(),
+	complement: z.string(strMessage('complemento')),
 })
 
 export async function saveUserController(

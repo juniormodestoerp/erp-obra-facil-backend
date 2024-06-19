@@ -25,6 +25,9 @@ export class ShowUserProfileUseCase {
 			})
 		}
 
+		console.log(user);
+		
+
 		function getRelativePath(fullPath: string) {
 			const srcIndex = fullPath?.indexOf('/src')
 			if (srcIndex === -1) {
@@ -33,7 +36,7 @@ export class ShowUserProfileUseCase {
 			return fullPath?.substring(srcIndex)
 		}
 
-		user.profilePicture = getRelativePath(user.files[0].path)
+		user.profilePicture = getRelativePath(user?.files[0]?.path)
 
 		return {
 			user,

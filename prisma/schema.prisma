@@ -23,7 +23,6 @@ model User {
   birthDate      DateTime
   balance        Float     @default(0)
   password       String
-  profilePath    String?
   role           UserRole
   status         String
   profilePicture String?
@@ -57,27 +56,26 @@ model Setting {
 
   @@map("settings")
 }
-
 model Category {
-  id          String    @id @default(uuid())
-  categoryId  String?   @map("categories_id")
-  userId      String    @map("user_id")
-  name        String    @unique
-  subcategory String?
-  type        String
-  model       String
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
-  deletedAt   DateTime? @map("deleted_at")
+  id                String     @id @default(uuid())
+  categoryId        String?    @map("categories_id")
+  userId            String     @map("user_id")
+  name              String     @unique
+  subcategory       String?
+  type              String
+  model             String
+  createdAt         DateTime   @default(now()) @map("created_at")
+  updatedAt         DateTime   @updatedAt @map("updated_at")
+  deletedAt         DateTime?  @map("deleted_at")
 
   relatedCategories Category[] @relation("ParentChild")
-
-  user         User          @relation(fields: [userId], references: [id])
-  categories   Category?     @relation("ParentChild", fields: [categoryId], references: [id])
-  transactions Transaction[]
+  user              User       @relation(fields: [userId], references: [id])
+  categories        Category?  @relation("ParentChild", fields: [categoryId], references: [id])
+  transactions      Transaction[]
 
   @@map("categories")
 }
+
 
 model Transaction {
   id                String   @id @default(uuid())

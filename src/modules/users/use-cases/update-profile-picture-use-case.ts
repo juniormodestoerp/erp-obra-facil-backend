@@ -85,6 +85,9 @@ export class UpdateProfilePictureUseCase {
 
 		await this.userFilesRepository.save(profilePicture)
 
+		user.profilePicture = getRelativePath(filePath)
+		await this.usersRepository.save(user)
+
 		return {
 			profilePicture: profilePicture.path,
 		}

@@ -1,5 +1,4 @@
-import { readFileSync } from 'node:fs'
-import type { PrismaClient, User as RawUser } from '@prisma/client'
+import type { PrismaClient } from '@prisma/client'
 
 import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
 import type { IFindManyUsersDTO } from '@modules/users/dtos/find-many-users-dto'
@@ -10,7 +9,7 @@ import type { UsersRepository } from '@modules/users/repositories/user-repositor
 
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
-import { PrismaUserFilesMapper } from '../mappers/prisma-user-files-mapper'
+import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-address-mapper'
 
 export class PrismaUsersRepository implements UsersRepository {
 	private repository: PrismaClient
@@ -155,36 +154,41 @@ export class PrismaUsersRepository implements UsersRepository {
 	}
 
 	async save(user: User): Promise<void> {
-		const prismaUserData = PrismaUserMapper.toPrisma(user)
-		const prismaAddressData = {
-			userId: user.id,
-			zipCode: user?.address?.zipCode ?? '',
-			state: user?.address?.state ?? '',
-			city: user?.address?.city ?? '',
-			neighborhood: user?.address?.neighborhood ?? '',
-			street: user?.address?.street ?? '',
-			number: user?.address?.number ?? '',
-			complement: user?.address?.complement ?? 'Não informado',
-		}
+		const prismaUserData = PrismaUserMapper.toPrisma(user);
+	
+		// Mapeando os dados do endereço, se existir
+		const prismaAddressData = user.address ? PrismaAddressesMapper.toPrisma(user.address) : null;
 
-		await this.repository.user.update({
-			where: {
-				id: user.id,
-			},
-			data: prismaUserData,
-		})
+		await this.repository.$transaction(async (prisma) => {
+			const previusAddress = await prisma.address.findUnique({
+				where: {
+					userId: user.id,
+				}
+			})
 
-		const address = await this.repository.address.upsert({
-			where: {
-				userId: prismaAddressData.userId,
-			},
-			create: prismaAddressData,
-			update: prismaAddressData,
-		})
+			console.log('previusAddress', previusAddress); // não tem
+			console.log('prismaAddressData', prismaAddressData); // tem
+			console.log('userId', user.id); // correto
+			console.log('addressId', prismaUserData.addressId); // null
 
-		await this.repository.user.update({
-			where: { id: user.id },
-			data: { addressId: address.id },
+			if (previusAddress === null && prismaAddressData !== null) {
+				console.log('entou aqui no não tem address');
+					await prisma.address.create({
+						data: prismaAddressData,
+					})
+			}
+
+			if (previusAddress && prismaAddressData !== null) {
+				await prisma.address.update({
+					where: { id: previusAddress.id },
+					data: prismaAddressData,
+				})
+			}
+
+			await prisma.user.update({
+				where: { id: user.id },
+				data: prismaUserData,
+			})
 		})
 	}
 

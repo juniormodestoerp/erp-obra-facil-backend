@@ -7,11 +7,11 @@ import {
 	strMessage,
 } from '@core/utils/custom-zod-error'
 
+import { randomUUID } from 'node:crypto'
 import { makeAddTransactionUseCase } from '@modules/conciliations/use-cases/factories/make-add-transaction-factory'
 
 const schema = z.object({
-	id: z.string(strMessage('identificador do usuário')),
-	userId: z.string(strMessage('identificador do usuário')).nullish(),
+	id: z.string(strMessage('identificador do usuário')).nullish(),
 	fitId: z.string(strMessage('identificador FIT')).nullish(),
 	trnType: z.string(strMessage('tipo de transação')).optional(),
 	name: z.string(strMessage('nome do lançamento')),
@@ -50,7 +50,6 @@ export async function addConciliationController(
 
 	const {
 		id,
-		userId,
 		fitId,
 		trnType,
 		name,
@@ -82,8 +81,8 @@ export async function addConciliationController(
 	const addTransactionUseCase = makeAddTransactionUseCase()
 
 	const { transaction } = await addTransactionUseCase.execute({
-		id,
-		userId: userId ?? request.user.sub,
+		id: id ?? randomUUID(),
+		userId: request.user.sub,
 		fitId: fitId ?? null,
 		trnType,
 		name,

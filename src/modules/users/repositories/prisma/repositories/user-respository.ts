@@ -56,9 +56,17 @@ export class PrismaUsersRepository implements UsersRepository {
 			},
 		})
 
+		const address = await this.repository.address.findUnique({
+			where: {
+				userId,
+			},
+		})
+
 		if (!user) {
 			return null
 		}
+
+		user.address = address
 
 		return PrismaUserMapper.toDomain(user)
 	}

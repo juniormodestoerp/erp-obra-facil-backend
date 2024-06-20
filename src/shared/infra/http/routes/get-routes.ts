@@ -14,7 +14,9 @@ export async function getRoutes(): Promise<Output> {
 	 * node: __dirname: /usr/src/app/dist/shared/infra/http
 	 * tsx: __dirname: /usr/src/app/src/shared/infra/http/routes
 	 */
+
 	const isProduction = env.NODE_ENV === 'production'
+
 	const basePath = isProduction
 		? join(__dirname, '..', '..', '..')
 		: join(__dirname, '..', '..', '..', '..')

@@ -13,5 +13,7 @@ export async function showUserProfileController(
 		userId: request.user.sub,
 	})
 
+	// console.log('User:', user);
+
 	return reply.status(200).send(UserProfileViewModel.toHTTP(user))
 }

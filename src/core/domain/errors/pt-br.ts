@@ -206,6 +206,12 @@ export const errors = {
 		message: 'A solicitação não está no formato multipart.',
 		status: StatusCode.BAD_REQUEST,
 	},
+
+	'transaction.already_exists': {
+		error: 'Transaction already exists!',
+		message: 'O lançamento informado já está registrado no sistema.',
+		status: StatusCode.BAD_REQUEST,
+	},
 }
 
 export type ErrorKeys = keyof typeof errors

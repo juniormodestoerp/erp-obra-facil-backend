@@ -1,3 +1,4 @@
+import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
 import { Transaction } from '@modules/transactions/entities/transaction'
@@ -5,10 +6,15 @@ import type { TransactionsRepository } from '@modules/transactions/repositories/
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
+	id: string
 	userId: string
+	fitId: string
+	trnType: string
 	name: string
 	description: string
+	accountType: string
 	categoryId: string
+	categoryName?: string
 	establishmentName: string
 	bankName: string
 	transactionDate: Date
@@ -16,7 +22,6 @@ interface Input {
 	totalAmount: number
 	currentBalance: number
 	paymentMethod: string
-	// Additional optional configurations
 	competencyDate: Date | null
 	costAndProfitCenters: string | null
 	tags: string | null
@@ -24,6 +29,8 @@ interface Input {
 	associatedContracts: string | null
 	associatedProjects: string | null
 	additionalComments: string | null
+	status: string
+	createdAt: Date
 }
 
 interface Output {
@@ -37,10 +44,15 @@ export class AddTransactionUseCase {
 	) {}
 
 	async execute({
+		id,
 		userId,
+		fitId,
+		trnType,
 		name,
 		description,
+		accountType,
 		categoryId,
+		categoryName,
 		establishmentName,
 		bankName,
 		transactionDate,
@@ -48,7 +60,6 @@ export class AddTransactionUseCase {
 		totalAmount,
 		currentBalance,
 		paymentMethod,
-		// Additional optional configurations
 		competencyDate,
 		costAndProfitCenters,
 		tags,
@@ -56,10 +67,10 @@ export class AddTransactionUseCase {
 		associatedContracts,
 		associatedProjects,
 		additionalComments,
+		status,
+		createdAt,
 	}: Input): Promise<Output> {
-		const user = await this.usersRepository.findById({
-			userId,
-		})
+		const user = await this.usersRepository.findById({ userId })
 
 		if (!user) {
 			throw new AppError({
@@ -67,23 +78,30 @@ export class AddTransactionUseCase {
 			})
 		}
 
+		const alreadyTransaction = await this.transactionsRepository.findById({ userId, id })
+
+		if (alreadyTransaction) {
+			throw new AppError({
+				code: 'transaction.already_exists',
+			})
+		}
+
 		const transaction = Transaction.create({
 			userId,
+			fitId,
+			trnType,
 			name,
 			description,
-			categoryId:
-				categoryId ?? ('4fdf8ff9-6e93-400e-b214-f9c547b2daf4' as string),
+			accountType,
+			categoryId,
+			categoryName,
 			establishmentName,
 			bankName,
 			transactionDate,
 			previousBalance,
 			totalAmount,
 			currentBalance,
-			fitId, // New
-			trnType, // New
-			accountType, // New
 			paymentMethod,
-			// Additional optional configurations
 			competencyDate,
 			costAndProfitCenters,
 			tags,
@@ -91,8 +109,11 @@ export class AddTransactionUseCase {
 			associatedContracts,
 			associatedProjects,
 			additionalComments,
-			status: 'pending',
-		})
+			status,
+			createdAt,
+		}, new UniqueEntityID(id))
+
+		console.log(transaction)
 
 		await this.transactionsRepository.create(transaction)
 

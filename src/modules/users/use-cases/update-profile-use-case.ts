@@ -65,8 +65,6 @@ export class UpdateProfileUseCase {
 
 		await this.usersRepository.save(updatedUser)
 
-		console.log('complement', complement)
-
 		const address = Address.create({
 			userId,
 			zipCode,

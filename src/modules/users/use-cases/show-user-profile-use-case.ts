@@ -25,9 +25,6 @@ export class ShowUserProfileUseCase {
 			})
 		}
 
-		console.log(user);
-		
-
 		function getRelativePath(fullPath: string) {
 			const srcIndex = fullPath?.indexOf('/src')
 			if (srcIndex === -1) {

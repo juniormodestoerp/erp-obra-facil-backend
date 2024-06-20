@@ -34,23 +34,9 @@ app.register(multipart)
 app.register(fastifyStatic, {
 	root: join(__dirname, '..', '..', '..', 'uploads'),
 	prefix: '/uploads/',
-	setHeaders: (res, path, stat) => {
+	setHeaders: (res) => {
 		res.setHeader('Access-Control-Allow-Origin', '*')
 	},
-})
-
-// http://localhost:8080/uploads/profile-pictures/bruno-vilefort-fdb8f2f0-ab61-4f36-9372-e7a09eaa10ab.jpeg
-
-app.get('/hello', async (request, reply) => {
-	const showUserProfileUseCase = makeShowUserProfileUseCase()
-
-	const { user } = await showUserProfileUseCase.execute({
-		userId: '2d7b29bb-8625-478c-8091-c09b263167ae',
-	})
-
-	console.log('final user', JSON.stringify(user, null, 2))
-
-	reply.send(user)
 })
 
 app.register(AppRoutes, { prefix: 'api/v1' })

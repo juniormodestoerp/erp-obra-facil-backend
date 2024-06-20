@@ -1,9 +1,9 @@
-import { AppError } from '@core/domain/errors/app-error'
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
+import { AppError } from '@core/domain/errors/app-error'
 
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
 import { Address } from '@modules/addresses/entities/address'
 import { User } from '@modules/users/entities/user'
+import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
 	id: string

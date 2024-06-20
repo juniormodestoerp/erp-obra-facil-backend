@@ -7,9 +7,9 @@ import type { User } from '@modules/users/entities/user'
 import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
+import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-address-mapper'
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
-import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-address-mapper'
 
 export class PrismaUsersRepository implements UsersRepository {
 	private repository: PrismaClient
@@ -154,28 +154,24 @@ export class PrismaUsersRepository implements UsersRepository {
 	}
 
 	async save(user: User): Promise<void> {
-		const prismaUserData = PrismaUserMapper.toPrisma(user);
-	
+		const prismaUserData = PrismaUserMapper.toPrisma(user)
+
 		// Mapeando os dados do endereço, se existir
-		const prismaAddressData = user.address ? PrismaAddressesMapper.toPrisma(user.address) : null;
+		const prismaAddressData = user.address
+			? PrismaAddressesMapper.toPrisma(user.address)
+			: null
 
 		await this.repository.$transaction(async (prisma) => {
 			const previusAddress = await prisma.address.findUnique({
 				where: {
 					userId: user.id,
-				}
+				},
 			})
 
-			console.log('previusAddress', previusAddress); // não tem
-			console.log('prismaAddressData', prismaAddressData); // tem
-			console.log('userId', user.id); // correto
-			console.log('addressId', prismaUserData.addressId); // null
-
 			if (previusAddress === null && prismaAddressData !== null) {
-				console.log('entou aqui no não tem address');
-					await prisma.address.create({
-						data: prismaAddressData,
-					})
+				await prisma.address.create({
+					data: prismaAddressData,
+				})
 			}
 
 			if (previusAddress && prismaAddressData !== null) {

@@ -1,34 +1,46 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { Transaction } from '@modules/transactions/entities/transaction'
-import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import { prisma } from '@shared/infra/database/prisma';
 
 interface Input {
 	userId: string
 }
 
 interface Output {
-	transaction: Transaction
+  transactions: {
+    id: string;
+    userId: string;
+    totalAmount: number;
+    transactionDate: Date;
+    description: string;
+  }[];
 }
 
 export class CashEntriesUseCase {
-	constructor(
-		private readonly transactionsRepository: TransactionsRepository,
-	) {}
-
 	async execute({ userId }: Input): Promise<Output> {
-		const transaction = await this.transactionsRepository.findById({
-			userId,
-		})
+		const transactions = await prisma.transaction.findMany({
+      where: {
+        userId,
+        accountType: 'Crédito',
+      },
+      select: {
+        id: true,
+        userId: true,
+        totalAmount: true,
+        transactionDate: true,
+        description: true,
+      },
+    });
 
-		if (!transaction) {
+
+		if (!transactions || transactions.length === 0) {
 			throw new AppError({
 				code: 'transaction.not_found',
 			})
 		}
 
 		return {
-			transaction,
+			transactions,
 		}
 	}
 }

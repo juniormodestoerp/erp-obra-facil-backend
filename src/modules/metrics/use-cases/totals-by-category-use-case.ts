@@ -1,34 +1,56 @@
-import { AppError } from '@core/domain/errors/app-error'
+import { AppError } from '@core/domain/errors/app-error';
 
-import type { Transaction } from '@modules/transactions/entities/transaction'
-import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import { prisma } from '@shared/infra/database/prisma';
 
 interface Input {
-	userId: string
+  userId: string;
+}
+
+interface ICategoryTotal {
+  categoryId: string | null;
+  totalAmount: number;
 }
 
 interface Output {
-	transaction: Transaction
+  transactions: ICategoryTotal[];
 }
 
 export class TotalsByCategoryUseCase {
-	constructor(
-		private readonly transactionsRepository: TransactionsRepository,
-	) {}
-
 	async execute({ userId }: Input): Promise<Output> {
-		const transaction = await this.transactionsRepository.findById({
-			userId,
-		})
+		const transactions = await prisma.transaction.findMany({
+      where: {
+        userId,
+      },
+      select: {
+        categoryId: true,
+        totalAmount: true,
+      },
+    });
 
-		if (!transaction) {
+		if (!transactions || transactions.length === 0) {
 			throw new AppError({
 				code: 'transaction.not_found',
 			})
 		}
 
-		return {
-			transaction,
-		}
+		const totalsByCategory = transactions.reduce((acc, transaction) => {
+      const categoryId = transaction.categoryId || 'uncategorized';
+      if (!acc[categoryId]) {
+        acc[categoryId] = 0;
+      }
+      acc[categoryId] += transaction.totalAmount;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const result: ICategoryTotal[] = Object.keys(totalsByCategory).map(
+      (categoryId) => ({
+        categoryId: categoryId === 'uncategorized' ? null : categoryId,
+        totalAmount: totalsByCategory[categoryId],
+      })
+    );
+
+    return {
+      transactions: result,
+    };
 	}
 }

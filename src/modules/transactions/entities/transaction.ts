@@ -11,7 +11,7 @@ interface Props {
 	name: string
 	description: string
 	accountType: string
-	categoryId: string
+	categoryId: string | null
 	categoryName?: string
 	establishmentName: string
 	bankName: string
@@ -80,11 +80,11 @@ export class Transaction extends Entity<Props> {
 		this.props.description = value
 	}
 
-	get categoryId(): string {
+	get categoryId(): string | null {
 		return this.props.categoryId
 	}
 
-	set categoryId(value: string) {
+	set categoryId(value: string | null) {
 		this.props.categoryId = value
 	}
 

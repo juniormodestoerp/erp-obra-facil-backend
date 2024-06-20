@@ -123,7 +123,12 @@ export class AddTransactionUseCase {
 				previousBalance: user.balance,
 				totalAmount,
 				currentBalance: user.balance + totalAmount,
-				paymentMethod: paymentMethod ?? trnType,
+				paymentMethod:
+					paymentMethod === 'credit'
+						? 'Crédito'
+						: 'Débito' ?? trnType === 'credit'
+							? 'Crédito'
+							: 'Débito',
 				competencyDate,
 				costAndProfitCenters,
 				tags,

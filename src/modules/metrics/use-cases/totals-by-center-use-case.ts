@@ -1,34 +1,56 @@
-import { AppError } from '@core/domain/errors/app-error'
+import { AppError } from '@core/domain/errors/app-error';
 
-import type { Transaction } from '@modules/transactions/entities/transaction'
-import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import { prisma } from '@shared/infra/database/prisma';
 
 interface Input {
-	userId: string
+  userId: string;
+}
+
+interface ICenterTotal {
+  centerId: string | null;
+  totalAmount: number;
 }
 
 interface Output {
-	transaction: Transaction
+  transactions: ICenterTotal[];
 }
 
 export class TotalsByCenterUseCase {
-	constructor(
-		private readonly transactionsRepository: TransactionsRepository,
-	) {}
-
 	async execute({ userId }: Input): Promise<Output> {
-		const transaction = await this.transactionsRepository.findById({
-			userId,
-		})
+		const transactions = await prisma.transaction.findMany({
+      where: {
+        userId,
+      },
+      select: {
+        costAndProfitCenters: true,
+        totalAmount: true,
+      },
+    });
 
-		if (!transaction) {
+		if (!transactions || transactions.length === 0) {
 			throw new AppError({
 				code: 'transaction.not_found',
 			})
 		}
 
-		return {
-			transaction,
-		}
+		const totalsByCenter = transactions.reduce((acc, transaction) => {
+      const centerId = transaction.costAndProfitCenters || 'uncategorized';
+      if (!acc[centerId]) {
+        acc[centerId] = 0;
+      }
+      acc[centerId] += transaction.totalAmount;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const result: ICenterTotal[] = Object.keys(totalsByCenter).map(
+      (centerId) => ({
+        centerId: centerId === 'uncategorized' ? null : centerId,
+        totalAmount: totalsByCenter[centerId],
+      })
+    );
+
+    return {
+      transactions: result,
+    };
 	}
 }

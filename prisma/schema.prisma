@@ -101,6 +101,9 @@ model Transaction {
   associatedContracts  String?   @map("associated_contracts")
   associatedProjects   String?   @map("associated_projects")
   additionalComments   String?   @map("additional_comments")
+  accountToTransfer    String?   @map("account_to_transfer")
+  contact              String?   @map("contact")
+  card                 String?   @map("card")
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -111,6 +114,7 @@ model Transaction {
 
   @@map("transactions")
 }
+
 
 model UserToken {
   id        String    @id @default(uuid())

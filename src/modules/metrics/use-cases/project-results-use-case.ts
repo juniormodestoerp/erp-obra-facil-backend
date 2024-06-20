@@ -1,34 +1,56 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { Transaction } from '@modules/transactions/entities/transaction'
-import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import { prisma } from '@shared/infra/database/prisma';
 
 interface Input {
 	userId: string
 }
 
+interface IProjectResult {
+  project: string | null;
+  totalAmount: number;
+}
+
 interface Output {
-	transaction: Transaction
+  transactions: IProjectResult[];
 }
 
 export class ProjectResultsUseCase {
-	constructor(
-		private readonly transactionsRepository: TransactionsRepository,
-	) {}
-
 	async execute({ userId }: Input): Promise<Output> {
-		const transaction = await this.transactionsRepository.findById({
-			userId,
-		})
+		const transactions = await prisma.transaction.findMany({
+      where: {
+        userId,
+      },
+      select: {
+        associatedProjects: true,
+        totalAmount: true,
+      },
+    });
 
-		if (!transaction) {
+		if (!transactions || transactions.length === 0) {
 			throw new AppError({
 				code: 'transaction.not_found',
 			})
 		}
 
-		return {
-			transaction,
-		}
+		const totalsByProject = transactions.reduce((acc, transaction) => {
+      const project = transaction.associatedProjects || 'unknown';
+      if (!acc[project]) {
+        acc[project] = 0;
+      }
+      acc[project] += transaction.totalAmount;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const result: IProjectResult[] = Object.keys(totalsByProject).map(
+      (project) => ({
+        project: project === 'unknown' ? null : project,
+        totalAmount: totalsByProject[project],
+      })
+    );
+
+    return {
+      transactions: result,
+    };
 	}
 }

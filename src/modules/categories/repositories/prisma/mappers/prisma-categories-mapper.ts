@@ -26,7 +26,6 @@ export class PrismaCategoriesMapper {
 			relatedCategories: any[]
 		},
 	): Category {
-		
 		return Category.create(
 			{
 				userId: raw.userId,

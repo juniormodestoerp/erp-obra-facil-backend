@@ -34,6 +34,11 @@ const schema = z.object({
 	associatedProjects: z.string(strMessage('projetos associados')).nullable(),
 	additionalComments: z.string(strMessage('comentários adicionais')).nullable(),
 	status: z.string(strMessage('status')),
+	accountToTransfer: z
+		.string(strMessage('conta para transferência'))
+		.nullable(),
+	contact: z.string(strMessage('contato')).nullable(),
+	card: z.string(strMessage('cartão')).nullable(),
 	createdAt: z.coerce.date(dateMessage('data de criação')).nullish(),
 })
 
@@ -41,7 +46,7 @@ export async function addConciliationController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	console.log('CHEGOU NO CONTROLLER 1');
+	console.log('CHEGOU NO CONTROLLER 1')
 
 	const {
 		id,
@@ -68,6 +73,9 @@ export async function addConciliationController(
 		associatedProjects,
 		additionalComments,
 		status,
+		accountToTransfer,
+		contact,
+		card,
 		createdAt,
 	} = schema.parse(request.body)
 
@@ -98,6 +106,9 @@ export async function addConciliationController(
 		associatedProjects,
 		additionalComments,
 		status,
+		accountToTransfer,
+		contact,
+		card,
 		createdAt: createdAt ?? new Date(),
 	})
 

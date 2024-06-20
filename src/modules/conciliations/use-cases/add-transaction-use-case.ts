@@ -31,6 +31,9 @@ interface Input {
 	associatedProjects: string | null
 	additionalComments: string | null
 	status: string
+	accountToTransfer: string | null
+	contact: string | null
+	card: string | null
 	createdAt: Date
 }
 
@@ -58,7 +61,9 @@ export class AddTransactionUseCase {
 		establishmentName,
 		bankName,
 		transactionDate,
+		previousBalance,
 		totalAmount,
+		currentBalance,
 		paymentMethod,
 		competencyDate,
 		costAndProfitCenters,
@@ -68,6 +73,9 @@ export class AddTransactionUseCase {
 		associatedProjects,
 		additionalComments,
 		status,
+		accountToTransfer,
+		contact,
+		card,
 		createdAt,
 	}: Input): Promise<Output> {
 		const user = await this.usersRepository.findById({ userId })
@@ -124,6 +132,9 @@ export class AddTransactionUseCase {
 				associatedProjects,
 				additionalComments,
 				status,
+				accountToTransfer,
+				contact,
+				card,
 				createdAt,
 			},
 			new UniqueEntityID(id),
@@ -132,9 +143,8 @@ export class AddTransactionUseCase {
 		await this.transactionsRepository.create(transaction)
 
 		user.balance = user.balance + totalAmount
-		console.log('user balance', user.balance)
+
 		await this.usersRepository.save(user)
-		console.log('user balance', user.balance)
 
 		return {
 			transaction,

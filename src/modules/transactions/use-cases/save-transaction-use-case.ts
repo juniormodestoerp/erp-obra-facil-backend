@@ -8,9 +8,29 @@ import type { UsersRepository } from '@modules/users/repositories/user-repositor
 interface Input {
 	id?: string
 	userId: string
-	transactionId?: string
 	name: string
-	description?: string
+	description: string
+	categoryId: string
+	establishmentName: string
+	bankName: string
+	transactionDate: string
+	previousBalance: number
+	totalAmount: number
+	currentBalance: number
+	paymentMethod: string
+	status: string
+	accountType: string
+	fitId: string | null
+	accountToTransfer: string | null
+	contact: string | null
+	card: string | null
+	competencyDate: string | null
+	costAndProfitCenters: string | null
+	tags: string | null
+	documentNumber: string | null
+	associatedContracts: string | null
+	associatedProjects: string | null
+	additionalComments: string | null
 }
 
 export class SaveTransactionUseCase {
@@ -22,11 +42,31 @@ export class SaveTransactionUseCase {
 	async execute({
 		id,
 		userId,
-		transactionId,
 		name,
 		description,
+		categoryId,
+		establishmentName,
+		bankName,
+		transactionDate,
+		previousBalance,
+		totalAmount,
+		currentBalance,
+		paymentMethod,
+		status,
+		accountType,
+		fitId,
+		accountToTransfer,
+		contact,
+		card,
+		competencyDate,
+		costAndProfitCenters,
+		tags,
+		documentNumber,
+		associatedContracts,
+		associatedProjects,
+		additionalComments,
 	}: Input): Promise<void> {
-		const user = await this.usersRepository.findById(userId)
+		const user = await this.usersRepository.findById({ userId })
 		if (!user) {
 			throw new AppError({
 				code: 'user.not_found',
@@ -36,11 +76,31 @@ export class SaveTransactionUseCase {
 		const transaction = Transaction.create(
 			{
 				userId,
-				transactionId,
+				fitId,
 				name,
 				description,
+				accountType,
+				categoryId,
+				establishmentName,
+				bankName,
+				transactionDate: new Date(transactionDate),
+				previousBalance,
+				totalAmount,
+				currentBalance,
+				paymentMethod,
+				status,
+				accountToTransfer,
+				contact,
+				card,
+				competencyDate: competencyDate ? new Date(competencyDate) : null,
+				costAndProfitCenters,
+				tags,
+				documentNumber,
+				associatedContracts,
+				associatedProjects,
+				additionalComments,
 			},
-			new UniqueEntityID(id),
+			id ? new UniqueEntityID(id) : undefined,
 		)
 
 		await this.transactionsRepository.save(transaction)

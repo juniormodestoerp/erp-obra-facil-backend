@@ -7,7 +7,7 @@ import type { User } from '@modules/users/entities/user'
 
 interface Props {
 	userId: string
-	fitId: string
+	fitId: string | null
 	name: string
 	description: string
 	accountType: string
@@ -28,6 +28,9 @@ interface Props {
 	associatedProjects: string | null
 	additionalComments: string | null
 	status: string
+	accountToTransfer: string | null
+	contact: string | null
+	card: string | null
 	createdAt: Date
 	updatedAt: Date
 	deletedAt?: Date | null
@@ -45,11 +48,11 @@ export class Transaction extends Entity<Props> {
 		this.props.userId = value
 	}
 
-	get fitId(): string {
+	get fitId(): string | null {
 		return this.props.fitId
 	}
 
-	set fitId(value: string) {
+	set fitId(value: string | null) {
 		this.props.fitId = value
 	}
 
@@ -211,6 +214,30 @@ export class Transaction extends Entity<Props> {
 
 	set status(value: string) {
 		this.props.status = value
+	}
+
+	get accountToTransfer(): string | null {
+		return this.props.accountToTransfer
+	}
+
+	set accountToTransfer(value: string | null) {
+		this.props.accountToTransfer = value
+	}
+
+	get contact(): string | null {
+		return this.props.contact
+	}
+
+	set contact(value: string | null) {
+		this.props.contact = value
+	}
+
+	get card(): string | null {
+		return this.props.card
+	}
+
+	set card(value: string | null) {
+		this.props.card = value
 	}
 
 	get createdAt(): Date {

@@ -11,13 +11,13 @@ import { makeAddTransactionUseCase } from '@modules/conciliations/use-cases/fact
 
 const schema = z.object({
 	id: z.string(strMessage('identificador do usuário')),
-	userId: z.string(strMessage('identificador do usuário')),
-	fitId: z.string(strMessage('identificador FIT')),
-	trnType: z.string(strMessage('tipo de transação')),
+	userId: z.string(strMessage('identificador do usuário')).nullish(),
+	fitId: z.string(strMessage('identificador FIT')).nullish(),
+	trnType: z.string(strMessage('tipo de transação')).optional(),
 	name: z.string(strMessage('nome do lançamento')),
 	description: z.string(strMessage('descrição')),
 	accountType: z.string(strMessage('tipo de conta')),
-	categoryId: z.string(strMessage('categoria')),
+	categoryId: z.string(strMessage('categoria')).nullish(),
 	categoryName: z.string(strMessage('nome da categoria')).optional(),
 	establishmentName: z.string(strMessage('nome do estabelecimento')),
 	bankName: z.string(strMessage('nome do banco')),
@@ -34,7 +34,7 @@ const schema = z.object({
 	associatedProjects: z.string(strMessage('projetos associados')).nullable(),
 	additionalComments: z.string(strMessage('comentários adicionais')).nullable(),
 	status: z.string(strMessage('status')),
-	createdAt: z.coerce.date(dateMessage('data de criação')),
+	createdAt: z.coerce.date(dateMessage('data de criação')).nullish(),
 })
 
 export async function addConciliationController(
@@ -70,20 +70,18 @@ export async function addConciliationController(
 		status,
 		createdAt,
 	} = schema.parse(request.body)
-	console.log('CHEGOU NO CONTROLLER 2');
-
 
 	const addTransactionUseCase = makeAddTransactionUseCase()
 
 	const { transaction } = await addTransactionUseCase.execute({
 		id,
-		userId,
-		fitId,
+		userId: userId ?? request.user.sub,
+		fitId: fitId ?? null,
 		trnType,
 		name,
 		description,
 		accountType,
-		categoryId,
+		categoryId: categoryId ?? undefined,
 		categoryName,
 		establishmentName,
 		bankName,
@@ -100,7 +98,7 @@ export async function addConciliationController(
 		associatedProjects,
 		additionalComments,
 		status,
-		createdAt,
+		createdAt: createdAt ?? new Date(),
 	})
 
 	return reply.status(201).send({

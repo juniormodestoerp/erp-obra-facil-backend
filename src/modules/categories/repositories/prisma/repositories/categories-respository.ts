@@ -28,6 +28,11 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 				id,
 				deletedAt: null,
 			},
+			include: {
+				categories: true,
+				relatedCategories: true,
+				user: true,
+			}
 		})
 
 		if (!category) {
@@ -41,13 +46,24 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 		userId,
 		name,
 	}: IFindCategoryByNameDTO): Promise<Category | null> {
+		console.log('userId', userId);
+		console.log('name', name);
+		
 		const category = await this.repository.category.findUnique({
 			where: {
 				userId,
 				name,
 				deletedAt: null,
 			},
+			include: {
+				categories: true,
+				relatedCategories: true,
+				user: true,
+			}
 		})
+
+		console.log('category', category);
+		
 
 		if (!category) {
 			return null
@@ -66,6 +82,11 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 				subcategory: name,
 				deletedAt: null,
 			},
+			include: {
+				categories: true,
+				relatedCategories: true,
+				user: true,
+			}
 		})
 
 		if (!category) {
@@ -85,6 +106,11 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 			where: {
 				userId,
 				deletedAt: null,
+			},
+			include: {
+				categories: true,
+				relatedCategories: true,
+				user: true,
 			},
 			skip,
 			take: env.PER_PAGE,

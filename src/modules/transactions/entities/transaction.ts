@@ -8,7 +8,6 @@ import type { User } from '@modules/users/entities/user'
 interface Props {
 	userId: string
 	fitId: string
-	trnType: string
 	name: string
 	description: string
 	accountType: string
@@ -60,14 +59,6 @@ export class Transaction extends Entity<Props> {
 
 	set accountType(value: string) {
 		this.props.accountType = value
-	}
-
-	get trnType(): string {
-		return this.props.trnType
-	}
-
-	set trnType(value: string) {
-		this.props.trnType = value
 	}
 
 	get name(): string {

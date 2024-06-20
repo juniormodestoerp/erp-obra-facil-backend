@@ -26,6 +26,7 @@ export class PrismaUserMapper {
 			password: user.password,
 			role: user.role,
 			status: user.status,
+			balance: user.balance,
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
 			deletedAt: user.deletedAt,

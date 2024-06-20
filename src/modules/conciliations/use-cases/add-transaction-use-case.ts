@@ -1,5 +1,6 @@
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
+import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
 
 import { Transaction } from '@modules/transactions/entities/transaction'
 import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
@@ -8,12 +9,12 @@ import type { UsersRepository } from '@modules/users/repositories/user-repositor
 interface Input {
 	id: string
 	userId: string
-	fitId: string
-	trnType: string
+	fitId: string | null
+	trnType?: string
 	name: string
 	description: string
 	accountType: string
-	categoryId: string
+	categoryId?: string
 	categoryName?: string
 	establishmentName: string
 	bankName: string
@@ -41,6 +42,7 @@ export class AddTransactionUseCase {
 	constructor(
 		private readonly transactionsRepository: TransactionsRepository,
 		private readonly usersRepository: UsersRepository,
+		private readonly categoriesRepository: CategoriesRepository,
 	) {}
 
 	async execute({
@@ -56,9 +58,7 @@ export class AddTransactionUseCase {
 		establishmentName,
 		bankName,
 		transactionDate,
-		previousBalance,
 		totalAmount,
-		currentBalance,
 		paymentMethod,
 		competencyDate,
 		costAndProfitCenters,
@@ -78,7 +78,10 @@ export class AddTransactionUseCase {
 			})
 		}
 
-		const alreadyTransaction = await this.transactionsRepository.findById({ userId, id })
+		const alreadyTransaction = await this.transactionsRepository.findById({
+			userId,
+			id,
+		})
 
 		if (alreadyTransaction) {
 			throw new AppError({
@@ -86,36 +89,52 @@ export class AddTransactionUseCase {
 			})
 		}
 
-		const transaction = Transaction.create({
+		const defaultCategory = await this.categoriesRepository.findByName({
 			userId,
-			fitId,
-			trnType,
-			name,
-			description,
-			accountType,
-			categoryId,
-			categoryName,
-			establishmentName,
-			bankName,
-			transactionDate,
-			previousBalance,
-			totalAmount,
-			currentBalance,
-			paymentMethod,
-			competencyDate,
-			costAndProfitCenters,
-			tags,
-			documentNumber,
-			associatedContracts,
-			associatedProjects,
-			additionalComments,
-			status,
-			createdAt,
-		}, new UniqueEntityID(id))
+			name: 'padrão',
+		})
 
-		console.log(transaction)
+		if (!defaultCategory) {
+			throw new AppError({
+				code: 'category.not_found',
+			})
+		}
+
+		const transaction = Transaction.create(
+			{
+				userId,
+				fitId: fitId ?? '',
+				name,
+				description,
+				accountType,
+				categoryId: categoryId ?? defaultCategory.id,
+				categoryName,
+				establishmentName,
+				bankName,
+				transactionDate,
+				previousBalance: user.balance,
+				totalAmount,
+				currentBalance: user.balance + totalAmount,
+				paymentMethod: paymentMethod ?? trnType,
+				competencyDate,
+				costAndProfitCenters,
+				tags,
+				documentNumber,
+				associatedContracts,
+				associatedProjects,
+				additionalComments,
+				status,
+				createdAt,
+			},
+			new UniqueEntityID(id),
+		)
 
 		await this.transactionsRepository.create(transaction)
+
+		user.balance = user.balance + totalAmount
+		console.log('user balance', user.balance)
+		await this.usersRepository.save(user)
+		console.log('user balance', user.balance)
 
 		return {
 			transaction,

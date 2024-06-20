@@ -16,197 +16,209 @@ import { parse } from 'ofx-js'
 const pump = util.promisify(pipeline)
 
 interface IMapTransactions {
-	categoryId: string
-	file: any
-	userId: string
+    categoryId: string
+    file: any
+    userId: string
 }
 
 interface IProcessOFXTransactions {
-	filePath: string
-	existingTransactions: Transaction[]
+    filePath: string
+    existingTransactions: Transaction[]
 }
 
 interface IProcessOFXTransactionsOutput {
-	newTransactions: Transaction[]
-	conflictingTransactions: Transaction[]
-	completedTransactions: Transaction[]
+    newTransactions: Transaction[]
+    conflictingTransactions: Transaction[]
+    completedTransactions: Transaction[]
 }
 
 interface Input {
-	user: User
-	file: MultipartFile
+    user: User
+    file: MultipartFile
 }
 
 interface Output {
-	newTransactions: Transaction[]
-	conflictingTransactions: Transaction[]
-	completedTransactions: Transaction[]
+    newTransactions: Transaction[]
+    conflictingTransactions: Transaction[]
+    completedTransactions: Transaction[]
 }
 
 export class CreateConciliationUseCase {
-	constructor(
-		private readonly transactionsRepository: TransactionsRepository,
-		private readonly categoriesRepository: CategoriesRepository,
-	) {}
+    constructor(
+        private readonly transactionsRepository: TransactionsRepository,
+        private readonly categoriesRepository: CategoriesRepository,
+    ) {}
 
-	async execute({ user, file }: Input): Promise<Output> {
-		const UPLOAD_DIR = join(
-			__dirname,
-			'..',
-			'..',
-			'..',
-			'..',
-			'src',
-			'uploads',
-			'ofx-statement',
-		)
+    async execute({ user, file }: Input): Promise<Output> {
+        const UPLOAD_DIR = join(
+            __dirname,
+            '..',
+            '..',
+            '..',
+            '..',
+            'src',
+            'uploads',
+            'ofx-statement',
+        )
 
-		if (!existsSync(UPLOAD_DIR)) {
-			mkdirSync(UPLOAD_DIR, {
-				recursive: true,
-			})
-		}
+        if (!existsSync(UPLOAD_DIR)) {
+            mkdirSync(UPLOAD_DIR, {
+                recursive: true,
+            })
+        }
 
-		if (!file) {
-			throw new AppError({
-				code: 'file.cannot_download',
-			})
-		}
+        if (!file) {
+            throw new AppError({
+                code: 'file.cannot_download',
+            })
+        }
 
-		const newFileName = `${Utils.NormalizeName(user.name)}-${user.id}-${file.filename}`
-		const filePath = join(UPLOAD_DIR, newFileName)
+        console.log('Starting file upload process...')
 
-		await pump(file.file, createWriteStream(filePath))
+        const newFileName = `${Utils.NormalizeName(user.name)}-${user.id}-${file.filename}`
+        const filePath = join(UPLOAD_DIR, newFileName)
 
-		const category = await this.categoriesRepository.findByName({
-			userId: user.id,
-			name: 'padrão',
-		})
+        await pump(file.file, createWriteStream(filePath))
 
-		if (!category) {
-			throw new AppError({
-				code: 'category.not_found',
-			})
-		}
+        console.log('File uploaded to:', filePath)
 
-		const mapTransaction = async ({
-			file,
-			userId,
-			categoryId,
-		}: IMapTransactions): Promise<Partial<Transaction>> => {
-			const datePattern = /(\d{4})(\d{2})(\d{2})\d{6}\[-\d+:BRT\]/
-			const match = file.DTPOSTED.match(datePattern)
-			const transactionDate = match
-				? new Date(`${match[1]}-${match[2]}-${match[3]}`)
-				: new Date()
+        console.log('user', user.id)
 
-			const ofxData = readFileSync(filePath, 'utf-8')
-			const parsedData = await parse(ofxData)
-			const accountType =
-				parsedData.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKACCTFROM.ACCTTYPE ===
-				'CHECKING'
-					? 'Conta corrente'
-					: parsedData.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKACCTFROM
-								.ACCTTYPE === 'SAVINGS'
-						? 'Conta poupança'
-						: 'Cartão de crédito'
+        const category = await this.categoriesRepository.findByName({
+            userId: user.id,
+            name: 'padrão',
+        })
 
-			return {
-				userId,
-				fitId: file.FITID,
-				trnType: file.TRNTYPE,
-				accountType,
-				name: file.MEMO.split(' - ')[0],
-				description: file.MEMO,
-				categoryId,
-				establishmentName: file.MEMO.split(' - ')[1] || '',
-				bankName: file.MEMO.split(' - ')[3] || '',
-				transactionDate,
-				previousBalance: 0, // Ajustar conforme necessário
-				totalAmount: Number.parseFloat(file.TRNAMT),
-				currentBalance: 0, // Ajustar conforme necessário
-				paymentMethod: file.TRNTYPE === 'DEBIT' ? 'debit' : 'credit',
-				competencyDate: null,
-				costAndProfitCenters: null,
-				tags: null,
-				documentNumber: file.FITID,
-				associatedContracts: null,
-				associatedProjects: null,
-				additionalComments: null,
-				status: 'completed', // Status padrão
-				createdAt: new Date(),
-				updatedAt: new Date(),
-				deletedAt: null,
-			}
-		}
+        if (!category) {
+            throw new AppError({
+                code: 'category.not_found',
+            })
+        }
 
-		// Função principal para processar transações OFX
-		const processOFXTransactions = async ({
-			filePath,
-			existingTransactions,
-		}: IProcessOFXTransactions): Promise<IProcessOFXTransactionsOutput> => {
-			const ofxData = readFileSync(filePath, 'utf-8')
-			const parsedData = await parse(ofxData)
+        const mapTransaction = async ({
+            file,
+            userId,
+            categoryId,
+        }: IMapTransactions): Promise<Partial<Transaction>> => {
+            const datePattern = /(\d{4})(\d{2})(\d{2})\d{6}\[-\d+:BRT\]/
+            const match = file.DTPOSTED.match(datePattern)
+            const transactionDate = match
+                ? new Date(`${match[1]}-${match[2]}-${match[3]}`)
+                : new Date()
 
-			const ofxTransactions =
-				parsedData.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKTRANLIST.STMTTRN
+            const accountType =
+                file.ACCTTYPE === 'CHECKING'
+                    ? 'Conta corrente'
+                    : file.ACCTTYPE === 'SAVINGS'
+                        ? 'Conta poupança'
+                        : 'Cartão de crédito'
 
-			const newTransactions: Transaction[] = []
-			const conflictingTransactions: Transaction[] = []
-			const completedTransactions: Transaction[] = []
+            return {
+                userId,
+                fitId: file.FITID,
+                accountType,
+                name: file.MEMO.split(' - ')[0],
+                description: file.MEMO,
+                categoryId,
+                establishmentName: file.MEMO.split(' - ')[1] || '',
+                bankName: file.MEMO.split(' - ')[3] || '',
+                transactionDate,
+                previousBalance: 0, // Ajustar conforme necessário
+                totalAmount: Number.parseFloat(file.TRNAMT),
+                currentBalance: 0, // Ajustar conforme necessário
+                paymentMethod: file.TRNTYPE === 'DEBIT' ? 'debit' : 'credit',
+                competencyDate: null,
+                costAndProfitCenters: null,
+                tags: null,
+                documentNumber: file.FITID,
+                associatedContracts: null,
+                associatedProjects: null,
+                additionalComments: null,
+                status: 'completed', // Status padrão
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                deletedAt: null,
+            }
+        }
 
-			for (const ofxTransaction of ofxTransactions) {
-				const mappedTransaction = await mapTransaction({
-					categoryId: category?.categoryId as string,
-					file: ofxTransaction,
-					userId: user.id,
-				})
+        console.log('Mapping transactions...')
 
-				const existingTransaction = existingTransactions.find(
-					(txn) =>
-						txn.transactionDate.getTime() ===
-							mappedTransaction?.transactionDate?.getTime() &&
-						txn.fitId === mappedTransaction.fitId,
-				)
+        const processOFXTransactions = async ({
+            filePath,
+            existingTransactions,
+        }: IProcessOFXTransactions): Promise<IProcessOFXTransactionsOutput> => {
+            const ofxData = readFileSync(filePath, 'utf-8')
+            const parsedData = await parse(ofxData)
 
-				if (!existingTransaction) {
-					const transaction = Transaction.create(mappedTransaction as any)
-					newTransactions.push(transaction)
-					await this.transactionsRepository.create(transaction)
-				} else if (
-					existingTransaction.totalAmount !== mappedTransaction.totalAmount ||
-					existingTransaction.description !== mappedTransaction.description
-				) {
-					conflictingTransactions.push(existingTransaction)
-				} else {
-					completedTransactions.push(existingTransaction)
-				}
-			}
+            const ofxTransactions =
+                parsedData.OFX.BANKMSGSRSV1.STMTTRNRS.STMTRS.BANKTRANLIST.STMTTRN
 
-			return { newTransactions, conflictingTransactions, completedTransactions }
-		}
+            const newTransactions: Transaction[] = []
+            const conflictingTransactions: Transaction[] = []
+            const completedTransactions: Transaction[] = []
 
-		const existingTransactions: Transaction[] =
-			await this.transactionsRepository.fetchAll({
-				userId: user.id,
-			})
+            for (const ofxTransaction of ofxTransactions) {
+                const mappedTransaction = await mapTransaction({
+                    categoryId: category?.categoryId as string,
+                    file: ofxTransaction,
+                    userId: user.id,
+                })
 
-		try {
-			const result = await processOFXTransactions({
-				filePath,
-				existingTransactions,
-			})
+                const existingTransaction = existingTransactions.find(
+                    (txn) =>
+                        txn.transactionDate.getTime() ===
+                            mappedTransaction?.transactionDate?.getTime() &&
+                        txn.fitId === mappedTransaction.fitId,
+                )
 
-			return {
-				newTransactions: result.newTransactions,
-				conflictingTransactions: result.conflictingTransactions,
-				completedTransactions: result.completedTransactions,
-			}
-		} catch (error) {
-			console.error(error)
-			throw new AppError({
-				code: 'file.cannot_read_ofx',
-			})
-		}
-	}
+                if (!existingTransaction) {
+                    const transaction = Transaction.create(mappedTransaction as any)
+                    newTransactions.push(transaction)
+                    // Removido o salvamento no banco de dados
+                } else if (
+                    existingTransaction.totalAmount !== mappedTransaction.totalAmount ||
+                    existingTransaction.description !== mappedTransaction.description
+                ) {
+                    conflictingTransactions.push(existingTransaction)
+                } else {
+                    completedTransactions.push(existingTransaction)
+                }
+            }
+
+            console.log('Transactions processed:', {
+                newTransactions,
+                conflictingTransactions,
+                completedTransactions,
+            })
+
+            return { newTransactions, conflictingTransactions, completedTransactions }
+        }
+
+        const existingTransactions: Transaction[] =
+            await this.transactionsRepository.fetchAll({
+                userId: user.id,
+            })
+
+        console.log('Existing transactions:', existingTransactions)
+
+        try {
+            const result = await processOFXTransactions({
+                filePath,
+                existingTransactions,
+            })
+
+            console.log('Processing result:', result)
+
+            return {
+                newTransactions: result.newTransactions,
+                conflictingTransactions: result.conflictingTransactions,
+                completedTransactions: result.completedTransactions,
+            }
+        } catch (error) {
+            console.error('Error caught in use case:', error)
+            throw new AppError({
+                code: 'file.cannot_read_ofx',
+            })
+        }
+    }
 }

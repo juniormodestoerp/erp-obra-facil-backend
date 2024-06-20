@@ -26,6 +26,7 @@ export class PrismaCategoriesMapper {
 			relatedCategories: any[]
 		},
 	): Category {
+		
 		return Category.create(
 			{
 				userId: raw.userId,
@@ -37,11 +38,11 @@ export class PrismaCategoriesMapper {
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
 				deletedAt: raw.deletedAt,
-				user: raw.user ? PrismaUserMapper.toDomain(raw.user) : null,
+				user: null,
 				categories: raw.categories
 					? PrismaCategoriesMapper.toDomain(raw.categories)
 					: null,
-				relatedCategories: raw.relatedCategories.map((relatedCategory) =>
+				relatedCategories: raw.relatedCategories?.map((relatedCategory) =>
 					PrismaCategoriesMapper.toDomain(relatedCategory),
 				),
 			},

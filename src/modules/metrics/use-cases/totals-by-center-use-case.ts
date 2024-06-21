@@ -1,31 +1,31 @@
-import { AppError } from '@core/domain/errors/app-error';
+import { AppError } from '@core/domain/errors/app-error'
 
-import { prisma } from '@shared/infra/database/prisma';
+import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
-  userId: string;
+	userId: string
 }
 
 interface ICenterTotal {
-  centerId: string | null;
-  totalAmount: number;
+	centerId: string | null
+	totalAmount: number
 }
 
 interface Output {
-  transactions: ICenterTotal[];
+	transactions: ICenterTotal[]
 }
 
 export class TotalsByCenterUseCase {
 	async execute({ userId }: Input): Promise<Output> {
 		const transactions = await prisma.transaction.findMany({
-      where: {
-        userId,
-      },
-      select: {
-        costAndProfitCenters: true,
-        totalAmount: true,
-      },
-    });
+			where: {
+				userId,
+			},
+			select: {
+				costAndProfitCenters: true,
+				totalAmount: true,
+			},
+		})
 
 		if (!transactions || transactions.length === 0) {
 			throw new AppError({
@@ -33,24 +33,27 @@ export class TotalsByCenterUseCase {
 			})
 		}
 
-		const totalsByCenter = transactions.reduce((acc, transaction) => {
-      const centerId = transaction.costAndProfitCenters || 'uncategorized';
-      if (!acc[centerId]) {
-        acc[centerId] = 0;
-      }
-      acc[centerId] += transaction.totalAmount;
-      return acc;
-    }, {} as Record<string, number>);
+		const totalsByCenter = transactions.reduce(
+			(acc, transaction) => {
+				const centerId = transaction.costAndProfitCenters || 'uncategorized'
+				if (!acc[centerId]) {
+					acc[centerId] = 0
+				}
+				acc[centerId] += transaction.totalAmount
+				return acc
+			},
+			{} as Record<string, number>,
+		)
 
-    const result: ICenterTotal[] = Object.keys(totalsByCenter).map(
-      (centerId) => ({
-        centerId: centerId === 'uncategorized' ? null : centerId,
-        totalAmount: totalsByCenter[centerId],
-      })
-    );
+		const result: ICenterTotal[] = Object.keys(totalsByCenter).map(
+			(centerId) => ({
+				centerId: centerId === 'uncategorized' ? null : centerId,
+				totalAmount: totalsByCenter[centerId],
+			}),
+		)
 
-    return {
-      transactions: result,
-    };
+		return {
+			transactions: result,
+		}
 	}
 }

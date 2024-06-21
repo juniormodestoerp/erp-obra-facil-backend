@@ -8,7 +8,6 @@ interface Input {
 
 interface ICashEntries {
 	id: string
-	userId: string
 	totalAmount: number
 	transactionDate: string
 	description: string
@@ -27,7 +26,6 @@ export class CashEntriesUseCase {
 			},
 			select: {
 				id: true,
-				userId: true,
 				totalAmount: true,
 				transactionDate: true,
 				description: true,

@@ -8,7 +8,6 @@ interface Input {
 
 interface ICashFlow {
 	id: string
-	userId: string
 	totalAmount: number
 	transactionDate: string
 	description: string
@@ -26,7 +25,6 @@ export class CashFlowUseCase {
 			},
 			select: {
 				id: true,
-				userId: true,
 				totalAmount: true,
 				transactionDate: true,
 				description: true,

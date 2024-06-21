@@ -7,7 +7,6 @@ interface Input {
 
 interface IReceivedAccounts {
 	id: string
-	userId: string
 	name: string
 	description: string
 	totalAmount: number
@@ -28,7 +27,6 @@ export class ReceivedAccountsUseCase {
 			},
 			select: {
 				id: true,
-				userId: true,
 				name: true,
 				description: true,
 				totalAmount: true,

@@ -45,7 +45,7 @@ export class EntriesByContactUseCase {
 				acc[contact].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, { totalAmount: number, ids: string[] }>,
+			{} as Record<string, { totalAmount: number; ids: string[] }>,
 		)
 
 		const result: IEntriesByContact[] = Object.keys(totalsByContact).map(

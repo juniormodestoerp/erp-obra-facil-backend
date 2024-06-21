@@ -57,17 +57,22 @@ export class EvolutionByCenterUseCase {
 				acc[centerId].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, { totalAmounts: Record<string, number>, ids: string[] }>,
+			{} as Record<
+				string,
+				{ totalAmounts: Record<string, number>; ids: string[] }
+			>,
 		)
 
 		const result: ICenterEvolution[] = Object.keys(evolutionByCenter).map(
 			(centerId) => ({
 				id: evolutionByCenter[centerId].ids.join(', '),
 				centerId: centerId === 'uncategorized' ? null : centerId,
-				evolution: Object.keys(evolutionByCenter[centerId].totalAmounts).map((date) => ({
-					date,
-					totalAmount: evolutionByCenter[centerId].totalAmounts[date],
-				})),
+				evolution: Object.keys(evolutionByCenter[centerId].totalAmounts).map(
+					(date) => ({
+						date,
+						totalAmount: evolutionByCenter[centerId].totalAmounts[date],
+					}),
+				),
 			}),
 		)
 

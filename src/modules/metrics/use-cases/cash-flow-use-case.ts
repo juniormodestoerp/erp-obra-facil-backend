@@ -37,10 +37,12 @@ export class CashFlowUseCase {
 			})
 		}
 
-		const formattedTransactions: ICashFlow[] = transactions.map(transaction => ({
-			...transaction,
-			transactionDate: transaction.transactionDate.toISOString(),
-		}));
+		const formattedTransactions: ICashFlow[] = transactions.map(
+			(transaction) => ({
+				...transaction,
+				transactionDate: transaction.transactionDate.toISOString(),
+			}),
+		)
 
 		return {
 			transactions: formattedTransactions,

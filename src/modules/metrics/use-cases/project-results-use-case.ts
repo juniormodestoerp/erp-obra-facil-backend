@@ -45,7 +45,7 @@ export class ProjectResultsUseCase {
 				acc[project].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, { totalAmount: number, ids: string[] }>,
+			{} as Record<string, { totalAmount: number; ids: string[] }>,
 		)
 
 		const result: IProjectResult[] = Object.keys(totalsByProject).map(

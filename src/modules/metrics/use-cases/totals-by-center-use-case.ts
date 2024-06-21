@@ -45,7 +45,7 @@ export class TotalsByCenterUseCase {
 				acc[centerId].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, { totalAmount: number, ids: string[] }>,
+			{} as Record<string, { totalAmount: number; ids: string[] }>,
 		)
 
 		const result: ITotalsByCenter[] = Object.keys(totalsByCenter).map(

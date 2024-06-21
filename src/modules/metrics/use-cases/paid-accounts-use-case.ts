@@ -41,10 +41,12 @@ export class PaidAccountsUseCase {
 			})
 		}
 
-		const formattedTransactions: IPaidAccounts[] = transactions.map(transaction => ({
-			...transaction,
-			transactionDate: transaction.transactionDate.toISOString(),
-		}));
+		const formattedTransactions: IPaidAccounts[] = transactions.map(
+			(transaction) => ({
+				...transaction,
+				transactionDate: transaction.transactionDate.toISOString(),
+			}),
+		)
 
 		return {
 			transactions: formattedTransactions,

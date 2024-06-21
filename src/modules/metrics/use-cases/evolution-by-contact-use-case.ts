@@ -58,17 +58,22 @@ export class EvolutionByContactUseCase {
 				acc[contact].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, { totalAmounts: Record<string, number>, ids: string[] }>,
+			{} as Record<
+				string,
+				{ totalAmounts: Record<string, number>; ids: string[] }
+			>,
 		)
 
 		const result: IContactEvolution[] = Object.keys(evolutionByContact).map(
 			(contact) => ({
 				id: evolutionByContact[contact].ids.join(', '),
 				contact: contact === 'unknown' ? null : contact,
-				evolution: Object.keys(evolutionByContact[contact].totalAmounts).map((date) => ({
-					date,
-					totalAmount: evolutionByContact[contact].totalAmounts[date],
-				})),
+				evolution: Object.keys(evolutionByContact[contact].totalAmounts).map(
+					(date) => ({
+						date,
+						totalAmount: evolutionByContact[contact].totalAmounts[date],
+					}),
+				),
 			}),
 		)
 

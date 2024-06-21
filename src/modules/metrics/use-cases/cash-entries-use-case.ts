@@ -38,13 +38,15 @@ export class CashEntriesUseCase {
 			})
 		}
 
-		const formattedTransactions: ICashEntries[] = transactions.map(transaction => ({
-			...transaction,
-			transactionDate: transaction.transactionDate.toISOString(),
-		}));
+		const formattedTransactions: ICashEntries[] = transactions.map(
+			(transaction) => ({
+				...transaction,
+				transactionDate: transaction.transactionDate.toISOString(),
+			}),
+		)
 
 		return {
-			transactions: formattedTransactions
+			transactions: formattedTransactions,
 		}
 	}
 }

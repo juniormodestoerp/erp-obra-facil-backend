@@ -31,21 +31,21 @@ export class AccountsPayableUseCase {
 			},
 		})
 
-		
-
 		if (!transactions || transactions.length === 0) {
 			throw new AppError({
 				code: 'transaction.not_found',
 			})
 		}
 
-		const formattedTransactions: IAccountsPayable[] = transactions.map(transaction => ({
-			...transaction,
-			transactionDate: transaction.transactionDate.toISOString(),
-		}));
+		const formattedTransactions: IAccountsPayable[] = transactions.map(
+			(transaction) => ({
+				...transaction,
+				transactionDate: transaction.transactionDate.toISOString(),
+			}),
+		)
 
 		return {
-			transactions: formattedTransactions
+			transactions: formattedTransactions,
 		}
 	}
 }

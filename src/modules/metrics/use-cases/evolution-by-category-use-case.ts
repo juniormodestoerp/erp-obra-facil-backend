@@ -58,18 +58,23 @@ export class EvolutionByCategoryUseCase {
 				acc[categoryId][date].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, Record<string, { totalAmount: number, ids: string[] }>>,
+			{} as Record<
+				string,
+				Record<string, { totalAmount: number; ids: string[] }>
+			>,
 		)
 
 		const result: ICategoryEvolution[] = Object.keys(evolutionByCategory).map(
 			(categoryId) => {
-				const evolution = Object.keys(evolutionByCategory[categoryId]).map((date) => ({
-					date,
-					totalAmount: evolutionByCategory[categoryId][date].totalAmount,
-				}))
+				const evolution = Object.keys(evolutionByCategory[categoryId]).map(
+					(date) => ({
+						date,
+						totalAmount: evolutionByCategory[categoryId][date].totalAmount,
+					}),
+				)
 
 				const ids = Object.values(evolutionByCategory[categoryId])
-					.flatMap(item => item.ids)
+					.flatMap((item) => item.ids)
 					.join(', ')
 
 				return {
@@ -77,7 +82,7 @@ export class EvolutionByCategoryUseCase {
 					categoryId: categoryId === 'uncategorized' ? null : categoryId,
 					evolution,
 				}
-			}
+			},
 		)
 
 		return {

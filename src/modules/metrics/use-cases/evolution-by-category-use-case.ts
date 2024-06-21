@@ -6,9 +6,15 @@ interface Input {
 	userId: string
 }
 
+interface IEvolution {
+	date: string
+	totalAmount: number
+}
+
 interface ICategoryEvolution {
+	id: string
 	categoryId: string | null
-	evolution: { date: string; totalAmount: number }[]
+	evolution: IEvolution[]
 }
 
 interface Output {
@@ -22,6 +28,7 @@ export class EvolutionByCategoryUseCase {
 				userId,
 			},
 			select: {
+				id: true,
 				categoryId: true,
 				totalAmount: true,
 				transactionDate: true,
@@ -44,23 +51,33 @@ export class EvolutionByCategoryUseCase {
 				}
 
 				if (!acc[categoryId][date]) {
-					acc[categoryId][date] = 0
+					acc[categoryId][date] = { totalAmount: 0, ids: [] }
 				}
 
-				acc[categoryId][date] += transaction.totalAmount
+				acc[categoryId][date].totalAmount += transaction.totalAmount
+				acc[categoryId][date].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, Record<string, number>>,
+			{} as Record<string, Record<string, { totalAmount: number, ids: string[] }>>,
 		)
 
 		const result: ICategoryEvolution[] = Object.keys(evolutionByCategory).map(
-			(categoryId) => ({
-				categoryId: categoryId === 'uncategorized' ? null : categoryId,
-				evolution: Object.keys(evolutionByCategory[categoryId]).map((date) => ({
+			(categoryId) => {
+				const evolution = Object.keys(evolutionByCategory[categoryId]).map((date) => ({
 					date,
-					totalAmount: evolutionByCategory[categoryId][date],
-				})),
-			}),
+					totalAmount: evolutionByCategory[categoryId][date].totalAmount,
+				}))
+
+				const ids = Object.values(evolutionByCategory[categoryId])
+					.flatMap(item => item.ids)
+					.join(', ')
+
+				return {
+					id: ids,
+					categoryId: categoryId === 'uncategorized' ? null : categoryId,
+					evolution,
+				}
+			}
 		)
 
 		return {

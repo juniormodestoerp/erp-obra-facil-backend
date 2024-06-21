@@ -1,18 +1,18 @@
 import { AppError } from '@core/domain/errors/app-error'
-
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
 	userId: string
 }
 
-interface IProjectTotal {
+interface IEntriesByProject {
+	id: string
 	project: string | null
 	totalAmount: number
 }
 
 interface Output {
-	transactions: IProjectTotal[]
+	transactions: IEntriesByProject[]
 }
 
 export class EntriesByProjectUseCase {
@@ -22,6 +22,7 @@ export class EntriesByProjectUseCase {
 				userId,
 			},
 			select: {
+				id: true,
 				associatedProjects: true,
 				totalAmount: true,
 			},
@@ -37,18 +38,20 @@ export class EntriesByProjectUseCase {
 			(acc, transaction) => {
 				const project = transaction.associatedProjects || 'unknown'
 				if (!acc[project]) {
-					acc[project] = 0
+					acc[project] = { totalAmount: 0, ids: [] }
 				}
-				acc[project] += transaction.totalAmount
+				acc[project].totalAmount += transaction.totalAmount
+				acc[project].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, number>,
+			{} as Record<string, { totalAmount: number, ids: string[] }>,
 		)
 
-		const result: IProjectTotal[] = Object.keys(totalsByProject).map(
+		const result: IEntriesByProject[] = Object.keys(totalsByProject).map(
 			(project) => ({
+				id: totalsByProject[project].ids.join(', '),
 				project: project === 'unknown' ? null : project,
-				totalAmount: totalsByProject[project],
+				totalAmount: totalsByProject[project].totalAmount,
 			}),
 		)
 

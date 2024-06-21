@@ -6,9 +6,15 @@ interface Input {
 	userId: string
 }
 
+interface IEvolution {
+	date: string
+	totalAmount: number
+}
+
 interface IContactEvolution {
+	id: string
 	contact: string | null
-	evolution: { date: string; totalAmount: number }[]
+	evolution: IEvolution[]
 }
 
 interface Output {
@@ -22,6 +28,7 @@ export class EvolutionByContactUseCase {
 				userId,
 			},
 			select: {
+				id: true,
 				contact: true,
 				totalAmount: true,
 				transactionDate: true,
@@ -40,25 +47,27 @@ export class EvolutionByContactUseCase {
 				const date = transaction.transactionDate.toISOString().slice(0, 7) // YYYY-MM format
 
 				if (!acc[contact]) {
-					acc[contact] = {}
+					acc[contact] = { totalAmounts: {}, ids: [] }
 				}
 
-				if (!acc[contact][date]) {
-					acc[contact][date] = 0
+				if (!acc[contact].totalAmounts[date]) {
+					acc[contact].totalAmounts[date] = 0
 				}
 
-				acc[contact][date] += transaction.totalAmount
+				acc[contact].totalAmounts[date] += transaction.totalAmount
+				acc[contact].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, Record<string, number>>,
+			{} as Record<string, { totalAmounts: Record<string, number>, ids: string[] }>,
 		)
 
 		const result: IContactEvolution[] = Object.keys(evolutionByContact).map(
 			(contact) => ({
+				id: evolutionByContact[contact].ids.join(', '),
 				contact: contact === 'unknown' ? null : contact,
-				evolution: Object.keys(evolutionByContact[contact]).map((date) => ({
+				evolution: Object.keys(evolutionByContact[contact].totalAmounts).map((date) => ({
 					date,
-					totalAmount: evolutionByContact[contact][date],
+					totalAmount: evolutionByContact[contact].totalAmounts[date],
 				})),
 			}),
 		)

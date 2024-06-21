@@ -6,14 +6,14 @@ interface Input {
 	userId: string
 }
 
-interface ICenterTotal {
+interface IEntriesByCenter {
 	id: string
 	costAndProfitCenters: string | null
 	totalAmount: number
 }
 
 interface Output {
-	transactions: ICenterTotal[]
+	transactions: IEntriesByCenter[]
 }
 
 export class EntriesByCenterUseCase {
@@ -49,7 +49,7 @@ export class EntriesByCenterUseCase {
 			{} as Record<string, { totalAmount: number, ids: string[] }>,
 		)
 
-		const result: ICenterTotal[] = Object.keys(totalsByCenter).map(
+		const result: IEntriesByCenter[] = Object.keys(totalsByCenter).map(
 			(costAndProfitCenters) => ({
 				id: totalsByCenter[costAndProfitCenters].ids.join(', '),
 				costAndProfitCenters:

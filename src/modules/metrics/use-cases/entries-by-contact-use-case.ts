@@ -6,14 +6,14 @@ interface Input {
 	userId: string
 }
 
-interface IContactTotal {
+interface IEntriesByContact {
 	id: string
 	contact: string | null
 	totalAmount: number
 }
 
 interface Output {
-	transactions: IContactTotal[]
+	transactions: IEntriesByContact[]
 }
 
 export class EntriesByContactUseCase {
@@ -48,7 +48,7 @@ export class EntriesByContactUseCase {
 			{} as Record<string, { totalAmount: number, ids: string[] }>,
 		)
 
-		const result: IContactTotal[] = Object.keys(totalsByContact).map(
+		const result: IEntriesByContact[] = Object.keys(totalsByContact).map(
 			(contact) => ({
 				id: totalsByContact[contact].ids.join(', '),
 				contact: contact === 'unknown' ? null : contact,

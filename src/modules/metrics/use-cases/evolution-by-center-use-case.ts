@@ -1,14 +1,19 @@
 import { AppError } from '@core/domain/errors/app-error'
-
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
 	userId: string
 }
 
+interface IEvolution {
+	date: string
+	totalAmount: number
+}
+
 interface ICenterEvolution {
+	id: string
 	centerId: string | null
-	evolution: { date: string; totalAmount: number }[]
+	evolution: IEvolution[]
 }
 
 interface Output {
@@ -22,6 +27,7 @@ export class EvolutionByCenterUseCase {
 				userId,
 			},
 			select: {
+				id: true,
 				costAndProfitCenters: true,
 				totalAmount: true,
 				transactionDate: true,
@@ -40,25 +46,27 @@ export class EvolutionByCenterUseCase {
 				const date = transaction.transactionDate.toISOString().slice(0, 7)
 
 				if (!acc[centerId]) {
-					acc[centerId] = {}
+					acc[centerId] = { totalAmounts: {}, ids: [] }
 				}
 
-				if (!acc[centerId][date]) {
-					acc[centerId][date] = 0
+				if (!acc[centerId].totalAmounts[date]) {
+					acc[centerId].totalAmounts[date] = 0
 				}
 
-				acc[centerId][date] += transaction.totalAmount
+				acc[centerId].totalAmounts[date] += transaction.totalAmount
+				acc[centerId].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, Record<string, number>>,
+			{} as Record<string, { totalAmounts: Record<string, number>, ids: string[] }>,
 		)
 
 		const result: ICenterEvolution[] = Object.keys(evolutionByCenter).map(
 			(centerId) => ({
+				id: evolutionByCenter[centerId].ids.join(', '),
 				centerId: centerId === 'uncategorized' ? null : centerId,
-				evolution: Object.keys(evolutionByCenter[centerId]).map((date) => ({
+				evolution: Object.keys(evolutionByCenter[centerId].totalAmounts).map((date) => ({
 					date,
-					totalAmount: evolutionByCenter[centerId][date],
+					totalAmount: evolutionByCenter[centerId].totalAmounts[date],
 				})),
 			}),
 		)

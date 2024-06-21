@@ -8,7 +8,6 @@ interface Input {
 
 interface IAccountsPayable {
 	id: string
-	userId: string
 	categoryId: string | null
 	totalAmount: number
 	transactionDate: string
@@ -26,12 +25,13 @@ export class AccountsPayableUseCase {
 			},
 			select: {
 				id: true,
-				userId: true,
 				categoryId: true,
 				totalAmount: true,
 				transactionDate: true,
 			},
 		})
+
+		
 
 		if (!transactions || transactions.length === 0) {
 			throw new AppError({

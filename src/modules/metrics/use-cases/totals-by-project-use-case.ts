@@ -6,13 +6,14 @@ interface Input {
 	userId: string
 }
 
-interface IProjectTotal {
+interface ITotalsByProject {
+	id: string
 	projectId: string | null
 	totalAmount: number
 }
 
 interface Output {
-	transactions: IProjectTotal[]
+	transactions: ITotalsByProject[]
 }
 
 export class TotalsByProjectUseCase {
@@ -22,6 +23,7 @@ export class TotalsByProjectUseCase {
 				userId,
 			},
 			select: {
+				id: true,
 				associatedProjects: true,
 				totalAmount: true,
 			},
@@ -37,18 +39,20 @@ export class TotalsByProjectUseCase {
 			(acc, transaction) => {
 				const projectId = transaction.associatedProjects || 'uncategorized'
 				if (!acc[projectId]) {
-					acc[projectId] = 0
+					acc[projectId] = { totalAmount: 0, ids: [] }
 				}
-				acc[projectId] += transaction.totalAmount
+				acc[projectId].totalAmount += transaction.totalAmount
+				acc[projectId].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, number>,
+			{} as Record<string, { totalAmount: number, ids: string[] }>,
 		)
 
-		const result: IProjectTotal[] = Object.keys(totalsByProject).map(
+		const result: ITotalsByProject[] = Object.keys(totalsByProject).map(
 			(projectId) => ({
+				id: totalsByProject[projectId].ids.join(', '),
 				projectId: projectId === 'uncategorized' ? null : projectId,
-				totalAmount: totalsByProject[projectId],
+				totalAmount: totalsByProject[projectId].totalAmount,
 			}),
 		)
 

@@ -1,18 +1,18 @@
 import { AppError } from '@core/domain/errors/app-error'
-
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
 	userId: string
 }
 
-interface ICategoryTotal {
+interface TotalsByCategory {
+	id: string
 	categoryId: string | null
 	totalAmount: number
 }
 
 interface Output {
-	transactions: ICategoryTotal[]
+	transactions: TotalsByCategory[]
 }
 
 export class TotalsByCategoryUseCase {
@@ -22,6 +22,7 @@ export class TotalsByCategoryUseCase {
 				userId,
 			},
 			select: {
+				id: true,
 				categoryId: true,
 				totalAmount: true,
 			},
@@ -37,18 +38,20 @@ export class TotalsByCategoryUseCase {
 			(acc, transaction) => {
 				const categoryId = transaction.categoryId || 'uncategorized'
 				if (!acc[categoryId]) {
-					acc[categoryId] = 0
+					acc[categoryId] = { totalAmount: 0, ids: [] }
 				}
-				acc[categoryId] += transaction.totalAmount
+				acc[categoryId].totalAmount += transaction.totalAmount
+				acc[categoryId].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, number>,
+			{} as Record<string, { totalAmount: number, ids: string[] }>,
 		)
 
-		const result: ICategoryTotal[] = Object.keys(totalsByCategory).map(
+		const result: TotalsByCategory[] = Object.keys(totalsByCategory).map(
 			(categoryId) => ({
+				id: totalsByCategory[categoryId].ids.join(', '),
 				categoryId: categoryId === 'uncategorized' ? null : categoryId,
-				totalAmount: totalsByCategory[categoryId],
+				totalAmount: totalsByCategory[categoryId].totalAmount,
 			}),
 		)
 

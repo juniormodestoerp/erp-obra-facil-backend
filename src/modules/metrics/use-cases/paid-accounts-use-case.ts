@@ -1,5 +1,4 @@
 import { AppError } from '@core/domain/errors/app-error'
-
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
@@ -12,7 +11,7 @@ interface IPaidAccounts {
 	name: string
 	description: string
 	totalAmount: number
-	transactionDate: Date
+	transactionDate: string
 	status: string
 }
 
@@ -44,8 +43,13 @@ export class PaidAccountsUseCase {
 			})
 		}
 
+		const formattedTransactions: IPaidAccounts[] = transactions.map(transaction => ({
+			...transaction,
+			transactionDate: transaction.transactionDate.toISOString(),
+		}));
+
 		return {
-			transactions,
+			transactions: formattedTransactions,
 		}
 	}
 }

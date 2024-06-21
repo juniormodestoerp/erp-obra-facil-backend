@@ -7,9 +7,10 @@ interface Input {
 }
 
 interface IAccountsReceivable {
+	id: string
 	categoryId: string | null
 	totalAmount: number
-	transactionDate: Date
+	transactionDate: string
 }
 interface Output {
 	transactions: IAccountsReceivable[]
@@ -21,6 +22,7 @@ export class AccountsReceivableUseCase {
 				userId,
 			},
 			select: {
+				id: true,
 				categoryId: true,
 				totalAmount: true,
 				transactionDate: true,
@@ -33,8 +35,15 @@ export class AccountsReceivableUseCase {
 			})
 		}
 
+		const formattedTransactions: IAccountsReceivable[] = transactions.map(
+			(transaction) => ({
+				...transaction,
+				transactionDate: transaction.transactionDate.toISOString(),
+			}),
+		)
+
 		return {
-			transactions,
+			transactions: formattedTransactions,
 		}
 	}
 }

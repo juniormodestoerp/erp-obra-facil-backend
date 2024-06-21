@@ -10,7 +10,7 @@ interface ICashEntries {
 	id: string
 	userId: string
 	totalAmount: number
-	transactionDate: Date
+	transactionDate: string
 	description: string
 }
 
@@ -40,8 +40,13 @@ export class CashEntriesUseCase {
 			})
 		}
 
+		const formattedTransactions: ICashEntries[] = transactions.map(transaction => ({
+			...transaction,
+			transactionDate: transaction.transactionDate.toISOString(),
+		}));
+
 		return {
-			transactions,
+			transactions: formattedTransactions
 		}
 	}
 }

@@ -7,6 +7,7 @@ interface Input {
 }
 
 interface IEntriesByCategory {
+	id: string
 	categoryId: string | null
 	totalAmount: number
 }
@@ -22,6 +23,7 @@ export class EntriesByCategoryUseCase {
 				userId,
 			},
 			select: {
+				id: true,
 				categoryId: true,
 				totalAmount: true,
 			},

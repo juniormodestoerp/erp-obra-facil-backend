@@ -1,4 +1,5 @@
 import { AppError } from '@core/domain/errors/app-error'
+
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
@@ -6,6 +7,7 @@ interface Input {
 }
 
 interface ICenterTotal {
+	id: string
 	costAndProfitCenters: string | null
 	totalAmount: number
 }
@@ -21,6 +23,7 @@ export class EntriesByCenterUseCase {
 				userId,
 			},
 			select: {
+				id: true,
 				costAndProfitCenters: true,
 				totalAmount: true,
 			},
@@ -37,21 +40,23 @@ export class EntriesByCenterUseCase {
 			(acc, transaction) => {
 				const centerId = transaction.costAndProfitCenters || 'uncategorized'
 				if (!acc[centerId]) {
-					acc[centerId] = 0
+					acc[centerId] = { totalAmount: 0, ids: [] }
 				}
-				acc[centerId] += transaction.totalAmount
+				acc[centerId].totalAmount += transaction.totalAmount
+				acc[centerId].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, number>,
+			{} as Record<string, { totalAmount: number, ids: string[] }>,
 		)
 
 		const result: ICenterTotal[] = Object.keys(totalsByCenter).map(
 			(costAndProfitCenters) => ({
+				id: totalsByCenter[costAndProfitCenters].ids.join(', '),
 				costAndProfitCenters:
 					costAndProfitCenters === 'uncategorized'
 						? null
 						: costAndProfitCenters,
-				totalAmount: totalsByCenter[costAndProfitCenters],
+				totalAmount: totalsByCenter[costAndProfitCenters].totalAmount,
 			}),
 		)
 

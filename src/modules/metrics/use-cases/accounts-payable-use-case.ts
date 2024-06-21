@@ -11,7 +11,7 @@ interface IAccountsPayable {
 	userId: string
 	categoryId: string | null
 	totalAmount: number
-	transactionDate: Date
+	transactionDate: string
 }
 
 interface Output {
@@ -39,8 +39,13 @@ export class AccountsPayableUseCase {
 			})
 		}
 
+		const formattedTransactions: IAccountsPayable[] = transactions.map(transaction => ({
+			...transaction,
+			transactionDate: transaction.transactionDate.toISOString(),
+		}));
+
 		return {
-			transactions,
+			transactions: formattedTransactions
 		}
 	}
 }

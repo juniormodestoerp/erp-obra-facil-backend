@@ -10,7 +10,7 @@ interface ICashFlow {
 	id: string
 	userId: string
 	totalAmount: number
-	transactionDate: Date
+	transactionDate: string
 	description: string
 }
 
@@ -39,8 +39,13 @@ export class CashFlowUseCase {
 			})
 		}
 
+		const formattedTransactions: ICashFlow[] = transactions.map(transaction => ({
+			...transaction,
+			transactionDate: transaction.transactionDate.toISOString(),
+		}));
+
 		return {
-			transactions,
+			transactions: formattedTransactions,
 		}
 	}
 }

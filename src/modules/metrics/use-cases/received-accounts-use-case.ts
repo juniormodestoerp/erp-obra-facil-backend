@@ -6,7 +6,7 @@ interface Input {
   userId: string;
 }
 
-interface ITransaction {
+interface IReceivedAccounts {
   id: string;
   userId: string;
   name: string;
@@ -17,7 +17,7 @@ interface ITransaction {
 }
 
 interface Output {
-  transactions: ITransaction[];
+  transactions: IReceivedAccounts[];
 }
 
 export class ReceivedAccountsUseCase {

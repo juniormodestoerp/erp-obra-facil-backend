@@ -6,30 +6,32 @@ interface Input {
 	userId: string
 }
 
+interface ICashFlow {
+	id: string
+	userId: string
+	totalAmount: number
+	transactionDate: Date
+	description: string
+}
+
 interface Output {
-	transactions: {
-    id: string;
-    userId: string;
-    totalAmount: number;
-    transactionDate: Date;
-    description: string;
-  }[];
+	transactions: ICashFlow[]
 }
 
 export class CashFlowUseCase {
 	async execute({ userId }: Input): Promise<Output> {
 		const transactions = await prisma.transaction.findMany({
-      where: {
-        userId,
-      },
-      select: {
-        id: true,
-        userId: true,
-        totalAmount: true,
-        transactionDate: true,
-        description: true,
-      },
-    });
+			where: {
+				userId,
+			},
+			select: {
+				id: true,
+				userId: true,
+				totalAmount: true,
+				transactionDate: true,
+				description: true,
+			},
+		})
 
 		if (!transactions || transactions.length === 0) {
 			throw new AppError({

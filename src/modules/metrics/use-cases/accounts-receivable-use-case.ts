@@ -3,27 +3,29 @@ import { AppError } from '@core/domain/errors/app-error'
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
-  userId: string
+	userId: string
+}
+
+interface IAccountsReceivable {
+	categoryId: string | null
+	totalAmount: number
+	transactionDate: Date
 }
 interface Output {
-  transactions: {
-		categoryId: string | null
-		totalAmount: number
-		transactionDate: Date
-	}[]
+	transactions: IAccountsReceivable[]
 }
 export class AccountsReceivableUseCase {
 	async execute({ userId }: Input): Promise<Output> {
 		const transactions = await prisma.transaction.findMany({
-      where: {
-        userId,
-      },
-      select: {
-        categoryId: true,
-        totalAmount: true,
+			where: {
+				userId,
+			},
+			select: {
+				categoryId: true,
+				totalAmount: true,
 				transactionDate: true,
-      },
-    })
+			},
+		})
 
 		if (!transactions || transactions.length === 0) {
 			throw new AppError({

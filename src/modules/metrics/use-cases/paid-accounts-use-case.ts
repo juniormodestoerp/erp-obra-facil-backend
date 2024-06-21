@@ -6,16 +6,19 @@ interface Input {
 	userId: string
 }
 
+interface IPaidAccounts {
+  id: string
+  userId: string
+  name: string
+  description: string
+  totalAmount: number
+  transactionDate: Date
+  status: string
+
+}
+
 interface Output {
-  transactions: {
-    id: string;
-    userId: string;
-    name: string;
-    description: string;
-    totalAmount: number;
-    transactionDate: Date;
-    status: string;
-  }[];
+  transactions: IPaidAccounts[];
 }
 
 export class PaidAccountsUseCase {

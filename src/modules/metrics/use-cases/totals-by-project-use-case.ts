@@ -12,7 +12,7 @@ interface IProjectTotal {
 }
 
 interface Output {
-  totalsByProject: IProjectTotal[];
+  transactions: IProjectTotal[];
 }
 
 export class TotalsByProjectUseCase {
@@ -50,7 +50,7 @@ export class TotalsByProjectUseCase {
     );
 
     return {
-      totalsByProject: result,
+      transactions: result,
     };
 	}
 }

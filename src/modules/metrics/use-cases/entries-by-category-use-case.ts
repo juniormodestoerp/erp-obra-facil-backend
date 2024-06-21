@@ -6,11 +6,13 @@ interface Input {
 	userId: string
 }
 
+interface IEntriesByCategory {
+	categoryId: string | null
+	totalAmount: number
+}
+
 interface Output {
-	transactions: {
-		categoryId: string | null
-		totalAmount: number
-	}[]
+	transactions: IEntriesByCategory[]
 }
 
 export class EntriesByCategoryUseCase {

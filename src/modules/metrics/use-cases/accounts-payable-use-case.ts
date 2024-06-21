@@ -6,14 +6,16 @@ interface Input {
 	userId: string
 }
 
+interface IAccountsPayable {
+	id: string
+	userId: string
+	categoryId: string | null
+	totalAmount: number
+	transactionDate: Date
+}
+
 interface Output {
-	transactions: {
-		id: string
-		userId: string
-		categoryId: string | null
-		totalAmount: number
-		transactionDate: Date
-	}[]
+	transactions: IAccountsPayable[]
 }
 
 export class AccountsPayableUseCase {

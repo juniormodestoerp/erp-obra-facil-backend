@@ -1,5 +1,4 @@
 import { AppError } from '@core/domain/errors/app-error'
-
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
@@ -10,6 +9,8 @@ interface IEntriesByCenter {
 	id: string
 	costAndProfitCenters: string | null
 	totalAmount: number
+	transactionDate: string
+	name: string
 }
 
 interface Output {
@@ -26,6 +27,8 @@ export class EntriesByCenterUseCase {
 				id: true,
 				costAndProfitCenters: true,
 				totalAmount: true,
+				transactionDate: true,
+				name: true,
 			},
 		})
 
@@ -36,32 +39,16 @@ export class EntriesByCenterUseCase {
 			})
 		}
 
-		const totalsByCenter = transactions.reduce(
-			(acc, transaction) => {
-				const centerId = transaction.costAndProfitCenters || 'uncategorized'
-				if (!acc[centerId]) {
-					acc[centerId] = { totalAmount: 0, ids: [] }
-				}
-				acc[centerId].totalAmount += transaction.totalAmount
-				acc[centerId].ids.push(transaction.id)
-				return acc
-			},
-			{} as Record<string, { totalAmount: number; ids: string[] }>,
-		)
-
-		const result: IEntriesByCenter[] = Object.keys(totalsByCenter).map(
-			(costAndProfitCenters) => ({
-				id: totalsByCenter[costAndProfitCenters].ids.join(', '),
-				costAndProfitCenters:
-					costAndProfitCenters === 'uncategorized'
-						? null
-						: costAndProfitCenters,
-				totalAmount: totalsByCenter[costAndProfitCenters].totalAmount,
+		const formattedTransactions: IEntriesByCenter[] = transactions.map(
+			(transaction) => ({
+				...transaction,
+				costAndProfitCenters: transaction.costAndProfitCenters || 'Centro não informado',
+				transactionDate: transaction.transactionDate.toISOString(),
 			}),
 		)
 
 		return {
-			transactions: result,
+			transactions: formattedTransactions
 		}
 	}
 }

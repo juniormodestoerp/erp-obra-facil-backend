@@ -1,5 +1,4 @@
 import { AppError } from '@core/domain/errors/app-error'
-
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
@@ -8,24 +7,36 @@ interface Input {
 
 interface IAccountsReceivable {
 	id: string
-	categoryId: string | null
+	name: string
 	totalAmount: number
 	transactionDate: string
+	tags: string | null
+	paymentMethod: string
 }
+
 interface Output {
 	transactions: IAccountsReceivable[]
 }
+
 export class AccountsReceivableUseCase {
 	async execute({ userId }: Input): Promise<Output> {
 		const transactions = await prisma.transaction.findMany({
 			where: {
 				userId,
+				totalAmount: {
+					gt: 0,
+				},
+				transactionDate: {
+					gt: new Date(),
+				},
 			},
 			select: {
 				id: true,
-				categoryId: true,
+				name: true,
 				totalAmount: true,
 				transactionDate: true,
+				tags: true,
+				paymentMethod: true,
 			},
 		})
 
@@ -37,8 +48,12 @@ export class AccountsReceivableUseCase {
 
 		const formattedTransactions: IAccountsReceivable[] = transactions.map(
 			(transaction) => ({
-				...transaction,
+				id: transaction.id,
+				name: transaction.name,
+				totalAmount: transaction.totalAmount,
 				transactionDate: transaction.transactionDate.toISOString(),
+				tags: transaction.tags,
+				paymentMethod: transaction.paymentMethod,
 			}),
 		)
 

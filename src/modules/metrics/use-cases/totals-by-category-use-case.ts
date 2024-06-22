@@ -23,7 +23,11 @@ export class TotalsByCategoryUseCase {
 			},
 			select: {
 				id: true,
-				categoryId: true,
+				category: {
+					select: {
+						name: true,
+					},
+				},
 				totalAmount: true,
 			},
 		})
@@ -36,7 +40,7 @@ export class TotalsByCategoryUseCase {
 
 		const totalsByCategory = transactions.reduce(
 			(acc, transaction) => {
-				const categoryId = transaction.categoryId || 'uncategorized'
+				const categoryId = transaction.category?.name || 'uncategorized'
 				if (!acc[categoryId]) {
 					acc[categoryId] = { totalAmount: 0, ids: [] }
 				}

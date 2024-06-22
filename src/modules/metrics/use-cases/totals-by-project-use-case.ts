@@ -1,5 +1,4 @@
 import { AppError } from '@core/domain/errors/app-error'
-
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
@@ -8,7 +7,7 @@ interface Input {
 
 interface ITotalsByProject {
 	id: string
-	projectId: string | null
+	associatedProject: string | null
 	totalAmount: number
 }
 
@@ -37,22 +36,22 @@ export class TotalsByProjectUseCase {
 
 		const totalsByProject = transactions.reduce(
 			(acc, transaction) => {
-				const projectId = transaction.associatedProjects || 'uncategorized'
-				if (!acc[projectId]) {
-					acc[projectId] = { totalAmount: 0, ids: [] }
+				const associatedProject = transaction.associatedProjects || 'uncategorized'
+				if (!acc[associatedProject]) {
+					acc[associatedProject] = { totalAmount: 0, ids: [] }
 				}
-				acc[projectId].totalAmount += transaction.totalAmount
-				acc[projectId].ids.push(transaction.id)
+				acc[associatedProject].totalAmount += transaction.totalAmount
+				acc[associatedProject].ids.push(transaction.id)
 				return acc
 			},
 			{} as Record<string, { totalAmount: number; ids: string[] }>,
 		)
 
 		const result: ITotalsByProject[] = Object.keys(totalsByProject).map(
-			(projectId) => ({
-				id: totalsByProject[projectId].ids.join(', '),
-				projectId: projectId === 'uncategorized' ? null : projectId,
-				totalAmount: totalsByProject[projectId].totalAmount,
+			(associatedProject) => ({
+				id: totalsByProject[associatedProject].ids.join(', '),
+				associatedProject: associatedProject === 'uncategorized' ? null : associatedProject,
+				totalAmount: totalsByProject[associatedProject].totalAmount,
 			}),
 		)
 

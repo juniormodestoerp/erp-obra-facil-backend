@@ -23,6 +23,9 @@ export class PaidAccountsUseCase {
 		const transactions = await prisma.transaction.findMany({
 			where: {
 				userId,
+				totalAmount: {
+					lt: 0,
+				},
 				status: 'paid',
 			},
 			select: {
@@ -43,8 +46,12 @@ export class PaidAccountsUseCase {
 
 		const formattedTransactions: IPaidAccounts[] = transactions.map(
 			(transaction) => ({
-				...transaction,
+				id: transaction.id,
+				name: transaction.name,
+				description: transaction.description,
+				totalAmount: transaction.totalAmount,
 				transactionDate: transaction.transactionDate.toISOString(),
+				status: transaction.status,
 			}),
 		)
 

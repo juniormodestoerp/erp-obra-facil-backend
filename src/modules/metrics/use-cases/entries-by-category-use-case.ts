@@ -8,8 +8,10 @@ interface Input {
 
 interface IEntriesByCategory {
 	id: string
-	categoryId: string | null
+	category: string | null
+	name: string
 	totalAmount: number
+	transactionDate: string
 }
 
 interface Output {
@@ -24,8 +26,14 @@ export class EntriesByCategoryUseCase {
 			},
 			select: {
 				id: true,
-				categoryId: true,
+				category: {
+					select: {
+						name: true,
+					}
+				},
+				name: true,
 				totalAmount: true,
+				transactionDate: true,
 			},
 		})
 
@@ -35,8 +43,16 @@ export class EntriesByCategoryUseCase {
 			})
 		}
 
+		const formattedTransactions: IEntriesByCategory[] = transactions.map(
+			(transaction) => ({
+				...transaction,
+				category: transaction.category?.name || 'Categoria não informada',
+				transactionDate: transaction.transactionDate.toISOString(),
+			}),
+		)
+
 		return {
-			transactions,
+			transactions: formattedTransactions
 		}
 	}
 }

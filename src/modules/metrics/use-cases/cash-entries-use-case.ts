@@ -1,5 +1,4 @@
 import { AppError } from '@core/domain/errors/app-error'
-
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
@@ -9,8 +8,10 @@ interface Input {
 interface ICashEntries {
 	id: string
 	totalAmount: number
+	tags: string | null
+	name: string
+	paymentMethod: string
 	transactionDate: string
-	description: string
 }
 
 interface Output {
@@ -22,13 +23,14 @@ export class CashEntriesUseCase {
 		const transactions = await prisma.transaction.findMany({
 			where: {
 				userId,
-				accountType: 'Crédito',
 			},
 			select: {
 				id: true,
 				totalAmount: true,
+				tags: true,
+				name: true,
+				paymentMethod: true,
 				transactionDate: true,
-				description: true,
 			},
 		})
 

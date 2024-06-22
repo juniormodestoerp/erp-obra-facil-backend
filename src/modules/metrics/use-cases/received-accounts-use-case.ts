@@ -23,7 +23,10 @@ export class ReceivedAccountsUseCase {
 		const transactions = await prisma.transaction.findMany({
 			where: {
 				userId,
-				status: 'receivable', // Supondo que 'receivable' é o valor que indica que a conta é a receber
+				totalAmount: {
+					gt: 0,
+				},
+				status: 'paid',
 			},
 			select: {
 				id: true,

@@ -1,5 +1,6 @@
 import { AppError } from '@core/domain/errors/app-error'
 import { prisma } from '@shared/infra/database/prisma'
+import { addMonths, differenceInMonths } from 'date-fns'
 
 interface Input {
 	userId: string
@@ -8,11 +9,14 @@ interface Input {
 interface IEvolution {
 	date: string
 	totalAmount: number
+	percentageChange: number
+	accumulatedTotal: number
 }
 
 interface ICenterEvolution {
 	id: string
 	centerId: string | null
+	centerName: string | null
 	evolution: IEvolution[]
 }
 
@@ -40,40 +44,76 @@ export class EvolutionByCenterUseCase {
 			})
 		}
 
-		const evolutionByCenter = transactions.reduce(
-			(acc, transaction) => {
-				const centerId = transaction.costAndProfitCenters || 'uncategorized'
-				const date = transaction.transactionDate.toISOString().slice(0, 7)
+		const evolutionByCenter = transactions.reduce((acc, transaction) => {
+			const centerName = transaction.costAndProfitCenters || 'Uncategorized'
+			const date = transaction.transactionDate.toISOString().slice(0, 7)
 
-				if (!acc[centerId]) {
-					acc[centerId] = { totalAmounts: {}, ids: [] }
+			if (!acc[centerName]) {
+				acc[centerName] = {
+					createdAt: transaction.transactionDate,
+					transactions: {}
 				}
+			}
 
-				if (!acc[centerId].totalAmounts[date]) {
-					acc[centerId].totalAmounts[date] = 0
-				}
+			if (!acc[centerName].transactions[date]) {
+				acc[centerName].transactions[date] = { totalAmount: 0, ids: [] }
+			}
 
-				acc[centerId].totalAmounts[date] += transaction.totalAmount
-				acc[centerId].ids.push(transaction.id)
-				return acc
-			},
-			{} as Record<
-				string,
-				{ totalAmounts: Record<string, number>; ids: string[] }
-			>,
-		)
+			acc[centerName].transactions[date].totalAmount += transaction.totalAmount
+			acc[centerName].transactions[date].ids.push(transaction.id)
+			return acc
+		}, {} as Record<
+			string,
+			{
+				createdAt: Date
+				transactions: Record<string, { totalAmount: number; ids: string[] }>
+			}
+		>)
 
 		const result: ICenterEvolution[] = Object.keys(evolutionByCenter).map(
-			(centerId) => ({
-				id: evolutionByCenter[centerId].ids.join(', '),
-				centerId: centerId === 'uncategorized' ? null : centerId,
-				evolution: Object.keys(evolutionByCenter[centerId].totalAmounts).map(
-					(date) => ({
-						date,
-						totalAmount: evolutionByCenter[centerId].totalAmounts[date],
-					}),
-				),
-			}),
+			(centerName) => {
+				const { createdAt, transactions } = evolutionByCenter[centerName]
+				const evolution: IEvolution[] = []
+
+				const startDate = new Date(createdAt)
+				const endDate = new Date()
+
+				const totalMonths = differenceInMonths(endDate, startDate) + 1
+
+				let accumulatedTotal = 0
+
+				for (let i = 0; i < totalMonths; i++) {
+					const currentDate = addMonths(startDate, i)
+					const currentMonth = currentDate.toISOString().slice(0, 7)
+
+					const totalAmount = transactions[currentMonth]?.totalAmount || 0
+					accumulatedTotal += totalAmount
+
+					const previousMonth = addMonths(currentDate, -1).toISOString().slice(0, 7)
+					const previousAmount = transactions[previousMonth]?.totalAmount || 0
+					const percentageChange = previousAmount
+						? ((totalAmount - previousAmount) / Math.abs(previousAmount)) * 100
+						: 0
+
+					evolution.push({
+						date: currentMonth,
+						totalAmount,
+						percentageChange,
+						accumulatedTotal,
+					})
+				}
+
+				const ids = Object.values(transactions)
+					.flatMap((item) => item.ids)
+					.join(', ')
+
+				return {
+					id: ids,
+					centerId: centerName === 'Uncategorized' ? null : centerName,
+					centerName: centerName === 'Uncategorized' ? null : centerName,
+					evolution,
+				}
+			},
 		)
 
 		return {

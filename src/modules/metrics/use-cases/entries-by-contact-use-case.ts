@@ -1,5 +1,4 @@
 import { AppError } from '@core/domain/errors/app-error'
-
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
@@ -9,7 +8,9 @@ interface Input {
 interface IEntriesByContact {
 	id: string
 	contact: string | null
+	name: string
 	totalAmount: number
+	transactionDate: string
 }
 
 interface Output {
@@ -25,7 +26,9 @@ export class EntriesByContactUseCase {
 			select: {
 				id: true,
 				contact: true,
+				name: true,
 				totalAmount: true,
+				transactionDate: true,
 			},
 		})
 
@@ -35,29 +38,16 @@ export class EntriesByContactUseCase {
 			})
 		}
 
-		const totalsByContact = transactions.reduce(
-			(acc, transaction) => {
-				const contact = transaction.contact || 'unknown'
-				if (!acc[contact]) {
-					acc[contact] = { totalAmount: 0, ids: [] }
-				}
-				acc[contact].totalAmount += transaction.totalAmount
-				acc[contact].ids.push(transaction.id)
-				return acc
-			},
-			{} as Record<string, { totalAmount: number; ids: string[] }>,
-		)
-
-		const result: IEntriesByContact[] = Object.keys(totalsByContact).map(
-			(contact) => ({
-				id: totalsByContact[contact].ids.join(', '),
-				contact: contact === 'unknown' ? null : contact,
-				totalAmount: totalsByContact[contact].totalAmount,
+		const formattedTransactions: IEntriesByContact[] = transactions.map(
+			(transaction) => ({
+				...transaction,
+				contact: transaction.contact || 'Contato não informado',
+				transactionDate: transaction.transactionDate.toISOString(),
 			}),
 		)
 
 		return {
-			transactions: result,
+			transactions: formattedTransactions
 		}
 	}
 }

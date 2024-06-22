@@ -12,7 +12,6 @@ import { evolutionByCategoryController } from '@modules/metrics/http/controllers
 import { evolutionByCenterController } from '@modules/metrics/http/controllers/evolution-by-center-controller'
 import { evolutionByContactController } from '@modules/metrics/http/controllers/evolution-by-contact-controller'
 import { paidAccountsController } from '@modules/metrics/http/controllers/paid-accounts-controller'
-import { projectResultsController } from '@modules/metrics/http/controllers/project-results-controller'
 import { receivedAccountsController } from '@modules/metrics/http/controllers/received-accounts-controller'
 import { totalsByCategoryController } from '@modules/metrics/http/controllers/totals-by-category-controller'
 import { totalsByCenterController } from '@modules/metrics/http/controllers/totals-by-center-controller'
@@ -36,7 +35,6 @@ export async function Router(app: FastifyInstance) {
 	app.get('/metrics/evolution-by-center', evolutionByCenterController)
 	app.get('/metrics/evolution-by-contact', evolutionByContactController)
 	app.get('/metrics/paid-accounts', paidAccountsController)
-	app.get('/metrics/project-results', projectResultsController)
 	app.get('/metrics/received-accounts', receivedAccountsController)
 	app.get('/metrics/totals-by-category', totalsByCategoryController)
 	app.get('/metrics/totals-by-center', totalsByCenterController)

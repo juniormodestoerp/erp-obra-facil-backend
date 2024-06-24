@@ -41,6 +41,7 @@ model User {
   settings     Setting[]
   userTokens   UserToken[]
   transactions Transaction[]
+  BankAccount  BankAccount[]
 
   @@map("users")
 }
@@ -80,6 +81,24 @@ model Category {
   @@map("categories")
 }
 
+model BankAccount {
+  id             String    @id @default(uuid())
+  userId         String
+  name           String
+  currency       String
+  logo           String
+  initialBalance Float
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  transactions Transaction[]
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("bank_accounts")
+}
+
 model Transaction {
   id                String   @id @default(uuid())
   userId            String
@@ -112,8 +131,10 @@ model Transaction {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  user     User?     @relation(fields: [userId], references: [id])
-  category Category? @relation(fields: [categoryId], references: [id])
+  user          User?        @relation(fields: [userId], references: [id])
+  category      Category?    @relation(fields: [categoryId], references: [id])
+  BankAccount   BankAccount? @relation(fields: [bankAccountId], references: [id])
+  bankAccountId String?
 
   @@map("transactions")
 }

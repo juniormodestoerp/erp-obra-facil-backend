@@ -189,6 +189,18 @@ export const errors = {
 		status: StatusCode.BAD_REQUEST,
 	},
 
+	'bank_account.not_found': {
+		error: 'Bank account not found!',
+		message: 'A conta solicitada não foi encontrada.',
+		status: StatusCode.BAD_REQUEST,
+	},
+
+	'bank_account.already_exists': {
+		error: 'Bank account already exists!',
+		message: 'A conta informada já está registrada no sistema.',
+		status: StatusCode.BAD_REQUEST,
+	},
+
 	'subcategory.already_exists': {
 		error: 'Subcategory already exists!',
 		message: 'A subcategoria informada já está registrada no sistema.',

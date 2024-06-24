@@ -50,22 +50,22 @@ async function seed() {
 
     await usersRepository.create(user);
 
-    const category = Category.create({
-      userId: user.id,
-      name: 'padrão',
-      type: 'padrão',
-      model: 'padrão',
-      categoryId: null,
-      subcategory: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: null,
-      user: null,
-      categories: null,
-      relatedCategories: [],
-    });
+    // const category = Category.create({
+    //   userId: user.id,
+    //   name: 'padrão',
+    //   type: 'padrão',
+    //   model: 'padrão',
+    //   categoryId: null,
+    //   subcategory: null,
+    //   createdAt: new Date(),
+    //   updatedAt: new Date(),
+    //   deletedAt: null,
+    //   user: null,
+    //   categories: null,
+    //   relatedCategories: [],
+    // });
 
-    await categoriesRepository.create(category);
+    // await categoriesRepository.create(category);
 
     console.log(`
 User created with success 🎉

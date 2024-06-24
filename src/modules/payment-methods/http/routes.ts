@@ -1,21 +1,21 @@
 import type { FastifyInstance } from 'fastify'
 
-import { createPaymentMethodController } from '@modules/paymentMethods/http/controllers/create-payment-method-controller'
-import { fetchPaymentMethodsController } from '@modules/paymentMethods/http/controllers/fetch-paymentMethods-controller'
-import { fetchSelectInputPaymentMethodsController } from '@modules/paymentMethods/http/controllers/fetch-select-input-paymentMethods-controller'
-import { removePaymentMethodController } from '@modules/paymentMethods/http/controllers/remove-payment-method-controller'
-import { savePaymentMethodController } from '@modules/paymentMethods/http/controllers/save-payment-method-controller'
-import { showPaymentMethodController } from '@modules/paymentMethods/http/controllers/show-payment-method-controller'
+import { createPaymentMethodController } from '@modules/payment-methods/http/controllers/create-payment-method-controller'
+import { fetchPaymentMethodsController } from '@modules/payment-methods/http/controllers/fetch-payment-methods-controller'
+import { fetchSelectInputPaymentMethodsController } from '@modules/payment-methods/http/controllers/fetch-select-input-payment-methods-controller'
+import { removePaymentMethodController } from '@modules/payment-methods/http/controllers/remove-payment-method-controller'
+import { savePaymentMethodController } from '@modules/payment-methods/http/controllers/save-payment-method-controller'
+import { showPaymentMethodController } from '@modules/payment-methods/http/controllers/show-payment-method-controller'
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
 export async function Router(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
-	app.get('/paymentMethods/:id', showPaymentMethodController)
-	app.get('/paymentMethods', fetchPaymentMethodsController)
-	app.get('/paymentMethods/select-input', fetchSelectInputPaymentMethodsController)
-	app.post('/paymentMethods', createPaymentMethodController)
-	app.put('/paymentMethods/:id', savePaymentMethodController)
-	app.delete('/paymentMethods/:id', removePaymentMethodController)
+	app.get('/payment-methods/:id', showPaymentMethodController)
+	app.get('/payment-methods', fetchPaymentMethodsController)
+	app.get('/payment-methods/select-input', fetchSelectInputPaymentMethodsController)
+	app.post('/payment-methods', createPaymentMethodController)
+	app.put('/payment-methods/:id', savePaymentMethodController)
+	app.delete('/payment-methods/:id', removePaymentMethodController)
 }

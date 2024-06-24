@@ -6,7 +6,7 @@ import type { Transaction } from '@modules/transactions/entities/transaction'
 import type { User } from '@modules/users/entities/user'
 
 export enum CategoryType {
-	RECEIPT = 'RECEIPT',
+	EXPENSE = 'EXPENSE',
 	INCOME = 'INCOME',
 }
 

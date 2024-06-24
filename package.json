@@ -28,7 +28,8 @@
     "start:dev": "dotenv -e .env -- sh tools/start-dev.sh",
     "queue:dev": "dotenv -e .env -- sh tools/queue-dev.sh",
     "start:prod": "dotenv -e .env -- sh tools/start-prod.sh",
-    "queue:prod": "dotenv -e .env -- sh tools/queue-prod.sh"
+    "queue:prod": "dotenv -e .env -- sh tools/queue-prod.sh",
+    "db:reset": "prisma migrate reset --force --skip-seed"
   },
   "pre-commit": "lint",
   "dependencies": {

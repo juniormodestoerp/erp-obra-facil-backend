@@ -4,12 +4,9 @@ export class CategoriesViewModel {
 	static toHTTP(category: Category) {
 		return {
 			id: category.id,
-			userId: category.userId,
-			categoryId: category.categoryId,
-			categoryName: category.name,
-			subcategoryName: category.subcategory,
-			model: category.model,
 			type: category.type,
+			name: category.name,
+			subcategoryOf: category.subcategoryOf,
 			createdAt: category.createdAt,
 		}
 	}

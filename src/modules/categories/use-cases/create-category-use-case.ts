@@ -21,6 +21,8 @@ export class CreateCategoryUseCase {
 	constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
 	async execute({ userId, type, name, subcategoryOf }: Input): Promise<Output> {
+		console.log({ userId, type, name, subcategoryOf })
+
 		if (subcategoryOf === null) {
 			const existsCategory = await this.categoriesRepository.findByName({
 				userId,

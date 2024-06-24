@@ -23,7 +23,7 @@ export async function createCategoryController(
 
 	const { category } = await createCategoryUseCase.execute({
 		userId: request.user.sub,
-		type: CategoryType[type as keyof typeof CategoryType],
+		type: type === 'income' ? CategoryType.INCOME : CategoryType.EXPENSE,
 		name,
 		subcategoryOf,
 	})

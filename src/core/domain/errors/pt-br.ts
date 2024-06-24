@@ -225,6 +225,18 @@ export const errors = {
 		status: StatusCode.BAD_REQUEST,
 	},
 
+	'payment_method.not_found': {
+		error: 'Payment method not found!',
+		message: 'O método de pagamento solicitado não foi encontrado.',
+		status: StatusCode.BAD_REQUEST,
+	},
+
+	'payment_method.already_exists': {
+		error: 'Payment method already exists!',
+		message: 'O método de pagamento informado já está registrado no sistema.',
+		status: StatusCode.BAD_REQUEST,
+	},
+
 	'subcategory.already_exists': {
 		error: 'Subcategory already exists!',
 		message: 'A subcategoria informada já está registrada no sistema.',

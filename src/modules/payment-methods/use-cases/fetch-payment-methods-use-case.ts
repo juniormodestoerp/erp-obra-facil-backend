@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { Category } from '@modules/categories/entities/category'
-import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
+import type { PaymentMethod } from '@modules/payment-methods/entities/payment-method'
+import type { PaymentMethodsRepository } from '@modules/payment-methods/repositories/payment-methods-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
@@ -9,12 +9,12 @@ interface Input {
 }
 
 interface Output {
-	categories: Category[]
+	paymentMethods: PaymentMethod[]
 }
 
-export class FetchCategoriesUseCase {
+export class FetchPaymentMethodsUseCase {
 	constructor(
-		private readonly categoriesRepository: CategoriesRepository,
+		private readonly paymentMethodsRepository: PaymentMethodsRepository,
 		private readonly usersRepository: UsersRepository,
 	) {}
 
@@ -29,16 +29,16 @@ export class FetchCategoriesUseCase {
 			})
 		}
 
-		const categories = await this.categoriesRepository.findMany(userId)
+		const paymentMethods = await this.paymentMethodsRepository.findMany(userId)
 
-		if (categories.length === 0) {
+		if (paymentMethods.length === 0) {
 			throw new AppError({
-				code: 'category.not_found',
+				code: 'payment_method.not_found',
 			})
 		}
 
 		return {
-			categories,
+			paymentMethods,
 		}
 	}
 }

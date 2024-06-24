@@ -35,14 +35,15 @@ model User {
   updatedAt      DateTime  @updatedAt
   deletedAt      DateTime?
 
-  address      Address?      @relation(fields: [addressId], references: [id])
-  categories   Category[]
-  files        File[]
-  settings     Setting[]
-  userTokens   UserToken[]
-  transactions Transaction[]
-  BankAccount  BankAccount[]
-  Tag          Tag[]
+  address       Address?        @relation(fields: [addressId], references: [id])
+  categories    Category[]
+  files         File[]
+  settings      Setting[]
+  userTokens    UserToken[]
+  transactions  Transaction[]
+  BankAccount   BankAccount[]
+  Tag           Tag[]
+  PaymentMethod PaymentMethod[]
 
   @@map("users")
 }
@@ -123,6 +124,19 @@ model Tag {
   user User @relation(fields: [userId], references: [id])
 
   @@map("tags")
+}
+
+model PaymentMethod {
+  id        String    @id @default(uuid())
+  userId    String
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("payment_methods")
 }
 
 model TransferOption {

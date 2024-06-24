@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { Category } from '@modules/categories/entities/category'
-import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
+import type { Transfer } from '@modules/transfers/entities/transfer'
+import type { TransfersRepository } from '@modules/transfers/repositories/transfers-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
@@ -9,12 +9,12 @@ interface Input {
 }
 
 interface Output {
-	categories: Category[]
+	transfers: Transfer[]
 }
 
-export class FetchCategoriesUseCase {
+export class FetchTransfersUseCase {
 	constructor(
-		private readonly categoriesRepository: CategoriesRepository,
+		private readonly transfersRepository: TransfersRepository,
 		private readonly usersRepository: UsersRepository,
 	) {}
 
@@ -29,16 +29,16 @@ export class FetchCategoriesUseCase {
 			})
 		}
 
-		const categories = await this.categoriesRepository.findMany(userId)
+		const transfers = await this.transfersRepository.findMany(userId)
 
-		if (categories.length === 0) {
+		if (transfers.length === 0) {
 			throw new AppError({
-				code: 'category.not_found',
+				code: 'transfers.not_found',
 			})
 		}
 
 		return {
-			categories,
+			transfers,
 		}
 	}
 }

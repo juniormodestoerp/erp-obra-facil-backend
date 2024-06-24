@@ -201,6 +201,18 @@ export const errors = {
 		status: StatusCode.BAD_REQUEST,
 	},
 
+	'transfers.not_found': {
+		error: 'Transfer not found!',
+		message: 'A transferência solicitada não foi encontrada.',
+		status: StatusCode.BAD_REQUEST,
+	},
+
+	'transfers.already_exists': {
+		error: 'Transfer already exists!',
+		message: 'A transferência informada já está registrada no sistema.',
+		status: StatusCode.BAD_REQUEST,
+	},
+
 	'subcategory.already_exists': {
 		error: 'Subcategory already exists!',
 		message: 'A subcategoria informada já está registrada no sistema.',

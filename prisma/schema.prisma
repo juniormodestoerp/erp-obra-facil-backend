@@ -99,6 +99,33 @@ model BankAccount {
   @@map("bank_accounts")
 }
 
+model Transfer {
+  id             String           @id @default(uuid())
+  name           String
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  deletedAt      DateTime?
+
+  transferOption TransferOption[]
+
+  @@map("transfers")
+}
+
+model TransferOption {
+  id                 String    @id @default(uuid())
+  transactionId      String
+  transferId         String
+  sourceAccount      String
+  destinationAccount String
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  deletedAt          DateTime?
+
+  transfer Transfer @relation(fields: [transferId], references: [id])
+
+  @@map("transfer_options")
+}
+
 model Transaction {
   id                String   @id @default(uuid())
   userId            String

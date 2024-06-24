@@ -8,18 +8,15 @@ import { makeSaveTransferUseCase } from '@modules/transfers/use-cases/factories/
 
 const paramsSchema = z.object({
 	id: z
-		.string(strMessage('identificador da conta'))
+		.string(strMessage('identificador da transferência'))
 		.uuid({
-			message: 'O campo identificador da conta deve ser um UUID válido.',
+			message: 'O campo identificador da transferência deve ser um UUID válido.',
 		})
-		.min(1, 'O campo identificador da conta é obrigatório.'),
+		.min(1, 'O campo identificador da transferência é obrigatório.'),
 })
 
 const bodySchema = z.object({
-	name: z.string(strMessage('nome da conta')),
-	currency: z.string(strMessage('moeada da conta')),
-	logo: z.string(strMessage('logo da conta')),
-	initialBalance: z.number(numbMessage('saldo inicial')),
+	name: z.string(strMessage('nome da transferência')),
 })
 
 export async function saveTransferController(
@@ -28,7 +25,7 @@ export async function saveTransferController(
 ) {
 	const { id } = paramsSchema.parse(request.params)
 
-	const { name, currency, logo, initialBalance } = bodySchema.parse(
+	const { name } = bodySchema.parse(
 		request.body,
 	)
 
@@ -38,9 +35,6 @@ export async function saveTransferController(
 		id,
 		userId: request.user.sub,
 		name,
-		currency,
-		logo,
-		initialBalance,
 	})
 
 	return reply.status(200).send(TransfersViewModel.toHTTP(transfer))

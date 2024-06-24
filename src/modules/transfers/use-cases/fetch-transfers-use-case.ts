@@ -29,11 +29,11 @@ export class FetchTransfersUseCase {
 			})
 		}
 
-		const transfers = await this.transfersRepository.findMany(userId)
+		const transfers = await this.transfersRepository.findMany()
 
 		if (transfers.length === 0) {
 			throw new AppError({
-				code: 'transfers.not_found',
+				code: 'transfer.not_found',
 			})
 		}
 

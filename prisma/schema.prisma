@@ -42,6 +42,7 @@ model User {
   userTokens   UserToken[]
   transactions Transaction[]
   BankAccount  BankAccount[]
+  Tag          Tag[]
 
   @@map("users")
 }
@@ -100,15 +101,28 @@ model BankAccount {
 }
 
 model Transfer {
-  id             String           @id @default(uuid())
-  name           String
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  deletedAt      DateTime?
+  id        String    @id @default(uuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   transferOption TransferOption[]
 
   @@map("transfers")
+}
+
+model Tag {
+  id        String    @id @default(uuid())
+  userId    String
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("tags")
 }
 
 model TransferOption {

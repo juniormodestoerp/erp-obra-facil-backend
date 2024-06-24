@@ -7,16 +7,14 @@ interface Input {
 }
 
 export class RemoveTransferUseCase {
-	constructor(
-		private readonly transfersRepository: TransfersRepository,
-	) {}
+	constructor(private readonly transfersRepository: TransfersRepository) {}
 
 	async execute({ id }: Input): Promise<void> {
 		const transfer = await this.transfersRepository.findById(id)
 
 		if (!transfer) {
 			throw new AppError({
-				code: 'transfers.not_found',
+				code: 'transfer.not_found',
 			})
 		}
 

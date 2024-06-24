@@ -8,16 +8,14 @@ interface Output {
 }
 
 export class FetchSelectInputTransfersUseCase {
-	constructor(
-		private readonly transfersRepository: TransfersRepository,
-	) {}
+	constructor(private readonly transfersRepository: TransfersRepository) {}
 
 	async execute(): Promise<Output> {
 		const transfers = await this.transfersRepository.selectInput()
 
 		if (transfers.length === 0) {
 			throw new AppError({
-				code: 'transfers.not_found',
+				code: 'transfer.not_found',
 			})
 		}
 

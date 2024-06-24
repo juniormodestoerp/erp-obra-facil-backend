@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { Category } from '@modules/categories/entities/category'
-import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
+import type { Tag } from '@modules/tags/entities/tag'
+import type { TagsRepository } from '@modules/tags/repositories/tags-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
@@ -9,12 +9,12 @@ interface Input {
 }
 
 interface Output {
-	categories: Category[]
+	tags: Tag[]
 }
 
-export class FetchCategoriesUseCase {
+export class FetchTagsUseCase {
 	constructor(
-		private readonly categoriesRepository: CategoriesRepository,
+		private readonly tagsRepository: TagsRepository,
 		private readonly usersRepository: UsersRepository,
 	) {}
 
@@ -29,16 +29,16 @@ export class FetchCategoriesUseCase {
 			})
 		}
 
-		const categories = await this.categoriesRepository.findMany(userId)
+		const tags = await this.tagsRepository.findMany(userId)
 
-		if (categories.length === 0) {
+		if (tags.length === 0) {
 			throw new AppError({
-				code: 'category.not_found',
+				code: 'tag.not_found',
 			})
 		}
 
 		return {
-			categories,
+			tags,
 		}
 	}
 }

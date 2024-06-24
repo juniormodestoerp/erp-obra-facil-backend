@@ -21,11 +21,7 @@ export class SaveTransferUseCase {
 		private readonly usersRepository: UsersRepository,
 	) {}
 
-	async execute({
-		id,
-		userId,
-		name,
-	}: Input): Promise<Output> {
+	async execute({ id, userId, name }: Input): Promise<Output> {
 		const user = await this.usersRepository.findById({
 			userId,
 		})
@@ -40,7 +36,7 @@ export class SaveTransferUseCase {
 
 		if (!previusTransfer) {
 			throw new AppError({
-				code: 'transfers.not_found',
+				code: 'transfer.not_found',
 			})
 		}
 

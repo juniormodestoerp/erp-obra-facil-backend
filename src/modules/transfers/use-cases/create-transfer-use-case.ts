@@ -19,7 +19,7 @@ export class CreateTransferUseCase {
 
 		if (existsTransfer) {
 			throw new AppError({
-				code: 'transfers.already_exists',
+				code: 'transfer.already_exists',
 			})
 		}
 

@@ -201,15 +201,27 @@ export const errors = {
 		status: StatusCode.BAD_REQUEST,
 	},
 
-	'transfers.not_found': {
+	'transfer.not_found': {
 		error: 'Transfer not found!',
 		message: 'A transferência solicitada não foi encontrada.',
 		status: StatusCode.BAD_REQUEST,
 	},
 
-	'transfers.already_exists': {
+	'transfer.already_exists': {
 		error: 'Transfer already exists!',
 		message: 'A transferência informada já está registrada no sistema.',
+		status: StatusCode.BAD_REQUEST,
+	},
+
+	'tag.not_found': {
+		error: 'Tag not found!',
+		message: 'A tag solicitada não foi encontrada.',
+		status: StatusCode.BAD_REQUEST,
+	},
+
+	'tag.already_exists': {
+		error: 'Tag already exists!',
+		message: 'A tag informada já está registrada no sistema.',
 		status: StatusCode.BAD_REQUEST,
 	},
 

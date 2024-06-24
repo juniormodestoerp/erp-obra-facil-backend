@@ -7,7 +7,7 @@ import { TransfersViewModel } from '@modules/transfers/http/view-models/transfer
 import { makeCreateTransferUseCase } from '@modules/transfers/use-cases/factories/make-create-transfer-factory'
 
 const bodySchema = z.object({
-	name: z.string(strMessage('nome da conta')),
+	name: z.string(strMessage('nome da transferência')),
 })
 
 export async function createTransferController(

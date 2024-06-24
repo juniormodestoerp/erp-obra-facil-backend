@@ -5,13 +5,11 @@ import type { CategoriesRepository } from '@modules/categories/repositories/cate
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
-	pageIndex: number
 	userId: string
 }
 
 interface Output {
 	categories: Category[]
-	totalCount: number
 }
 
 export class FetchCategoriesUseCase {
@@ -20,7 +18,7 @@ export class FetchCategoriesUseCase {
 		private readonly usersRepository: UsersRepository,
 	) {}
 
-	async execute({ pageIndex, userId }: Input): Promise<Output> {
+	async execute({ userId }: Input): Promise<Output> {
 		const user = await this.usersRepository.findById({
 			userId,
 		})
@@ -31,10 +29,7 @@ export class FetchCategoriesUseCase {
 			})
 		}
 
-		const categories = await this.categoriesRepository.findMany({
-			pageIndex,
-			userId,
-		})
+		const categories = await this.categoriesRepository.findMany(userId)
 
 		if (categories.length === 0) {
 			throw new AppError({
@@ -42,11 +37,8 @@ export class FetchCategoriesUseCase {
 			})
 		}
 
-		const totalCount = await this.categoriesRepository.count()
-
 		return {
 			categories,
-			totalCount,
 		}
 	}
 }

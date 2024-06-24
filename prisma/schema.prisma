@@ -12,6 +12,11 @@ enum UserRole {
   USER
 }
 
+enum CategoryType {
+  RECEIPT
+  INCOME
+}
+
 model User {
   id             String    @id @default(uuid())
   addressId      String?   @unique
@@ -56,65 +61,62 @@ model Setting {
 
   @@map("settings")
 }
-model Category {
-  id                String     @id @default(uuid())
-  categoryId        String?    @map("categories_id")
-  userId            String     @map("user_id")
-  name              String     @unique
-  subcategory       String?
-  type              String
-  model             String
-  createdAt         DateTime   @default(now()) @map("created_at")
-  updatedAt         DateTime   @updatedAt @map("updated_at")
-  deletedAt         DateTime?  @map("deleted_at")
 
-  relatedCategories Category[] @relation("ParentChild")
-  user              User       @relation(fields: [userId], references: [id])
-  categories        Category?  @relation("ParentChild", fields: [categoryId], references: [id])
-  transactions      Transaction[]
+model Category {
+  id            String       @id @default(uuid())
+  userId        String
+  transactionId String?      @unique
+  type          CategoryType
+  name          String
+  subcategoryOf String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  deletedAt     DateTime?
+
+  transactions Transaction[]
+
+  user User @relation(fields: [userId], references: [id])
 
   @@map("categories")
 }
 
-
 model Transaction {
   id                String   @id @default(uuid())
-  userId            String   @map("user_id")
-  fitId             String   @map("fit_id")
-  accountType       String   @map("account_type")
+  userId            String
+  fitId             String
+  accountType       String
   name              String
   description       String
-  categoryId        String?   @map("category_id")
-  establishmentName String   @map("establishment_name")
-  bankName          String   @map("bank_name")
-  transactionDate   DateTime @map("transaction_date")
-  previousBalance   Float    @map("previous_balance")
-  totalAmount       Float    @map("total_amount")
-  currentBalance    Float    @map("current_balance")
-  paymentMethod     String   @map("payment_method")
+  categoryId        String?
+  establishmentName String
+  bankName          String
+  transactionDate   DateTime
+  previousBalance   Float
+  totalAmount       Float
+  currentBalance    Float
+  paymentMethod     String
   status            String
 
-  competencyDate       DateTime? @map("competency_date")
-  costAndProfitCenters String?   @map("cost_center")
-  tags                 String?   @map("tags")
-  documentNumber       String?   @map("document_number")
-  associatedContracts  String?   @map("associated_contracts")
-  associatedProjects   String?   @map("associated_projects")
-  additionalComments   String?   @map("additional_comments")
-  accountToTransfer    String?   @map("account_to_transfer")
-  contact              String?   @map("contact")
-  card                 String?   @map("card")
+  competencyDate       DateTime?
+  costAndProfitCenters String?
+  tags                 String?
+  documentNumber       String?
+  associatedContracts  String?
+  associatedProjects   String?
+  additionalComments   String?
+  accountToTransfer    String?
+  contact              String?
+  card                 String?
 
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @updatedAt @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   user     User?     @relation(fields: [userId], references: [id])
   category Category? @relation(fields: [categoryId], references: [id])
 
   @@map("transactions")
 }
-
 
 model UserToken {
   id        String    @id @default(uuid())

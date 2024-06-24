@@ -47,7 +47,7 @@ export class EntriesByProjectUseCase {
 		)
 
 		return {
-			transactions: formattedTransactions
+			transactions: formattedTransactions,
 		}
 	}
 }

@@ -7,9 +7,11 @@ import { makeRemoveCategoryUseCase } from '@modules/categories/use-cases/factori
 
 const paramsSchema = z.object({
 	id: z
-		.string(strMessage('id das configurações'))
-		.uuid({ message: 'O campo id das configurações deve ser um UUID válido.' })
-		.min(1, 'O campo id das configurações é obrigatório.'),
+		.string(strMessage('identificador da categoria'))
+		.uuid({
+			message: 'O campo identificador da categoria deve ser um UUID válido.',
+		})
+		.min(1, 'O campo identificador da categoria é obrigatório.'),
 })
 
 export async function removeCategoryController(
@@ -21,7 +23,6 @@ export async function removeCategoryController(
 	const removeCategoryUseCase = makeRemoveCategoryUseCase()
 
 	await removeCategoryUseCase.execute({
-		userId: request.user.sub,
 		id,
 	})
 

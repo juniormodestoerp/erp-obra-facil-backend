@@ -29,7 +29,7 @@ export class EntriesByCategoryUseCase {
 				category: {
 					select: {
 						name: true,
-					}
+					},
 				},
 				name: true,
 				totalAmount: true,
@@ -52,7 +52,7 @@ export class EntriesByCategoryUseCase {
 		)
 
 		return {
-			transactions: formattedTransactions
+			transactions: formattedTransactions,
 		}
 	}
 }

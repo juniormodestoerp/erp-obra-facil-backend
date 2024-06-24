@@ -1,15 +1,16 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import { Category } from '@modules/categories/entities/category'
+import {
+	Category,
+	type CategoryType,
+} from '@modules/categories/entities/category'
 import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
 
 interface Input {
 	userId: string
-	categoryId?: string
+	type: CategoryType
 	name: string
-	subcategory?: string
-	model: string
-	type: string
+	subcategoryOf: string | null
 }
 
 interface Output {
@@ -19,15 +20,8 @@ interface Output {
 export class CreateCategoryUseCase {
 	constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
-	async execute({
-		userId,
-		categoryId,
-		name,
-		subcategory,
-		model,
-		type,
-	}: Input): Promise<Output> {
-		if (!subcategory) {
+	async execute({ userId, type, name, subcategoryOf }: Input): Promise<Output> {
+		if (subcategoryOf === null) {
 			const existsCategory = await this.categoriesRepository.findByName({
 				userId,
 				name,
@@ -42,7 +36,7 @@ export class CreateCategoryUseCase {
 			const subcategoryExists =
 				await this.categoriesRepository.findBySubcategoryName({
 					userId,
-					name: subcategory,
+					name,
 				})
 
 			if (subcategoryExists) {
@@ -52,20 +46,17 @@ export class CreateCategoryUseCase {
 			}
 		}
 
-		const parentId = await this.categoriesRepository.findByName({
-			userId,
-			name,
-		})
-
-		const id = parentId?.id ?? categoryId
-
 		const category = Category.create({
 			userId,
-			categoryId: id ?? undefined,
-			name: subcategory || name,
-			subcategory: subcategory ? name : null,
-			model,
+			transactionId: null,
 			type,
+			name,
+			subcategoryOf,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			deletedAt: null,
+			user: null,
+			transactions: [],
 		})
 
 		await this.categoriesRepository.create(category)

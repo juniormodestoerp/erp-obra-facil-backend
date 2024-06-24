@@ -1,14 +1,12 @@
 import type { PrismaClient } from '@prisma/client'
 
-import type { IFindCategoryByIdDTO } from '@modules/categories/dtos/find-category-by-id-dto'
+import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
+
 import type { IFindCategoryByNameDTO } from '@modules/categories/dtos/find-category-by-name-dto'
-import type { IFindManyCategoriesDTO } from '@modules/categories/dtos/find-many-categories-dto'
-import type { ISelectInputDTO } from '@modules/categories/dtos/select-input-dto'
 import type { Category } from '@modules/categories/entities/category'
 import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
 import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
 
-import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
 
 export class PrismaCategoriesRepository implements CategoriesRepository {
@@ -18,20 +16,11 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 		this.repository = prisma
 	}
 
-	async findById({
-		userId,
-		id,
-	}: IFindCategoryByIdDTO): Promise<Category | null> {
+	async findById(id: string): Promise<Category | null> {
 		const category = await this.repository.category.findUnique({
 			where: {
-				userId,
 				id,
 				deletedAt: null,
-			},
-			include: {
-				categories: true,
-				relatedCategories: true,
-				user: true,
 			},
 		})
 
@@ -46,19 +35,11 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 		userId,
 		name,
 	}: IFindCategoryByNameDTO): Promise<Category | null> {
-		console.log('userId', userId)
-		console.log('name', name)
-
-		const category = await this.repository.category.findUnique({
+		const category = await this.repository.category.findFirst({
 			where: {
 				userId,
 				name,
 				deletedAt: null,
-			},
-			include: {
-				categories: true,
-				relatedCategories: true,
-				user: true,
 			},
 		})
 
@@ -78,13 +59,8 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 		const category = await this.repository.category.findFirst({
 			where: {
 				userId,
-				subcategory: name,
+				name,
 				deletedAt: null,
-			},
-			include: {
-				categories: true,
-				relatedCategories: true,
-				user: true,
 			},
 		})
 
@@ -95,24 +71,12 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 		return PrismaCategoriesMapper.toDomain(category)
 	}
 
-	async findMany({
-		pageIndex,
-		userId,
-	}: IFindManyCategoriesDTO): Promise<Category[]> {
-		const skip = (pageIndex - 1) * env.PER_PAGE
-
+	async findMany(userId: string): Promise<Category[]> {
 		const categories = await this.repository.category.findMany({
 			where: {
 				userId,
 				deletedAt: null,
 			},
-			include: {
-				categories: true,
-				relatedCategories: true,
-				user: true,
-			},
-			skip,
-			take: env.PER_PAGE,
 			orderBy: {
 				updatedAt: 'desc',
 			},
@@ -153,10 +117,6 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 		})
 	}
 
-	async count(): Promise<number> {
-		return await this.repository.category.count()
-	}
-
 	async create(category: Category): Promise<void> {
 		const prismaCategoryData = PrismaCategoriesMapper.toPrisma(category)
 
@@ -170,7 +130,6 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 
 		await this.repository.category.update({
 			where: {
-				userId: category.userId,
 				id: category.id,
 				deletedAt: null,
 			},
@@ -178,10 +137,9 @@ export class PrismaCategoriesRepository implements CategoriesRepository {
 		})
 	}
 
-	async remove({ userId, id }: IFindCategoryByIdDTO): Promise<void> {
+	async remove(id: string): Promise<void> {
 		await this.repository.category.delete({
 			where: {
-				userId,
 				id,
 				deletedAt: null,
 			},

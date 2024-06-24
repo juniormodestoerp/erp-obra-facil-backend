@@ -42,13 +42,14 @@ export class EntriesByCenterUseCase {
 		const formattedTransactions: IEntriesByCenter[] = transactions.map(
 			(transaction) => ({
 				...transaction,
-				costAndProfitCenters: transaction.costAndProfitCenters || 'Centro não informado',
+				costAndProfitCenters:
+					transaction.costAndProfitCenters || 'Centro não informado',
 				transactionDate: transaction.transactionDate.toISOString(),
 			}),
 		)
 
 		return {
-			transactions: formattedTransactions
+			transactions: formattedTransactions,
 		}
 	}
 }

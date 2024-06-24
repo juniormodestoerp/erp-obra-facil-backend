@@ -45,31 +45,34 @@ export class EvolutionByContactUseCase {
 			})
 		}
 
-		const evolutionByContact = transactions.reduce((acc, transaction) => {
-			const contact = transaction.contact || 'unknown'
-			const date = transaction.transactionDate.toISOString().slice(0, 7) // YYYY-MM format
+		const evolutionByContact = transactions.reduce(
+			(acc, transaction) => {
+				const contact = transaction.contact || 'unknown'
+				const date = transaction.transactionDate.toISOString().slice(0, 7) // YYYY-MM format
 
-			if (!acc[contact]) {
-				acc[contact] = {
-					createdAt: transaction.transactionDate,
-					transactions: {}
+				if (!acc[contact]) {
+					acc[contact] = {
+						createdAt: transaction.transactionDate,
+						transactions: {},
+					}
 				}
-			}
 
-			if (!acc[contact].transactions[date]) {
-				acc[contact].transactions[date] = { totalAmount: 0, ids: [] }
-			}
+				if (!acc[contact].transactions[date]) {
+					acc[contact].transactions[date] = { totalAmount: 0, ids: [] }
+				}
 
-			acc[contact].transactions[date].totalAmount += transaction.totalAmount
-			acc[contact].transactions[date].ids.push(transaction.id)
-			return acc
-		}, {} as Record<
-			string,
-			{
-				createdAt: Date
-				transactions: Record<string, { totalAmount: number; ids: string[] }>
-			}
-		>)
+				acc[contact].transactions[date].totalAmount += transaction.totalAmount
+				acc[contact].transactions[date].ids.push(transaction.id)
+				return acc
+			},
+			{} as Record<
+				string,
+				{
+					createdAt: Date
+					transactions: Record<string, { totalAmount: number; ids: string[] }>
+				}
+			>,
+		)
 
 		const result: IContactEvolution[] = Object.keys(evolutionByContact).map(
 			(contact) => {
@@ -90,7 +93,9 @@ export class EvolutionByContactUseCase {
 					const totalAmount = transactions[currentMonth]?.totalAmount || 0
 					accumulatedTotal += totalAmount
 
-					const previousMonth = addMonths(currentDate, -1).toISOString().slice(0, 7)
+					const previousMonth = addMonths(currentDate, -1)
+						.toISOString()
+						.slice(0, 7)
 					const previousAmount = transactions[previousMonth]?.totalAmount || 0
 					const percentageChange = previousAmount
 						? ((totalAmount - previousAmount) / Math.abs(previousAmount)) * 100

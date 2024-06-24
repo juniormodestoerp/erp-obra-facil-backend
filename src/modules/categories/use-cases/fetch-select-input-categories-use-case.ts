@@ -1,6 +1,6 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { ISelectInputDTO } from '@modules/categories/dtos/select-input-dto'
+import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
 
 interface Output {

@@ -36,7 +36,8 @@ export class TotalsByProjectUseCase {
 
 		const totalsByProject = transactions.reduce(
 			(acc, transaction) => {
-				const associatedProject = transaction.associatedProjects || 'uncategorized'
+				const associatedProject =
+					transaction.associatedProjects || 'uncategorized'
 				if (!acc[associatedProject]) {
 					acc[associatedProject] = { totalAmount: 0, ids: [] }
 				}
@@ -50,7 +51,8 @@ export class TotalsByProjectUseCase {
 		const result: ITotalsByProject[] = Object.keys(totalsByProject).map(
 			(associatedProject) => ({
 				id: totalsByProject[associatedProject].ids.join(', '),
-				associatedProject: associatedProject === 'uncategorized' ? null : associatedProject,
+				associatedProject:
+					associatedProject === 'uncategorized' ? null : associatedProject,
 				totalAmount: totalsByProject[associatedProject].totalAmount,
 			}),
 		)

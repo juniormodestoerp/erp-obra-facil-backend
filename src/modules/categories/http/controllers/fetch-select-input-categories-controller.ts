@@ -3,7 +3,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import { makeFetchSelectInputCategoriesUseCase } from '@modules/categories/use-cases/factories/make-fetch-select-input-categories-factory'
 
 export async function fetchSelectInputCategoriesController(
-	request: FastifyRequest,
+	_: FastifyRequest,
 	reply: FastifyReply,
 ) {
 	const fetchSelectInputCategoriesUseCase =

@@ -4,7 +4,6 @@ import type { Category } from '@modules/categories/entities/category'
 import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
 
 interface Input {
-	userId: string
 	id: string
 }
 
@@ -15,11 +14,8 @@ interface Output {
 export class ShowCategoryUseCase {
 	constructor(private readonly categoriesRepository: CategoriesRepository) {}
 
-	async execute({ id, userId }: Input): Promise<Output> {
-		const category = await this.categoriesRepository.findById({
-			userId,
-			id,
-		})
+	async execute({ id }: Input): Promise<Output> {
+		const category = await this.categoriesRepository.findById(id)
 
 		if (!category) {
 			throw new AppError({

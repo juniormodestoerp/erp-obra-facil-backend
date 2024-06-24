@@ -53,37 +53,42 @@ export class EvolutionByCategoryUseCase {
 			})
 		}
 
-		const evolutionByCategory = transactions.reduce((acc, transaction) => {
-			const categoryId = transaction.categoryId || 'uncategorized'
-			const date = transaction.transactionDate.toISOString().slice(0, 7)
+		const evolutionByCategory = transactions.reduce(
+			(acc, transaction) => {
+				const categoryId = transaction.categoryId || 'uncategorized'
+				const date = transaction.transactionDate.toISOString().slice(0, 7)
 
-			if (!acc[categoryId]) {
-				acc[categoryId] = {
-					categoryName: transaction.category?.name || 'Uncategorized',
-					createdAt: transaction.category?.createdAt || new Date(),
-					transactions: {}
+				if (!acc[categoryId]) {
+					acc[categoryId] = {
+						categoryName: transaction.category?.name || 'Uncategorized',
+						createdAt: transaction.category?.createdAt || new Date(),
+						transactions: {},
+					}
 				}
-			}
 
-			if (!acc[categoryId].transactions[date]) {
-				acc[categoryId].transactions[date] = { totalAmount: 0, ids: [] }
-			}
+				if (!acc[categoryId].transactions[date]) {
+					acc[categoryId].transactions[date] = { totalAmount: 0, ids: [] }
+				}
 
-			acc[categoryId].transactions[date].totalAmount += transaction.totalAmount
-			acc[categoryId].transactions[date].ids.push(transaction.id)
-			return acc
-		}, {} as Record<
-			string,
-			{
-				categoryName: string
-				createdAt: Date
-				transactions: Record<string, { totalAmount: number; ids: string[] }>
-			}
-		>)
+				acc[categoryId].transactions[date].totalAmount +=
+					transaction.totalAmount
+				acc[categoryId].transactions[date].ids.push(transaction.id)
+				return acc
+			},
+			{} as Record<
+				string,
+				{
+					categoryName: string
+					createdAt: Date
+					transactions: Record<string, { totalAmount: number; ids: string[] }>
+				}
+			>,
+		)
 
 		const result: ICategoryEvolution[] = Object.keys(evolutionByCategory).map(
 			(categoryId) => {
-				const { categoryName, createdAt, transactions } = evolutionByCategory[categoryId]
+				const { categoryName, createdAt, transactions } =
+					evolutionByCategory[categoryId]
 				const evolution: IEvolution[] = []
 
 				const startDate = new Date(createdAt)
@@ -100,7 +105,9 @@ export class EvolutionByCategoryUseCase {
 					const totalAmount = transactions[currentMonth]?.totalAmount || 0
 					accumulatedTotal += totalAmount
 
-					const previousMonth = addMonths(currentDate, -1).toISOString().slice(0, 7)
+					const previousMonth = addMonths(currentDate, -1)
+						.toISOString()
+						.slice(0, 7)
 					const previousAmount = transactions[previousMonth]?.totalAmount || 0
 					const percentageChange = previousAmount
 						? ((totalAmount - previousAmount) / previousAmount) * 100

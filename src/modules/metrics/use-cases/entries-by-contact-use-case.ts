@@ -47,7 +47,7 @@ export class EntriesByContactUseCase {
 		)
 
 		return {
-			transactions: formattedTransactions
+			transactions: formattedTransactions,
 		}
 	}
 }

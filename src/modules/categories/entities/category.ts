@@ -1,21 +1,26 @@
 import { Entity } from '@core/domain/entities/entity'
 import type { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import type { Optional } from '@core/domain/types/opcional'
+
+import type { Transaction } from '@modules/transactions/entities/transaction'
 import type { User } from '@modules/users/entities/user'
+
+export enum CategoryType {
+	RECEIPT = 'RECEIPT',
+	INCOME = 'INCOME',
+}
 
 interface Props {
 	userId: string
-	categoryId: string | null
+	transactionId: string | null
+	type: CategoryType
 	name: string
-	subcategory: string | null
-	type: string
-	model: string
+	subcategoryOf: string | null
 	createdAt: Date
 	updatedAt: Date
 	deletedAt: Date | null
 	user: User | null
-	categories: Category | null
-	relatedCategories: Category[]
+	transactions: Transaction[]
 }
 
 export class Category extends Entity<Props> {
@@ -27,12 +32,20 @@ export class Category extends Entity<Props> {
 		this.props.userId = userId
 	}
 
-	get categoryId(): string | null {
-		return this.props.categoryId
+	get transactionId(): string | null {
+		return this.props.transactionId
 	}
 
-	set categoryId(categoryId: string | null) {
-		this.props.categoryId = categoryId
+	set transactionId(transactionId: string | null) {
+		this.props.transactionId = transactionId
+	}
+
+	get type(): CategoryType {
+		return this.props.type
+	}
+
+	set type(type: CategoryType) {
+		this.props.type = type
 	}
 
 	get name(): string {
@@ -43,28 +56,12 @@ export class Category extends Entity<Props> {
 		this.props.name = name
 	}
 
-	get subcategory(): string | null {
-		return this.props.subcategory
+	get subcategoryOf(): string | null {
+		return this.props.subcategoryOf
 	}
 
-	set subcategory(subcategory: string | null) {
-		this.props.subcategory = subcategory
-	}
-
-	get type(): string {
-		return this.props.type
-	}
-
-	set type(type: string) {
-		this.props.type = type
-	}
-
-	get model(): string {
-		return this.props.model
-	}
-
-	set model(model: string) {
-		this.props.model = model
+	set subcategoryOf(subcategoryOf: string | null) {
+		this.props.subcategoryOf = subcategoryOf
 	}
 
 	get createdAt(): Date {
@@ -99,20 +96,12 @@ export class Category extends Entity<Props> {
 		this.props.user = user
 	}
 
-	get categories(): Category | null {
-		return this.props.categories
+	get transactions(): Transaction[] {
+		return this.props.transactions
 	}
 
-	set categories(categories: Category | null) {
-		this.props.categories = categories
-	}
-
-	get relatedCategories(): Category[] {
-		return this.props.relatedCategories
-	}
-
-	set relatedCategories(relatedCategories: Category[]) {
-		this.props.relatedCategories = relatedCategories
+	set transactions(transactions: Transaction[]) {
+		this.props.transactions = transactions
 	}
 
 	static create(

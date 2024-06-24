@@ -237,6 +237,18 @@ export const errors = {
 		status: StatusCode.BAD_REQUEST,
 	},
 
+	'cost_and_profit_center.not_found': {
+		error: 'Cost and profit center not found!',
+		message: 'O centro de custo solicitado não foi encontrado.',
+		status: StatusCode.BAD_REQUEST,
+	},
+
+	'cost_and_profit_center.already_exists': {
+		error: 'Cost and profit center already exists!',
+		message: 'O centro de custo informado já está registrado no sistema.',
+		status: StatusCode.BAD_REQUEST,
+	},
+
 	'subcategory.already_exists': {
 		error: 'Subcategory already exists!',
 		message: 'A subcategoria informada já está registrada no sistema.',

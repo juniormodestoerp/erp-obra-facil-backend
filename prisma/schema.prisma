@@ -35,15 +35,16 @@ model User {
   updatedAt      DateTime  @updatedAt
   deletedAt      DateTime?
 
-  address       Address?        @relation(fields: [addressId], references: [id])
-  categories    Category[]
-  files         File[]
-  settings      Setting[]
-  userTokens    UserToken[]
-  transactions  Transaction[]
-  BankAccount   BankAccount[]
-  Tag           Tag[]
-  PaymentMethod PaymentMethod[]
+  address             Address?              @relation(fields: [addressId], references: [id])
+  categories          Category[]
+  files               File[]
+  settings            Setting[]
+  userTokens          UserToken[]
+  transactions        Transaction[]
+  BankAccount         BankAccount[]
+  Tag                 Tag[]
+  PaymentMethod       PaymentMethod[]
+  CostAndProfitCenter CostAndProfitCenter[]
 
   @@map("users")
 }
@@ -124,6 +125,19 @@ model Tag {
   user User @relation(fields: [userId], references: [id])
 
   @@map("tags")
+}
+
+model CostAndProfitCenter {
+  id        String    @id @default(uuid())
+  userId    String
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("cost_and_profit_centers")
 }
 
 model PaymentMethod {

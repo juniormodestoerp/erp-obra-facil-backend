@@ -1,21 +1,21 @@
 import type { FastifyInstance } from 'fastify'
 
-import { createCategoryController } from '@modules/categories/http/controllers/create-category-controller'
-import { fetchCategoriesController } from '@modules/categories/http/controllers/fetch-categories-controller'
-import { fetchSelectInputCategoriesController } from '@modules/categories/http/controllers/fetch-select-input-categories-controller'
-import { removeCategoryController } from '@modules/categories/http/controllers/remove-category-controller'
-import { saveCategoryController } from '@modules/categories/http/controllers/save-category-controller'
-import { showCategoryController } from '@modules/categories/http/controllers/show-category-controller'
+import { createCostAndProfitCenterController } from '@modules/cost-and-profit-centers/http/controllers/create-cost-and-profit-center-controller'
+import { fetchCostAndProfitCentersController } from '@modules/cost-and-profit-centers/http/controllers/fetch-cost-and-profit-centers-controller'
+import { fetchSelectInputCostAndProfitCentersController } from '@modules/cost-and-profit-centers/http/controllers/fetch-select-input-cost-and-profit-centers-controller'
+import { removeCostAndProfitCenterController } from '@modules/cost-and-profit-centers/http/controllers/remove-cost-and-profit-center-controller'
+import { saveCostAndProfitCenterController } from '@modules/cost-and-profit-centers/http/controllers/save-cost-and-profit-center-controller'
+import { showCostAndProfitCenterController } from '@modules/cost-and-profit-centers/http/controllers/show-cost-and-profit-center-controller'
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
 export async function Router(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
-	app.get('/categories/:id', showCategoryController)
-	app.get('/categories', fetchCategoriesController)
-	app.get('/categories/select-input', fetchSelectInputCategoriesController)
-	app.post('/categories', createCategoryController)
-	app.put('/categories/:id', saveCategoryController)
-	app.delete('/categories/:id', removeCategoryController)
+	app.get('/cost-and-profit-centers/:id', showCostAndProfitCenterController)
+	app.get('/cost-and-profit-centers', fetchCostAndProfitCentersController)
+	app.get('/cost-and-profit-centers/select-input', fetchSelectInputCostAndProfitCentersController)
+	app.post('/cost-and-profit-centers', createCostAndProfitCenterController)
+	app.put('/cost-and-profit-centers/:id', saveCostAndProfitCenterController)
+	app.delete('/cost-and-profit-centers/:id', removeCostAndProfitCenterController)
 }

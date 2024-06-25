@@ -4,10 +4,7 @@ export class TagsViewModel {
 	static toHTTP(tag: Tag) {
 		return {
 			id: tag.id,
-			tagName: tag.name,
-			currency: tag.currency,
-			logo: tag.logo,
-			initialBalance: tag.initialBalance,
+			name: tag.name,
 			createdAt: tag.createdAt,
 		}
 	}

@@ -4,11 +4,7 @@ export class TransfersViewModel {
 	static toHTTP(transfer: Transfer) {
 		return {
 			id: transfer.id,
-			userId: transfer.userId,
-			transferName: transfer.name,
-			currency: transfer.currency,
-			logo: transfer.logo,
-			initialBalance: transfer.initialBalance,
+			name: transfer.name,
 			createdAt: transfer.createdAt,
 		}
 	}

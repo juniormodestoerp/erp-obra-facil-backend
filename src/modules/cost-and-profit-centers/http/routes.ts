@@ -14,8 +14,14 @@ export async function Router(app: FastifyInstance) {
 
 	app.get('/cost-and-profit-centers/:id', showCostAndProfitCenterController)
 	app.get('/cost-and-profit-centers', fetchCostAndProfitCentersController)
-	app.get('/cost-and-profit-centers/select-input', fetchSelectInputCostAndProfitCentersController)
+	app.get(
+		'/cost-and-profit-centers/select-input',
+		fetchSelectInputCostAndProfitCentersController,
+	)
 	app.post('/cost-and-profit-centers', createCostAndProfitCenterController)
-	app.put('/cost-and-profit-centers/:id', saveCostAndProfitCenterController)
-	app.delete('/cost-and-profit-centers/:id', removeCostAndProfitCenterController)
+	app.patch('/cost-and-profit-centers/:id', saveCostAndProfitCenterController)
+	app.delete(
+		'/cost-and-profit-centers/:id',
+		removeCostAndProfitCenterController,
+	)
 }

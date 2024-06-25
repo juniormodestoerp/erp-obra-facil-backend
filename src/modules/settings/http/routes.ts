@@ -12,6 +12,6 @@ export async function Router(app: FastifyInstance) {
 
 	app.get('/settings:id', showSetting)
 	app.get('/settings', fetchSettings)
-	app.put('/settings/:id', saveSetting)
+	app.patch('/settings/:id', saveSetting)
 	app.delete('/settings/:id', removeSetting)
 }

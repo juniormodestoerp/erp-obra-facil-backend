@@ -14,6 +14,6 @@ export async function Router(app: FastifyInstance) {
 	app.get('/transactions/:id', showTransaction)
 	app.get('/transactions', fetchTransactions)
 	app.post('/transactions', createTransaction)
-	app.put('/transactions/:id', saveTransaction)
+	app.patch('/transactions/:id', saveTransaction)
 	app.delete('/transactions/:id', removeTransaction)
 }

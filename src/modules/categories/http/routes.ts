@@ -16,6 +16,6 @@ export async function Router(app: FastifyInstance) {
 	app.get('/categories', fetchCategoriesController)
 	app.get('/categories/select-input', fetchSelectInputCategoriesController)
 	app.post('/categories', createCategoryController)
-	app.put('/categories/:id', saveCategoryController)
+	app.patch('/categories/:id', saveCategoryController)
 	app.delete('/categories/:id', removeCategoryController)
 }

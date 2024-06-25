@@ -32,7 +32,7 @@ export async function Router(app: FastifyInstance) {
 
 	app.post('/users', createUserController)
 
-	app.put('/users', { onRequest: [verifyJwt] }, saveUserController)
+	app.patch('/users', { onRequest: [verifyJwt] }, saveUserController)
 
 	app.delete('/users/:id', { onRequest: [verifyJwt] }, removeUserController)
 }

@@ -1,8 +1,8 @@
 import type { FastifyInstance } from 'fastify'
 
 import { createTagController } from '@modules/tags/http/controllers/create-tag-controller'
-import { fetchTagsController } from '@modules/tags/http/controllers/fetch-tags-controller'
 import { fetchSelectInputTagsController } from '@modules/tags/http/controllers/fetch-select-input-tags-controller'
+import { fetchTagsController } from '@modules/tags/http/controllers/fetch-tags-controller'
 import { removeTagController } from '@modules/tags/http/controllers/remove-tag-controller'
 import { saveTagController } from '@modules/tags/http/controllers/save-tag-controller'
 import { showTagController } from '@modules/tags/http/controllers/show-tag-controller'
@@ -16,6 +16,6 @@ export async function Router(app: FastifyInstance) {
 	app.get('/tags', fetchTagsController)
 	app.get('/tags/select-input', fetchSelectInputTagsController)
 	app.post('/tags', createTagController)
-	app.put('/tags/:id', saveTagController)
+	app.patch('/tags/:id', saveTagController)
 	app.delete('/tags/:id', removeTagController)
 }

@@ -11,6 +11,6 @@ export async function Router(app: FastifyInstance) {
 
 	app
 		.get('/addresses', showAddress)
-		.put('/addresses/:id', saveAddress)
+		.patch('/addresses/:id', saveAddress)
 		.delete('/addresses/:id', removeAddress)
 }

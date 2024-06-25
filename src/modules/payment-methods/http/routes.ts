@@ -14,8 +14,11 @@ export async function Router(app: FastifyInstance) {
 
 	app.get('/payment-methods/:id', showPaymentMethodController)
 	app.get('/payment-methods', fetchPaymentMethodsController)
-	app.get('/payment-methods/select-input', fetchSelectInputPaymentMethodsController)
+	app.get(
+		'/payment-methods/select-input',
+		fetchSelectInputPaymentMethodsController,
+	)
 	app.post('/payment-methods', createPaymentMethodController)
-	app.put('/payment-methods/:id', savePaymentMethodController)
+	app.patch('/payment-methods/:id', savePaymentMethodController)
 	app.delete('/payment-methods/:id', removePaymentMethodController)
 }

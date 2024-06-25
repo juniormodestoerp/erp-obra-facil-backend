@@ -4,12 +4,19 @@ export class BankAccountsViewModel {
 	static toHTTP(bankAccount: BankAccount) {
 		return {
 			id: bankAccount.id,
-			userId: bankAccount.userId,
-			bankAccountName: bankAccount.name,
+			name: bankAccount.name,
 			currency: bankAccount.currency,
 			logo: bankAccount.logo,
+			limit: bankAccount.limit,
+			limitType: bankAccount.limitType,
+			dueDateDay: bankAccount.dueDateDay,
+			dueDateFirstInvoice: bankAccount.dueDateFirstInvoice,
+			closingDateInvoice: bankAccount.closingDateInvoice,
+			balanceFirstInvoice: bankAccount.balanceFirstInvoice,
+			isFirstInvoice: bankAccount.isFirstInvoice,
+			isCreditCard: bankAccount.isCreditCard,
 			initialBalance: bankAccount.initialBalance,
-			createdAt: bankAccount.createdAt,
+			createdAt: bankAccount.createdAt.toISOString(),
 		}
 	}
 }

@@ -17,6 +17,11 @@ enum CategoryType {
   INCOME
 }
 
+enum LimitType {
+  TOTAL
+  MONTHLY
+}
+
 model User {
   id             String    @id @default(uuid())
   addressId      String?   @unique
@@ -85,15 +90,23 @@ model Category {
 }
 
 model BankAccount {
-  id             String    @id @default(uuid())
-  userId         String
-  name           String
-  currency       String
-  logo           String
-  initialBalance Float
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  deletedAt      DateTime?
+  id                  String     @id @default(uuid())
+  userId              String
+  name                String
+  currency            String
+  logo                String
+  limit               Float?
+  limitType           LimitType?
+  dueDateDay          Int?
+  dueDateFirstInvoice DateTime?
+  closingDateInvoice  Int?
+  balanceFirstInvoice Float?
+  isFirstInvoice      Boolean?
+  isCreditCard        Boolean?
+  initialBalance      Float
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+  deletedAt           DateTime?
 
   transactions Transaction[]
 

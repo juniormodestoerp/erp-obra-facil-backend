@@ -1,13 +1,22 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import { BankAccount } from '@modules/bank-accounts/entities/bank-account'
+import { BankAccount, type LimitType } from '@modules/bank-accounts/entities/bank-account'
 import type { BankAccountsRepository } from '@modules/bank-accounts/repositories/bank-accounts-repository'
 
 interface Input {
 	userId: string
+	accountType: string
 	name: string
 	currency: string
-	logo: string
+	logo: string | null
+	limit: number | null
+	limitType: LimitType | null
+	dueDateDay: number | null
+	dueDateFirstInvoice: string | null
+	closingDateInvoice: number | null
+	balanceFirstInvoice: number | null
+	isFirstInvoice: boolean | null
+	isCreditCard: boolean | null
 	initialBalance: number
 }
 
@@ -22,9 +31,18 @@ export class CreateBankAccountUseCase {
 
 	async execute({
 		userId,
+		accountType,
 		name,
 		currency,
 		logo,
+		limit,
+		limitType,
+		dueDateDay,
+		dueDateFirstInvoice,
+		closingDateInvoice,
+		balanceFirstInvoice,
+		isFirstInvoice,
+		isCreditCard,
 		initialBalance,
 	}: Input): Promise<Output> {
 		const existsBankAccount = await this.bankAccountsRepository.findByName({
@@ -40,9 +58,18 @@ export class CreateBankAccountUseCase {
 
 		const bankAccount = BankAccount.create({
 			userId,
+			accountType,
 			name,
 			currency,
 			logo,
+			limit,
+			limitType,
+			dueDateDay,
+			dueDateFirstInvoice,
+			closingDateInvoice,
+			balanceFirstInvoice,
+			isFirstInvoice,
+			isCreditCard,
 			initialBalance,
 			createdAt: new Date(),
 			updatedAt: new Date(),

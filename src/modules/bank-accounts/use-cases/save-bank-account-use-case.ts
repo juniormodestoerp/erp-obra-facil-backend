@@ -8,9 +8,18 @@ import type { UsersRepository } from '@modules/users/repositories/user-repositor
 interface Input {
 	id: string
 	userId: string
+	accountType: string
 	name: string
 	currency: string
-	logo: string
+	logo: string | null
+	limit: number | null
+	limitType: string | null
+	dueDateDay: number | null
+	dueDateFirstInvoice: string | null
+	closingDateInvoice: number | null
+	balanceFirstInvoice: number | null
+	isFirstInvoice: boolean | null
+	isCreditCard: boolean | null
 	initialBalance: number
 }
 
@@ -27,9 +36,18 @@ export class SaveBankAccountUseCase {
 	async execute({
 		id,
 		userId,
+		accountType,
 		name,
 		currency,
 		logo,
+		limit,
+		limitType,
+		dueDateDay,
+		dueDateFirstInvoice,
+		closingDateInvoice,
+		balanceFirstInvoice,
+		isFirstInvoice,
+		isCreditCard,
 		initialBalance,
 	}: Input): Promise<Output> {
 		const user = await this.usersRepository.findById({

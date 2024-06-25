@@ -1,79 +1,76 @@
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
+import { PrismaBankAccountsMapper } from '@modules/bank-accounts/repositories/prisma/mappers/prisma-bank-accounts-mapper'
+import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
+import { PrismaCostAndProfitCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'
+import { PrismaPaymentMethodsMapper } from '@modules/payment-methods/repositories/prisma/mappers/prisma-payment-methods-mapper'
+import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tags-mapper'
 import { Transaction } from '@modules/transactions/entities/transaction'
-import type { Transaction as RawTransaction } from '@prisma/client'
+import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
+import type {
+	Transaction as RawTransaction,
+	User as RawUser,
+	Category as RawCategory,
+	BankAccount as RawBankAccount,
+	CostAndProfitCenter as RawCenter,
+	PaymentMethod as RawMethod,
+	Tag as RawTag,
+} from '@prisma/client'
 
 export class PrismaTransactionsMapper {
 	static toPrisma(transaction: Transaction) {
 		return {
 			id: transaction.id,
 			userId: transaction.userId,
-			fitId: transaction.fitId,
-			accountType: transaction.accountType,
-			name: transaction.name,
+			amount: transaction.amount,
 			description: transaction.description,
-			categoryId: transaction.categoryId,
-			establishmentName: transaction.establishmentName,
-			bankName: transaction.bankName,
-			transactionDate: transaction.transactionDate,
-			previousBalance: transaction.previousBalance,
-			totalAmount: transaction.totalAmount,
-			currentBalance: transaction.currentBalance,
-			paymentMethod: transaction.paymentMethod,
-			competencyDate: transaction.competencyDate,
-			costAndProfitCenters: transaction.costAndProfitCenters,
-			tags: transaction.tags,
-			documentNumber: transaction.documentNumber,
-			associatedContracts: transaction.associatedContracts,
-			associatedProjects: transaction.associatedProjects,
-			additionalComments: transaction.additionalComments,
-			status: transaction.status,
-			accountToTransfer: transaction.accountToTransfer,
-			contact: transaction.contact,
+			transferAccount: transaction.transferAccount,
 			card: transaction.card,
+			contact: transaction.contact,
+			project: transaction.project,
+			documentNumber: transaction.documentNumber,
+			notes: transaction.notes,
+			competenceDate: transaction.competenceDate,
 			createdAt: transaction.createdAt,
 			updatedAt: transaction.updatedAt,
 			deletedAt: transaction.deletedAt,
+			categoryId: transaction.category?.id,
+			accountId: transaction.account?.id,
+			centerId: transaction.center?.id,
+			methodId: transaction.method?.id,
 		}
 	}
 
 	static toDomain(
 		raw: RawTransaction & {
-			category?: {
-				id: string
-				name: string
-			}
+			user: RawUser
+			category: RawCategory
+			account: RawBankAccount
+			center: RawCenter
+			method: RawMethod
+			tags: RawTag[]
 		},
 	): Transaction {
 		return Transaction.create(
 			{
 				userId: raw.userId,
-				fitId: raw.fitId,
-				name: raw.name,
-				accountType: raw.accountType,
+				amount: raw.amount,
 				description: raw.description,
-				categoryId: raw.categoryId,
-				categoryName: raw.category?.name,
-				establishmentName: raw.establishmentName,
-				bankName: raw.bankName,
-				transactionDate: raw.transactionDate,
-				previousBalance: raw.previousBalance,
-				totalAmount: raw.totalAmount,
-				currentBalance: raw.currentBalance,
-				paymentMethod: raw.paymentMethod,
-				competencyDate: raw.competencyDate,
-				costAndProfitCenters: raw.costAndProfitCenters,
-				tags: raw.tags,
-				documentNumber: raw.documentNumber,
-				associatedContracts: raw.associatedContracts,
-				associatedProjects: raw.associatedProjects,
-				additionalComments: raw.additionalComments,
-				status: raw.status,
-				accountToTransfer: raw.accountToTransfer,
-				contact: raw.contact,
+				transferAccount: raw.transferAccount,
 				card: raw.card,
+				contact: raw.contact,
+				project: raw.project,
+				documentNumber: raw.documentNumber,
+				notes: raw.notes,
+				competenceDate: raw.competenceDate,
 				createdAt: raw.createdAt,
 				updatedAt: raw.updatedAt,
 				deletedAt: raw.deletedAt,
+				user: PrismaUserMapper.toDomain(raw.user),
+				account: PrismaBankAccountsMapper.toDomain(raw.account),
+				category: PrismaCategoriesMapper.toDomain(raw.category),
+				center: PrismaCostAndProfitCentersMapper.toDomain(raw.center),
+				method: PrismaPaymentMethodsMapper.toDomain(raw.method),
+				tags: raw.tags.map(PrismaTagsMapper.toDomain),
 			},
 			new UniqueEntityID(raw.id),
 		)

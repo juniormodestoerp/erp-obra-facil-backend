@@ -135,7 +135,8 @@ model Tag {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  user User @relation(fields: [userId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
+  transactions Transaction[]
 
   @@map("tags")
 }
@@ -147,6 +148,8 @@ model CostAndProfitCenter {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  transactions Transaction[]
 
   user User @relation(fields: [userId], references: [id])
 
@@ -160,6 +163,8 @@ model PaymentMethod {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
+
+  transactions Transaction[]
 
   user User @relation(fields: [userId], references: [id])
 
@@ -184,39 +189,29 @@ model TransferOption {
 model Transaction {
   id                String   @id @default(uuid())
   userId            String
-  fitId             String
-  accountType       String
-  name              String
+  amount            Float
   description       String
+  transferAccount   String?
+  card              String?
+  contact           String?
+  project           String?
+  documentNumber    String?
+  notes             String?
+  competenceDate    DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  user              User?      @relation(fields: [userId], references: [id])
+  account           BankAccount? @relation(fields: [bankAccountId], references: [id])
+  bankAccountId     String?
+  category          Category?  @relation(fields: [categoryId], references: [id])
   categoryId        String?
-  establishmentName String
-  bankName          String
-  transactionDate   DateTime
-  previousBalance   Float
-  totalAmount       Float
-  currentBalance    Float
-  paymentMethod     String
-  status            String
-
-  competencyDate       DateTime?
-  costAndProfitCenters String?
-  tags                 String?
-  documentNumber       String?
-  associatedContracts  String?
-  associatedProjects   String?
-  additionalComments   String?
-  accountToTransfer    String?
-  contact              String?
-  card                 String?
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-
-  user          User?        @relation(fields: [userId], references: [id])
-  category      Category?    @relation(fields: [categoryId], references: [id])
-  BankAccount   BankAccount? @relation(fields: [bankAccountId], references: [id])
-  bankAccountId String?
+  center            CostAndProfitCenter? @relation(fields: [centerId], references: [id])
+  centerId          String?
+  method            PaymentMethod? @relation(fields: [methodId], references: [id])
+  methodId          String?
+  tags              Tag[]
 
   @@map("transactions")
 }
@@ -269,3 +264,45 @@ model Address {
 
   @@map("addresses")
 }
+
+
+
+// model Transaction {
+//   id                String   @id @default(uuid())
+//   userId            String
+//   fitId             String
+//   accountType       String
+//   name              String
+//   description       String
+//   categoryId        String?
+//   establishmentName String
+//   bankName          String
+//   transactionDate   DateTime
+//   previousBalance   Float
+//   totalAmount       Float
+//   currentBalance    Float
+//   paymentMethod     String
+//   status            String
+
+//   competencyDate       DateTime?
+//   costAndProfitCenters String?
+//   tags                 String?
+//   documentNumber       String?
+//   associatedContracts  String?
+//   associatedProjects   String?
+//   additionalComments   String?
+//   accountToTransfer    String?
+//   contact              String?
+//   card                 String?
+
+//   createdAt DateTime  @default(now())
+//   updatedAt DateTime  @updatedAt
+//   deletedAt DateTime?
+
+//   user          User?        @relation(fields: [userId], references: [id])
+//   category      Category?    @relation(fields: [categoryId], references: [id])
+//   BankAccount   BankAccount? @relation(fields: [bankAccountId], references: [id])
+//   bankAccountId String?
+
+//   @@map("transactions")
+// }

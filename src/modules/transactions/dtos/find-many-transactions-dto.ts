@@ -6,14 +6,18 @@ export interface IFindManyTransactionsDTO {
 
 export interface ITransactionsWhereClauses {
 	userId?: string
-	deletedAt: null
-	OR?: Array<
-		| { name?: { contains: string; mode: 'insensitive' } }
-		| { description?: { contains: string; mode: 'insensitive' } }
-		| { categoryId?: { contains: string; mode: 'insensitive' } }
-		| { establishmentName?: { contains: string; mode: 'insensitive' } }
-		| { bankName?: { contains: string; mode: 'insensitive' } }
-		| { paymentMethod?: { contains: string; mode: 'insensitive' } }
-		| { status?: { contains: string; mode: 'insensitive' } }
-	>
+	deletedAt?: Date | null
+	OR?: Array<Partial<{
+		description: { contains: string; mode: 'insensitive' }
+		categoryId: { contains: string; mode: 'insensitive' }
+		transferAccount: { contains: string; mode: 'insensitive' }
+		card: { contains: string; mode: 'insensitive' }
+		contact: { contains: string; mode: 'insensitive' }
+		project: { contains: string; mode: 'insensitive' }
+		documentNumber: { contains: string; mode: 'insensitive' }
+		notes: { contains: string; mode: 'insensitive' }
+		bankName: { contains: string; mode: 'insensitive' }
+		paymentMethod: { contains: string; mode: 'insensitive' }
+		status: { contains: string; mode: 'insensitive' }
+	}>>
 }

@@ -1,5 +1,4 @@
 import type { PrismaClient } from '@prisma/client'
-
 import type {
 	IFindManyTransactionsDTO,
 	ITransactionsWhereClauses,
@@ -8,7 +7,6 @@ import type { IFindTransactionByIdDTO } from '@modules/transactions/dtos/find-tr
 import type { Transaction } from '@modules/transactions/entities/transaction'
 import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
 import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
-
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
 
@@ -28,6 +26,14 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				id,
 				userId,
 				deletedAt: null,
+			},
+			include: {
+				user: true,
+				category: true,
+				account: true,
+				center: true,
+				method: true,
+				tags: true,
 			},
 		})
 
@@ -52,10 +58,14 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
 		if (searchTerm) {
 			whereClauses.OR = [
-				{ name: { contains: searchTerm, mode: 'insensitive' } },
 				{ description: { contains: searchTerm, mode: 'insensitive' } },
 				{ categoryId: { contains: searchTerm, mode: 'insensitive' } },
-				{ establishmentName: { contains: searchTerm, mode: 'insensitive' } },
+				{ transferAccount: { contains: searchTerm, mode: 'insensitive' } },
+				{ card: { contains: searchTerm, mode: 'insensitive' } },
+				{ contact: { contains: searchTerm, mode: 'insensitive' } },
+				{ project: { contains: searchTerm, mode: 'insensitive' } },
+				{ documentNumber: { contains: searchTerm, mode: 'insensitive' } },
+				{ notes: { contains: searchTerm, mode: 'insensitive' } },
 				{ bankName: { contains: searchTerm, mode: 'insensitive' } },
 				{ paymentMethod: { contains: searchTerm, mode: 'insensitive' } },
 				{ status: { contains: searchTerm, mode: 'insensitive' } },
@@ -70,12 +80,12 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				updatedAt: 'desc',
 			},
 			include: {
-				category: {
-					select: {
-						id: true,
-						name: true,
-					},
-				},
+				user: true,
+				category: true,
+				account: true,
+				center: true,
+				method: true,
+				tags: true,
 			},
 		})
 
@@ -98,12 +108,12 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				updatedAt: 'desc',
 			},
 			include: {
-				category: {
-					select: {
-						id: true,
-						name: true,
-					},
-				},
+				user: true,
+				category: true,
+				account: true,
+				center: true,
+				method: true,
+				tags: true,
 			},
 		})
 
@@ -123,10 +133,14 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
 		if (searchTerm) {
 			whereClauses.OR = [
-				{ name: { contains: searchTerm, mode: 'insensitive' } },
 				{ description: { contains: searchTerm, mode: 'insensitive' } },
 				{ categoryId: { contains: searchTerm, mode: 'insensitive' } },
-				{ establishmentName: { contains: searchTerm, mode: 'insensitive' } },
+				{ transferAccount: { contains: searchTerm, mode: 'insensitive' } },
+				{ card: { contains: searchTerm, mode: 'insensitive' } },
+				{ contact: { contains: searchTerm, mode: 'insensitive' } },
+				{ project: { contains: searchTerm, mode: 'insensitive' } },
+				{ documentNumber: { contains: searchTerm, mode: 'insensitive' } },
+				{ notes: { contains: searchTerm, mode: 'insensitive' } },
 				{ bankName: { contains: searchTerm, mode: 'insensitive' } },
 				{ paymentMethod: { contains: searchTerm, mode: 'insensitive' } },
 				{ status: { contains: searchTerm, mode: 'insensitive' } },
@@ -151,8 +165,8 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 
 		await this.repository.transaction.update({
 			where: {
-				userId: transaction.userId,
 				id: transaction.id,
+				userId: transaction.userId,
 			},
 			data: prismaTransactionData,
 		})
@@ -161,8 +175,8 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 	async remove({ userId, id }: IFindTransactionByIdDTO): Promise<void> {
 		await this.repository.transaction.update({
 			where: {
-				userId,
 				id,
+				userId,
 			},
 			data: {
 				deletedAt: new Date(),

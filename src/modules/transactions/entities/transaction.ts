@@ -2,41 +2,34 @@ import { Entity } from '@core/domain/entities/entity'
 import type { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import type { Optional } from '@core/domain/types/opcional'
 
-import type { Category } from '@modules/categories/entities/category'
 import type { User } from '@modules/users/entities/user'
+import type { BankAccount as Account } from '@modules/bank-accounts/entities/bank-account'
+import type { Category } from '@modules/categories/entities/category'
+import type { CostAndProfitCenter as Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import type { PaymentMethod as Method } from '@modules/payment-methods/entities/payment-method'
+import type { Tag } from '@modules/tags/entities/tag'
 
 interface Props {
 	userId: string
-	fitId: string | null
-	name: string
+	amount: number
 	description: string
-	accountType: string
-	categoryId: string | null
-	categoryName?: string
-	establishmentName: string
-	bankName: string
-	transactionDate: Date
-	previousBalance: number
-	totalAmount: number
-	currentBalance: number
-	paymentMethod: string
-	competencyDate: Date | null
-	costAndProfitCenters: string | null
-	tags: string | null
-	documentNumber: string | null
-	associatedContracts: string | null
-	associatedProjects: string | null
-	additionalComments: string | null
-	status: string
-	accountToTransfer: string | null
-	contact: string | null
+	transferAccount: string | null
 	card: string | null
+	contact: string | null
+	project: string | null
+	documentNumber: string | null
+	notes: string | null
+	competenceDate: Date | null
 	createdAt: Date
 	updatedAt: Date
-	deletedAt?: Date | null
+	deletedAt: Date | null
 
-	user?: User
-	category?: Category
+	user: User
+	account: Account
+	category: Category
+	center: Center
+	method: Method
+	tags: Tag[]
 }
 
 export class Transaction extends Entity<Props> {
@@ -48,28 +41,12 @@ export class Transaction extends Entity<Props> {
 		this.props.userId = value
 	}
 
-	get fitId(): string | null {
-		return this.props.fitId
+	get amount(): number {
+		return this.props.amount
 	}
 
-	set fitId(value: string | null) {
-		this.props.fitId = value
-	}
-
-	get accountType(): string {
-		return this.props.accountType
-	}
-
-	set accountType(value: string) {
-		this.props.accountType = value
-	}
-
-	get name(): string {
-		return this.props.name
-	}
-
-	set name(value: string) {
-		this.props.name = value
+	set amount(value: number) {
+		this.props.amount = value
 	}
 
 	get description(): string {
@@ -80,148 +57,20 @@ export class Transaction extends Entity<Props> {
 		this.props.description = value
 	}
 
-	get categoryId(): string | null {
-		return this.props.categoryId
+	get transferAccount(): string | null {
+		return this.props.transferAccount
 	}
 
-	set categoryId(value: string | null) {
-		this.props.categoryId = value
+	set transferAccount(value: string | null) {
+		this.props.transferAccount = value
 	}
 
-	get categoryName(): string | undefined {
-		return this.props.categoryName
+	get card(): string | null {
+		return this.props.card
 	}
 
-	set categoryName(value: string | undefined) {
-		this.props.categoryName = value
-	}
-
-	get establishmentName(): string {
-		return this.props.establishmentName
-	}
-
-	set establishmentName(value: string) {
-		this.props.establishmentName = value
-	}
-
-	get bankName(): string {
-		return this.props.bankName
-	}
-
-	set bankName(value: string) {
-		this.props.bankName = value
-	}
-
-	get transactionDate(): Date {
-		return this.props.transactionDate
-	}
-
-	set transactionDate(value: Date) {
-		this.props.transactionDate = value
-	}
-
-	get previousBalance(): number {
-		return this.props.previousBalance
-	}
-
-	set previousBalance(value: number) {
-		this.props.previousBalance = value
-	}
-
-	get totalAmount(): number {
-		return this.props.totalAmount
-	}
-
-	set totalAmount(value: number) {
-		this.props.totalAmount = value
-	}
-
-	get currentBalance(): number {
-		return this.props.currentBalance
-	}
-
-	set currentBalance(value: number) {
-		this.props.currentBalance = value
-	}
-
-	get paymentMethod(): string {
-		return this.props.paymentMethod
-	}
-
-	set paymentMethod(value: string) {
-		this.props.paymentMethod = value
-	}
-
-	get competencyDate(): Date | null {
-		return this.props.competencyDate
-	}
-
-	set competencyDate(value: Date | null) {
-		this.props.competencyDate = value
-	}
-
-	get costAndProfitCenters(): string | null {
-		return this.props.costAndProfitCenters
-	}
-
-	set costAndProfitCenters(value: string | null) {
-		this.props.costAndProfitCenters = value
-	}
-
-	get tags(): string | null {
-		return this.props.tags
-	}
-
-	set tags(value: string | null) {
-		this.props.tags = value
-	}
-
-	get documentNumber(): string | null {
-		return this.props.documentNumber
-	}
-
-	set documentNumber(value: string | null) {
-		this.props.documentNumber = value
-	}
-
-	get associatedContracts(): string | null {
-		return this.props.associatedContracts
-	}
-
-	set associatedContracts(value: string | null) {
-		this.props.associatedContracts = value
-	}
-
-	get associatedProjects(): string | null {
-		return this.props.associatedProjects
-	}
-
-	set associatedProjects(value: string | null) {
-		this.props.associatedProjects = value
-	}
-
-	get additionalComments(): string | null {
-		return this.props.additionalComments
-	}
-
-	set additionalComments(value: string | null) {
-		this.props.additionalComments = value
-	}
-
-	get status(): string {
-		return this.props.status
-	}
-
-	set status(value: string) {
-		this.props.status = value
-	}
-
-	get accountToTransfer(): string | null {
-		return this.props.accountToTransfer
-	}
-
-	set accountToTransfer(value: string | null) {
-		this.props.accountToTransfer = value
+	set card(value: string | null) {
+		this.props.card = value
 	}
 
 	get contact(): string | null {
@@ -232,12 +81,36 @@ export class Transaction extends Entity<Props> {
 		this.props.contact = value
 	}
 
-	get card(): string | null {
-		return this.props.card
+	get project(): string | null {
+		return this.props.project
 	}
 
-	set card(value: string | null) {
-		this.props.card = value
+	set project(value: string | null) {
+		this.props.project = value
+	}
+
+	get documentNumber(): string | null {
+		return this.props.documentNumber
+	}
+
+	set documentNumber(value: string | null) {
+		this.props.documentNumber = value
+	}
+
+	get notes(): string | null {
+		return this.props.notes
+	}
+
+	set notes(value: string | null) {
+		this.props.notes = value
+	}
+
+	get competenceDate(): Date | null {
+		return this.props.competenceDate
+	}
+
+	set competenceDate(value: Date | null) {
+		this.props.competenceDate = value
 	}
 
 	get createdAt(): Date {
@@ -256,28 +129,60 @@ export class Transaction extends Entity<Props> {
 		this.props.updatedAt = value
 	}
 
-	get deletedAt(): Date | null | undefined {
+	get deletedAt(): Date | null {
 		return this.props.deletedAt
 	}
 
-	set deletedAt(value: Date | null | undefined) {
+	set deletedAt(value: Date | null) {
 		this.props.deletedAt = value
 	}
 
-	get user(): User | undefined {
+	get user(): User {
 		return this.props.user
 	}
 
-	set user(value: User | undefined) {
+	set user(value: User) {
 		this.props.user = value
 	}
 
-	get category(): Category | undefined {
+	get account(): Account {
+		return this.props.account
+	}
+
+	set account(value: Account) {
+		this.props.account = value
+	}
+
+	get category(): Category {
 		return this.props.category
 	}
 
-	set category(value: Category | undefined) {
+	set category(value: Category) {
 		this.props.category = value
+	}
+
+	get center(): Center {
+		return this.props.center
+	}
+
+	set center(value: Center) {
+		this.props.center = value
+	}
+
+	get method(): Method {
+		return this.props.method
+	}
+
+	set method(value: Method) {
+		this.props.method = value
+	}
+
+	get tags(): Tag[] {
+		return this.props.tags
+	}
+
+	set tags(value: Tag[]) {
+		this.props.tags = value
 	}
 
 	static create(

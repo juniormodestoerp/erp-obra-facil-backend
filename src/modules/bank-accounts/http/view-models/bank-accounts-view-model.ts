@@ -4,6 +4,7 @@ export class BankAccountsViewModel {
 	static toHTTP(bankAccount: BankAccount) {
 		return {
 			id: bankAccount.id,
+			accountType: bankAccount.accountType,
 			name: bankAccount.name,
 			currency: bankAccount.currency,
 			logo: bankAccount.logo,

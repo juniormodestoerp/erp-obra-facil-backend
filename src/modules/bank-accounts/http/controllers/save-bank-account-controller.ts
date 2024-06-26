@@ -27,7 +27,7 @@ currency: z.string(strMessage('moeda')).min(1, 'A moeda é obrigatória!'),
 logo: z.string(strMessage('logo da conta')).nullable(),
 limit: z.number(numbMessage('limit da conta')).nullable(),
 limitType: z.nativeEnum(LimitType).nullable(),
-dueDateDay: z.coerce.number(numbMessage('dia de vencimento')).nullable(),
+dueDateDay: z.string(numbMessage('dia de vencimento')).nullable(),
 dueDateFirstInvoice: z
 	.string(strMessage('data da primeira fatura'))
 	.nullable(),

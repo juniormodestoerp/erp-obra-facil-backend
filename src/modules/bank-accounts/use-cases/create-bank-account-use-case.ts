@@ -11,7 +11,7 @@ interface Input {
 	logo: string | null
 	limit: number | null
 	limitType: LimitType | null
-	dueDateDay: number | null
+	dueDateDay: string | null
 	dueDateFirstInvoice: string | null
 	closingDateInvoice: number | null
 	balanceFirstInvoice: number | null

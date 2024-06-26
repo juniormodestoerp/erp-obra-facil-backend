@@ -11,21 +11,21 @@ import { randomUUID } from 'node:crypto';
 
 interface ITransactionInput {
 	id?: string;
-	date: Date;
+	date: string;
 	amount: number;
 	description: string;
-	account: string;
+	account: string | null;
 	transferAccount: string | null;
 	card: string | null;
-	category: string;
+	category: string | null;
 	subcategory: string | null;
 	contact: string | null;
 	center: string | null;
 	project: string | null;
-	method: string;
+	method: string | null;
 	documentNumber: string | null;
 	notes: string | null;
-	competenceDate: Date | null;
+	competenceDate: string | null;
 	tags: string | null;
 }
 
@@ -45,7 +45,7 @@ const bodySchema = z
 		method: z.string(strMessage('Forma')).nullable(),
 		documentNumber: z.string(strMessage('N. Documento')).nullable(),
 		notes: z.string(strMessage('Observações')).nullable(),
-		competenceDate: z.string(dateMessage('Data Competência')).nullable(),
+		competenceDate: z.coerce.string(dateMessage('Data Competência')).nullable(),
 		tags: z.string(strMessage('Tags')).nullable(),
 	})
 	.array();
@@ -95,7 +95,7 @@ export async function verifyXlsxController(
 		const existingTrans: ITransactionInput[] = [];
 
 		for (const transaction of newTransactions) {
-			const transactionKey = `${transaction.date.toISOString()}-${transaction.amount}-${transaction.description}`;
+			const transactionKey = `${transaction.date}-${transaction.amount}-${transaction.description}`;
 			if (existingSet.has(transactionKey)) {
 				existingTrans.push(transaction);
 			} else {

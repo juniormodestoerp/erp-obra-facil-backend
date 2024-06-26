@@ -92,12 +92,13 @@ model Category {
 model BankAccount {
   id                  String     @id @default(uuid())
   userId              String
+  accountType         String
   name                String
   currency            String
-  logo                String
+  logo                String?
   limit               Float?
   limitType           LimitType?
-  dueDateDay          Int?
+  dueDateDay          String?
   dueDateFirstInvoice DateTime?
   closingDateInvoice  Int?
   balanceFirstInvoice Float?

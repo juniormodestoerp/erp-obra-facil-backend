@@ -19,7 +19,7 @@ interface Props {
   logo: string | null
   limit: number | null
   limitType: LimitType | null
-  dueDateDay: number | null
+  dueDateDay: string | null
   dueDateFirstInvoice: string | null
   closingDateInvoice: number | null
   balanceFirstInvoice: number | null
@@ -91,11 +91,11 @@ export class BankAccount extends Entity<Props> {
     this.props.limitType = limitType
   }
 
-  get dueDateDay(): number | null {
+  get dueDateDay(): string | null {
     return this.props.dueDateDay
   }
 
-  set dueDateDay(dueDateDay: number | null) {
+  set dueDateDay(dueDateDay: string | null) {
     this.props.dueDateDay = dueDateDay
   }
 

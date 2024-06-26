@@ -1,7 +1,7 @@
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
-import { BankAccount } from '@modules/bank-accounts/entities/bank-account'
+import { BankAccount, type LimitType } from '@modules/bank-accounts/entities/bank-account'
 import type { BankAccountsRepository } from '@modules/bank-accounts/repositories/bank-accounts-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
@@ -13,8 +13,8 @@ interface Input {
 	currency: string
 	logo: string | null
 	limit: number | null
-	limitType: string | null
-	dueDateDay: number | null
+	limitType: LimitType | null
+	dueDateDay: string | null
 	dueDateFirstInvoice: string | null
 	closingDateInvoice: number | null
 	balanceFirstInvoice: number | null
@@ -71,15 +71,24 @@ export class SaveBankAccountUseCase {
 		const bankAccount = BankAccount.create(
 			{
 				userId,
+				accountType,
 				name,
 				currency,
 				logo,
+				limit,
+				limitType,
+				dueDateDay,
+				dueDateFirstInvoice,
+				closingDateInvoice,
+				balanceFirstInvoice,
+				isFirstInvoice,
+				isCreditCard,
 				initialBalance,
-				createdAt: previusBankAccount.createdAt,
+				createdAt: new Date(),
 				updatedAt: new Date(),
-				deletedAt: previusBankAccount.deletedAt,
-				user,
-				transactions: previusBankAccount.transactions,
+				deletedAt: null,
+				user: null,
+				transactions: [],
 			},
 			new UniqueEntityID(id),
 		)

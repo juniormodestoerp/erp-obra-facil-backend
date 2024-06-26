@@ -11,6 +11,7 @@ import type { Tag } from '@modules/tags/entities/tag'
 
 interface Props {
 	userId: string
+	date: Date
 	amount: number
 	description: string
 	transferAccount: string | null
@@ -39,6 +40,14 @@ export class Transaction extends Entity<Props> {
 
 	set userId(value: string) {
 		this.props.userId = value
+	}
+
+	get date(): Date {
+		return this.props.date
+	}
+
+	set date(value: Date) {
+		this.props.date = value
 	}
 
 	get amount(): number {

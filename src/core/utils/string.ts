@@ -46,9 +46,51 @@ function GenerateRandomCode(length: number): string {
 	return `${Math.floor(Math.random() * (max - min + 1)) + min}`
 }
 
+/**
+ * Converte um número de série do Excel para uma data legível.
+ * @param serialNumber Número de série do Excel.
+ * @returns Data no formato 'DD/MM/YYYY'.
+ */
+function excelSerialToDate(serialNumber: number): string {
+	const baseDate = new Date(1900, 0, 1)
+	const excelDate = new Date(
+		baseDate.getTime() + (serialNumber - 1) * 24 * 60 * 60 * 1000,
+	)
+	const day = String(excelDate.getDate()).padStart(2, '0')
+	const month = String(excelDate.getMonth() + 1).padStart(2, '0')
+	const year = excelDate.getFullYear()
+	return `${day}/${month}/${year}`
+}
+
+/**
+ * Converte uma data no formato 'DD/MM/YYYY' para um número de série do Excel.
+ * @param date Data no formato 'DD/MM/YYYY'.
+ * @returns Número de série do Excel.
+ */
+function dateToExcelSerial(date: string): number {
+	const [day, month, year] = date.split('/').map(Number)
+	const baseDate = new Date(1900, 0, 1)
+	const targetDate = new Date(year, month - 1, day)
+	const diffInTime = targetDate.getTime() - baseDate.getTime()
+	return Math.floor(diffInTime / (24 * 60 * 60 * 1000)) + 1
+}
+
+/**
+ * Converte uma data no formato 'DD/MM/YYYY' para um objeto Date do JavaScript.
+ * @param dateString Data no formato 'DD/MM/YYYY'.
+ * @returns Objeto Date do JavaScript.
+ */
+function parseDate(dateString: string): Date {
+	const [day, month, year] = dateString.split('/').map(Number)
+	return new Date(year, month - 1, day)
+}
+
 export const Utils = {
 	FormatDocument,
 	FormatPhone,
 	NormalizeName,
 	GenerateRandomCode,
+	excelSerialToDate,
+	dateToExcelSerial,
+	parseDate,
 }

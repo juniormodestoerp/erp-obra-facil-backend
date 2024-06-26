@@ -21,6 +21,7 @@ export class PrismaTransactionsMapper {
 		return {
 			id: transaction.id,
 			userId: transaction.userId,
+			date: transaction.date,
 			amount: transaction.amount,
 			description: transaction.description,
 			transferAccount: transaction.transferAccount,
@@ -53,6 +54,7 @@ export class PrismaTransactionsMapper {
 		return Transaction.create(
 			{
 				userId: raw.userId,
+				date: raw.date,
 				amount: raw.amount,
 				description: raw.description,
 				transferAccount: raw.transferAccount,

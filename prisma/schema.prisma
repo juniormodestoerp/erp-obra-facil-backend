@@ -135,7 +135,7 @@ model Tag {
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  user        User         @relation(fields: [userId], references: [id])
+  user         User          @relation(fields: [userId], references: [id])
   transactions Transaction[]
 
   @@map("tags")
@@ -187,31 +187,32 @@ model TransferOption {
 }
 
 model Transaction {
-  id                String   @id @default(uuid())
-  userId            String
-  amount            Float
-  description       String
-  transferAccount   String?
-  card              String?
-  contact           String?
-  project           String?
-  documentNumber    String?
-  notes             String?
-  competenceDate    DateTime?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-  deletedAt         DateTime?
+  id              String    @id @default(uuid())
+  userId          String
+  date            DateTime
+  amount          Float
+  description     String
+  transferAccount String?
+  card            String?
+  contact         String?
+  project         String?
+  documentNumber  String?
+  notes           String?
+  competenceDate  DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
 
-  user              User?      @relation(fields: [userId], references: [id])
-  account           BankAccount? @relation(fields: [bankAccountId], references: [id])
-  bankAccountId     String?
-  category          Category?  @relation(fields: [categoryId], references: [id])
-  categoryId        String?
-  center            CostAndProfitCenter? @relation(fields: [centerId], references: [id])
-  centerId          String?
-  method            PaymentMethod? @relation(fields: [methodId], references: [id])
-  methodId          String?
-  tags              Tag[]
+  user          User?                @relation(fields: [userId], references: [id])
+  account       BankAccount?         @relation(fields: [bankAccountId], references: [id])
+  bankAccountId String?
+  category      Category?            @relation(fields: [categoryId], references: [id])
+  categoryId    String?
+  center        CostAndProfitCenter? @relation(fields: [centerId], references: [id])
+  centerId      String?
+  method        PaymentMethod?       @relation(fields: [methodId], references: [id])
+  methodId      String?
+  tags          Tag[]
 
   @@map("transactions")
 }
@@ -264,8 +265,6 @@ model Address {
 
   @@map("addresses")
 }
-
-
 
 // model Transaction {
 //   id                String   @id @default(uuid())

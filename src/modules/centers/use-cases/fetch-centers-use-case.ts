@@ -2,7 +2,7 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import type { Center } from '@modules/centers/entities/center'
 import type { DomainCentersRepository } from '@modules/centers/repositories/domain-centers-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	userId: string
@@ -15,7 +15,7 @@ interface Output {
 export class FetchCentersUseCase {
 	constructor(
 		private readonly centersRepository: DomainCentersRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({ userId }: Input): Promise<Output> {

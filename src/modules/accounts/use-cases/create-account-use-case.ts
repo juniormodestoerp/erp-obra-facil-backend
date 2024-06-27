@@ -1,4 +1,5 @@
 import { AppError } from '@core/domain/errors/app-error'
+import { Utils } from '@core/utils/string'
 
 import { Account, type LimitType } from '@modules/accounts/entities/account'
 import type { DomainAccountsRepository } from '@modules/accounts/repositories/domain-accounts-repository'
@@ -65,7 +66,9 @@ export class CreateAccountUseCase {
 			limit,
 			limitType,
 			dueDateDay,
-			dueDateFirstInvoice,
+			dueDateFirstInvoice: dueDateFirstInvoice
+				? Utils.parseDate(dueDateFirstInvoice)
+				: null,
 			closingDateInvoice,
 			balanceFirstInvoice,
 			isFirstInvoice,

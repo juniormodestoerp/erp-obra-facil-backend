@@ -2,9 +2,9 @@ import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
 import { Address } from '@modules/addresses/entities/address'
-import type { AddressesRepository } from '@modules/addresses/repositories/address-repository'
+import type { DomainAddressesRepository } from '@modules/addresses/repositories/domain-addresses-repository'
 import { User } from '@modules/users/entities/user'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	userId: string
@@ -22,8 +22,8 @@ interface Input {
 
 export class UpdateProfileUseCase {
 	constructor(
-		private readonly usersRepository: UsersRepository,
-		private readonly addressesRepository: AddressesRepository,
+		private readonly usersRepository: DomainUsersRepository,
+		private readonly addressesRepository: DomainAddressesRepository,
 	) {}
 
 	async execute({

@@ -1,13 +1,13 @@
-import type { Address as RawAddress } from '@prisma/client'
+import type { Address as RawAddress, User as RawUser } from '@prisma/client'
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
-
 import { Address } from '@modules/addresses/entities/address'
+import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-users-mapper'
 
 export class PrismaAddressesMapper {
 	static toPrisma(address: Address) {
 		return {
-			id: address.id,
+			id: address.id.toString(),
 			userId: address.userId,
 			zipCode: address.zipCode,
 			state: address.state,
@@ -19,10 +19,17 @@ export class PrismaAddressesMapper {
 			createdAt: address.createdAt,
 			updatedAt: address.updatedAt,
 			deletedAt: address.deletedAt,
+			user: address.user ? { connect: { id: address.user.id } } : null,
 		}
 	}
 
-	static toDomain(raw: RawAddress): Address {
+	static toDomain(
+		raw: RawAddress & {
+			user?: RawUser
+		},
+	): Address {
+		const user = raw.user ? PrismaUsersMapper.toDomain(raw.user) : null
+
 		return Address.create(
 			{
 				userId: raw.userId,
@@ -33,9 +40,10 @@ export class PrismaAddressesMapper {
 				street: raw.street,
 				number: raw.number,
 				complement: raw.complement,
-				createdAt: raw.createdAt,
-				updatedAt: raw.createdAt,
-				deletedAt: raw.createdAt,
+				createdAt: new Date(raw.createdAt),
+				updatedAt: new Date(raw.updatedAt),
+				deletedAt: raw.deletedAt ? new Date(raw.deletedAt) : null,
+				user,
 			},
 			new UniqueEntityID(raw.id),
 		)

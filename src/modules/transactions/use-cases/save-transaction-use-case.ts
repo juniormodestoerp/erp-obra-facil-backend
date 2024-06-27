@@ -3,7 +3,7 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import { Transaction } from '@modules/transactions/entities/transaction'
 import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	id?: string
@@ -36,7 +36,7 @@ interface Input {
 export class SaveTransactionUseCase {
 	constructor(
 		private readonly transactionsRepository: TransactionsRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({

@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
-import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
+import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-users-mapper'
 
 import { prisma } from '@shared/infra/database/prisma'
 

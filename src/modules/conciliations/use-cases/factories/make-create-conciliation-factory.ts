@@ -1,4 +1,4 @@
-import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/categories-repository'
+import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/domain-categories-repository'
 import { PrismaTransactionsRepository } from '@modules/transactions/repositories/prisma/repositories/transactions-repository'
 
 import { CreateConciliationUseCase } from '@modules/conciliations/use-cases/create-conciliation-use-case'

@@ -8,8 +8,8 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { File } from '@modules/users/entities/file'
-import type { UsersFilesRepository } from '@modules/users/repositories/user-files-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
+import type { DomainUsersFilesRepository } from '@modules/users/repositories/prisma-user-files-repository'
 
 interface Input {
 	userId: string
@@ -22,8 +22,8 @@ interface Output {
 
 export class UpdateProfilePictureUseCase {
 	constructor(
-		private readonly usersRepository: UsersRepository,
-		private readonly userFilesRepository: UsersFilesRepository,
+		private readonly usersRepository: DomainUsersRepository,
+		private readonly userFilesRepository: DomainUsersFilesRepository,
 	) {}
 
 	async execute({ userId, data }: Input): Promise<Output> {

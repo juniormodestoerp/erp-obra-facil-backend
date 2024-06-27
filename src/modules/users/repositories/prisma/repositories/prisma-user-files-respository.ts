@@ -2,12 +2,12 @@ import type { PrismaClient } from '@prisma/client'
 
 import type { IFindFileByUserIdDTO } from '@modules/users/dtos/find-file-by-user-id-dto'
 import type { File } from '@modules/users/entities/file'
+import type { DomainUsersFilesRepository } from '@modules/users/repositories/prisma-user-files-repository'
 import { PrismaUserFilesMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-files-mapper'
-import type { UsersFilesRepository } from '@modules/users/repositories/user-files-repository'
 
 import { prisma } from '@shared/infra/database/prisma'
 
-export class PrismaUserFilesRepository implements UsersFilesRepository {
+export class PrismaUserFilesRepository implements DomainUsersFilesRepository {
 	private repository: PrismaClient
 
 	constructor() {

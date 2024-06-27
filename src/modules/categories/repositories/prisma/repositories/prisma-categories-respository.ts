@@ -4,12 +4,12 @@ import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 
 import type { IFindCategoryByNameDTO } from '@modules/categories/dtos/find-category-by-name-dto'
 import type { Category } from '@modules/categories/entities/category'
-import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
+import type { DomainCategoriesRepository } from '@modules/categories/repositories/domain-categories-repository'
 import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
 
 import { prisma } from '@shared/infra/database/prisma'
 
-export class PrismaCategoriesRepository implements CategoriesRepository {
+export class PrismaCategoriesRepository implements DomainCategoriesRepository {
 	private repository: PrismaClient
 
 	constructor() {

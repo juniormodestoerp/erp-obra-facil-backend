@@ -1,6 +1,6 @@
 import { Document } from '@core/domain/entities/value-object/document'
 import { Email } from '@core/domain/entities/value-object/email'
-import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/categories-repository'
+import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/domain-categories-repository'
 import { Setting } from '@modules/settings/entities/setting'
 import { User, UserRole } from '@modules/users/entities/user'
 import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'

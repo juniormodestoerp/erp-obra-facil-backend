@@ -1,14 +1,16 @@
 import { AppError } from '@core/domain/errors/app-error'
 
 import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
-import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
+import type { DomainCategoriesRepository } from '@modules/categories/repositories/domain-categories-repository'
 
 interface Output {
 	categories: ISelectInputDTO[]
 }
 
 export class FetchSelectInputCategoriesUseCase {
-	constructor(private readonly categoriesRepository: CategoriesRepository) {}
+	constructor(
+		private readonly categoriesRepository: DomainCategoriesRepository,
+	) {}
 
 	async execute(): Promise<Output> {
 		const categories = await this.categoriesRepository.selectInput()

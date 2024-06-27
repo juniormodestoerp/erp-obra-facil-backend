@@ -1,10 +1,16 @@
-import type { Account as RawAccount } from '@prisma/client'
+import type {
+	Account as RawAccount,
+	Transaction as RawTransaction,
+	User as RawUser,
+} from '@prisma/client'
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { Account, LimitType } from '@modules/accounts/entities/account'
+import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
+import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-users-mapper'
 
 export class PrismaAccountsMapper {
-	static toPrisma(account: Account): RawAccount {
+	static toPrisma(account: Account): any {
 		return {
 			id: account.id,
 			userId: account.userId,
@@ -26,10 +32,32 @@ export class PrismaAccountsMapper {
 			createdAt: account.createdAt,
 			updatedAt: account.updatedAt,
 			deletedAt: account.deletedAt,
+			user: account.user ? { connect: { id: account.user.id } } : null,
+			transactions:
+				account.transactions.length > 0
+					? {
+							connect: account.transactions.map((transaction) => ({
+								id: transaction.id.toString(),
+							})),
+						}
+					: null,
 		}
 	}
 
-	static toDomain(raw: RawAccount): Account {
+	static toDomain(
+		raw: RawAccount & {
+			user: RawUser
+			transactions?: RawTransaction[]
+		},
+	): Account {
+		const user = raw.user ? PrismaUsersMapper.toDomain(raw.user) : null
+
+		const transactions = raw.transactions
+			? raw.transactions.map((transaction: RawTransaction) => {
+					return PrismaTransactionsMapper.toDomain(transaction)
+				})
+			: []
+
 		return Account.create(
 			{
 				userId: raw.userId,
@@ -38,21 +66,23 @@ export class PrismaAccountsMapper {
 				currency: raw.currency,
 				logo: raw.logo,
 				limit: raw.limit,
-				limitType: LimitType[raw.limitType as keyof typeof LimitType],
+				limitType: raw.limitType
+					? LimitType[raw.limitType as keyof typeof LimitType]
+					: null,
 				dueDateDay: raw.dueDateDay,
 				dueDateFirstInvoice: raw.dueDateFirstInvoice
-					? raw.dueDateFirstInvoice?.toISOString()
+					? new Date(raw.dueDateFirstInvoice)
 					: null,
 				closingDateInvoice: raw.closingDateInvoice,
 				balanceFirstInvoice: raw.balanceFirstInvoice,
 				isFirstInvoice: raw.isFirstInvoice,
 				isCreditCard: raw.isCreditCard,
 				initialBalance: raw.initialBalance,
-				createdAt: raw.createdAt,
-				updatedAt: raw.updatedAt,
-				deletedAt: raw.deletedAt,
-				user: null,
-				transactions: [],
+				createdAt: new Date(raw.createdAt),
+				updatedAt: new Date(raw.updatedAt),
+				deletedAt: raw.deletedAt ? new Date(raw.deletedAt) : null,
+				user,
+				transactions,
 			},
 			new UniqueEntityID(raw.id),
 		)

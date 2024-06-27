@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
-import type { UserTokensRepository } from '@modules/users/repositories/user-tokens-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
+import type { DomainUserTokensRepository } from '@modules/users/repositories/user-tokens-repository'
 
 import { DateInstance } from '@shared/infra/providers/date'
 import type { Hash } from '@shared/infra/providers/hash'
@@ -14,8 +14,8 @@ interface Input {
 
 export class ResetForgotPasswordUseCase {
 	constructor(
-		private readonly usersRepository: UsersRepository,
-		private readonly userTokenRepository: UserTokensRepository,
+		private readonly usersRepository: DomainUsersRepository,
+		private readonly userTokenRepository: DomainUserTokensRepository,
 		private readonly hash: Hash,
 	) {}
 

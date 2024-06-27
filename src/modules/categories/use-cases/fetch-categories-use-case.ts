@@ -1,8 +1,8 @@
 import { AppError } from '@core/domain/errors/app-error'
 
 import type { Category } from '@modules/categories/entities/category'
-import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainCategoriesRepository } from '@modules/categories/repositories/domain-categories-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	userId: string
@@ -14,8 +14,8 @@ interface Output {
 
 export class FetchCategoriesUseCase {
 	constructor(
-		private readonly categoriesRepository: CategoriesRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly categoriesRepository: DomainCategoriesRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({ userId }: Input): Promise<Output> {

@@ -2,7 +2,7 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import type { Setting } from '@modules/settings/entities/setting'
 import type { SettingsRepository } from '@modules/settings/repositories/settings-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	pageIndex: number
@@ -17,7 +17,7 @@ interface Output {
 export class FetchSettingsUseCase {
 	constructor(
 		private readonly settingsRepository: SettingsRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({ pageIndex, userId }: Input): Promise<Output> {

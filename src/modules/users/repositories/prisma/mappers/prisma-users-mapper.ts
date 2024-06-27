@@ -14,22 +14,23 @@ import type {
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 
-import { PrismaAccountMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-account-mapper'
-import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-address-mapper'
-import { PrismaCategoryMapper } from '@modules/categories/repositories/prisma/mappers/prisma-category-mapper'
-import { PrismaCenterMapper } from '@modules/centers/repositories/prisma/mappers/prisma-center-mapper'
-import { PrismaMethodMapper } from '@modules/methods/repositories/prisma/mappers/prisma-method-mapper'
+import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-accounts-mapper'
+import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-addresses-mapper'
+import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
+import { PrismaCentersMapper } from '@modules/centers/repositories/prisma/mappers/prisma-centers-mapper'
+import { PrismaMethodsMapper } from '@modules/methods/repositories/prisma/mappers/prisma-methods-mapper'
 import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
-import { PrismaTagMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tag-mapper'
-import { PrismaTransactionMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transaction-mapper'
+import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tags-mapper'
+import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
 import { User, type UserRole } from '@modules/users/entities/user'
 import { PrismaUserFilesMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-files-mapper'
-import { PrismaUserTokenMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-token-mapper'
+import { PrismaUserTokenMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-tokens-mapper'
 
 export class PrismaUsersMapper {
 	static toPrisma(user: User) {
 		return {
-			id: user.id.toString(),
+			id: user.id,
+			addressId: user.address ? user.addressId : null,
 			name: user.name,
 			document: user.document,
 			email: user.email,
@@ -42,9 +43,56 @@ export class PrismaUsersMapper {
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
 			deletedAt: user.deletedAt,
-			addressId: user.address ? user.address.id.toString() : null,
 			fileId: user.files.length > 0 ? user.files[0].id.toString() : null,
 			profilePicture: user.profilePicture,
+			address: {
+				connect: user.address,
+			},
+			files: {
+				connect: user.files.map((file) => ({
+					id: file.id,
+				})),
+			},
+			settings: {
+				connect: user.settings.map((setting) => ({
+					id: setting.id,
+				})),
+			},
+			tags: {
+				connect: user.tags.map((tag) => ({
+					id: tag.id,
+				})),
+			},
+			centers: {
+				connect: user.centers.map((center) => ({
+					id: center.id,
+				})),
+			},
+			methods: {
+				connect: user.methods.map((method) => ({
+					id: method.id,
+				})),
+			},
+			accounts: {
+				connect: user.accounts.map((account) => ({
+					id: account.id,
+				})),
+			},
+			categories: {
+				connect: user.categories.map((category) => ({
+					id: category.id,
+				})),
+			},
+			userTokens: {
+				connect: user.userTokens.map((userToken) => ({
+					id: userToken.id,
+				})),
+			},
+			transactions: {
+				connect: user.transactions.map((transaction) => ({
+					id: transaction.id,
+				})),
+			},
 		}
 	}
 
@@ -75,24 +123,24 @@ export class PrismaUsersMapper {
 			: []
 
 		const tags = raw.tags
-			? raw.tags.map((tag) => PrismaTagMapper.toDomain(tag))
+			? raw.tags.map((tag) => PrismaTagsMapper.toDomain(tag))
 			: []
 
 		const centers = raw.centers
-			? raw.centers.map((center) => PrismaCenterMapper.toDomain(center))
+			? raw.centers.map((center) => PrismaCentersMapper.toDomain(center))
 			: []
 
 		const methods = raw.methods
-			? raw.methods.map((method) => PrismaMethodMapper.toDomain(method))
+			? raw.methods.map((method) => PrismaMethodsMapper.toDomain(method))
 			: []
 
 		const accounts = raw.accounts
-			? raw.accounts.map((account) => PrismaAccountMapper.toDomain(account))
+			? raw.accounts.map((account) => PrismaAccountsMapper.toDomain(account))
 			: []
 
 		const categories = raw.categories
 			? raw.categories.map((category) =>
-					PrismaCategoryMapper.toDomain(category),
+					PrismaCategoriesMapper.toDomain(category),
 				)
 			: []
 
@@ -101,9 +149,9 @@ export class PrismaUsersMapper {
 			: []
 
 		const transactions = raw.transactions
-			? raw.transactions.map((transaction) =>
-					PrismaTransactionMapper.toDomain(transaction),
-				)
+			? raw.transactions.map((transaction: RawTransaction) => {
+					return PrismaTransactionsMapper.toDomain(transaction)
+				})
 			: []
 
 		return User.create(

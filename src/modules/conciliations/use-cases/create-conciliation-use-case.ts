@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 import { Utils } from '@core/utils/string'
 import type { MultipartFile } from '@fastify/multipart'
-import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
+import type { DomainCategoriesRepository } from '@modules/categories/repositories/domain-categories-repository'
 
 import { createWriteStream, existsSync, mkdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
@@ -46,7 +46,7 @@ interface Output {
 export class CreateConciliationUseCase {
 	constructor(
 		private readonly transactionsRepository: TransactionsRepository,
-		private readonly categoriesRepository: CategoriesRepository,
+		private readonly categoriesRepository: DomainCategoriesRepository,
 	) {}
 
 	async execute({ user, file }: Input): Promise<Output> {

@@ -5,7 +5,7 @@ import { PrismaCentersMapper } from '@modules/centers/repositories/prisma/mapper
 import { PrismaMethodsMapper } from '@modules/methods/repositories/prisma/mappers/prisma-methods-mapper'
 import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tags-mapper'
 import { Transaction } from '@modules/transactions/entities/transaction'
-import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
+import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-users-mapper'
 import type {
 	Account as RawAccount,
 	Category as RawCategory,

@@ -11,7 +11,7 @@ import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/pris
 
 import { Transaction } from '@modules/transactions/entities/transaction'
 import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 import { prisma } from '@shared/infra/database/prisma'
 
 interface Input {
@@ -41,7 +41,7 @@ interface Output {
 export class CreateTransactionUseCase {
 	constructor(
 		private readonly transactionsRepository: TransactionsRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({

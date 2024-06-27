@@ -19,6 +19,7 @@ interface Props {
 	createdAt: Date
 	updatedAt: Date
 	deletedAt: Date | null
+
 	user: User | null
 	transactions: Transaction[]
 }
@@ -114,6 +115,8 @@ export class Category extends Entity<Props> {
 				createdAt: props.createdAt ?? new Date(),
 				updatedAt: props.updatedAt ?? new Date(),
 				deletedAt: props.deletedAt ?? null,
+				user: props.user ?? null,
+				transactions: props.transactions ?? [],
 			},
 			id,
 		)

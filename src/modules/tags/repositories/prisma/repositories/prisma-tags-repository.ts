@@ -3,12 +3,12 @@ import type { PrismaClient } from '@prisma/client'
 import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 
 import type { Tag } from '@modules/tags/entities/tag'
+import type { DomainTagsRepository } from '@modules/tags/repositories/domain-tags-repository'
 import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tags-mapper'
-import type { TagsRepository } from '@modules/tags/repositories/tags-repository'
 
 import { prisma } from '@shared/infra/database/prisma'
 
-export class PrismaTagsRepository implements TagsRepository {
+export class PrismaTagsRepository implements DomainTagsRepository {
 	private repository: PrismaClient
 
 	constructor() {

@@ -3,7 +3,7 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import { Address } from '@modules/addresses/entities/address'
 import { User } from '@modules/users/entities/user'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	id: string
@@ -24,7 +24,7 @@ interface Output {
 }
 
 export class SaveUserUseCase {
-	constructor(private readonly usersRepository: UsersRepository) {}
+	constructor(private readonly usersRepository: DomainUsersRepository) {}
 
 	async execute({
 		id,

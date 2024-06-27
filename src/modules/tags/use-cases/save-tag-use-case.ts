@@ -2,8 +2,8 @@ import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
 import { Tag } from '@modules/tags/entities/tag'
-import type { TagsRepository } from '@modules/tags/repositories/tags-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainTagsRepository } from '@modules/tags/repositories/domain-tags-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	id: string
@@ -17,8 +17,8 @@ interface Output {
 
 export class SaveTagUseCase {
 	constructor(
-		private readonly tagsRepository: TagsRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly tagsRepository: DomainTagsRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({ id, userId, name }: Input): Promise<Output> {

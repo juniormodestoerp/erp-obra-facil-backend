@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
 import { Tag } from '@modules/tags/entities/tag'
-import type { TagsRepository } from '@modules/tags/repositories/tags-repository'
+import type { DomainTagsRepository } from '@modules/tags/repositories/domain-tags-repository'
 
 interface Input {
 	userId: string
@@ -13,7 +13,7 @@ interface Output {
 }
 
 export class CreateTagUseCase {
-	constructor(private readonly tagsRepository: TagsRepository) {}
+	constructor(private readonly tagsRepository: DomainTagsRepository) {}
 
 	async execute({ userId, name }: Input): Promise<Output> {
 		const existsTag = await this.tagsRepository.findByName(name)

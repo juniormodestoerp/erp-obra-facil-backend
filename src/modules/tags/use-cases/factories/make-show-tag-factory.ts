@@ -1,4 +1,4 @@
-import { PrismaTagsRepository } from '@modules/tags/repositories/prisma/repositories/tags-repository'
+import { PrismaTagsRepository } from '@modules/tags/repositories/prisma/repositories/prisma-tags-repository'
 
 import { ShowTagUseCase } from '@modules/tags/use-cases/show-tag-use-case'
 

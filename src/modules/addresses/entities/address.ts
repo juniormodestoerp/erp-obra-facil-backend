@@ -2,6 +2,8 @@ import { Entity } from '@core/domain/entities/entity'
 import type { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import type { Optional } from '@core/domain/types/opcional'
 
+import type { User } from '@modules/users/entities/user'
+
 interface Props {
 	userId: string
 	zipCode: string
@@ -14,6 +16,8 @@ interface Props {
 	createdAt: Date
 	updatedAt: Date
 	deletedAt: Date | null
+
+	user: User | null
 }
 
 export class Address extends Entity<Props> {
@@ -101,8 +105,16 @@ export class Address extends Entity<Props> {
 		this.props.deletedAt = deletedAt
 	}
 
+	get user(): User | null {
+		return this.props.user
+	}
+
+	set user(user: User | null) {
+		this.props.user = user
+	}
+
 	static create(
-		props: Optional<Props, 'createdAt' | 'updatedAt' | 'deletedAt'>,
+		props: Optional<Props, 'createdAt' | 'updatedAt' | 'deletedAt' | 'user'>,
 		id?: UniqueEntityID,
 	): Address {
 		return new Address(
@@ -111,6 +123,7 @@ export class Address extends Entity<Props> {
 				createdAt: props.createdAt ?? new Date(),
 				updatedAt: props.updatedAt ?? new Date(),
 				deletedAt: props.deletedAt ?? null,
+				user: props.user ?? null,
 			},
 			id,
 		)

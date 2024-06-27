@@ -9,9 +9,7 @@ import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mapp
 
 import { prisma } from '@shared/infra/database/prisma'
 
-export class PrismaDomainAccountsRepository
-	implements DomainAccountsRepository
-{
+export class PrismaAccountsRepository implements DomainAccountsRepository {
 	private repository: PrismaClient
 
 	constructor() {

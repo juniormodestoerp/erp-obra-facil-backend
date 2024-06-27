@@ -2,7 +2,7 @@ import type { IFindManyUsersDTO } from '@modules/users/dtos/find-many-users-dto'
 import type { IFindUserByIdDTO } from '@modules/users/dtos/find-user-by-id-dto'
 import type { User } from '@modules/users/entities/user'
 
-export interface UsersRepository {
+export interface DomainUsersRepository {
 	findById({ userId }: IFindUserByIdDTO): Promise<User | null>
 	findProfile({ userId }: IFindUserByIdDTO): Promise<User | null>
 	findByDocument(document: string): Promise<User | null>

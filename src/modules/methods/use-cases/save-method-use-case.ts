@@ -3,7 +3,7 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import { Method } from '@modules/methods/entities/method'
 import type { DomainMethodsRepository } from '@modules/methods/repositories/domain-methods-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	id: string
@@ -18,7 +18,7 @@ interface Output {
 export class SaveMethodUseCase {
 	constructor(
 		private readonly paymentMethodsRepository: DomainMethodsRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({ id, userId, name }: Input): Promise<Output> {

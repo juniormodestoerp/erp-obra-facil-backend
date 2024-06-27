@@ -2,7 +2,7 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import type { Method } from '@modules/methods/entities/method'
 import type { DomainMethodsRepository } from '@modules/methods/repositories/domain-methods-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	userId: string
@@ -15,7 +15,7 @@ interface Output {
 export class FetchMethodsUseCase {
 	constructor(
 		private readonly paymentMethodsRepository: DomainMethodsRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({ userId }: Input): Promise<Output> {

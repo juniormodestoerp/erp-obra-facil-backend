@@ -1,4 +1,4 @@
-import { PrismaAddressesRepository } from '@modules/addresses/repositories/prisma/repositories/address-repository'
+import { PrismaAddressesRepository } from '@modules/addresses/repositories/prisma/repositories/prisma-address-respository'
 import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
 
 import { RemoveAddressUseCase } from '@modules/addresses/use-cases/remove-address-use-case'

@@ -1,4 +1,4 @@
-import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/categories-repository'
+import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/domain-categories-repository'
 import { PrismaTransactionsRepository } from '@modules/transactions/repositories/prisma/repositories/transactions-repository'
 import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
 

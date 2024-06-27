@@ -2,7 +2,7 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import { Setting } from '@modules/settings/entities/setting'
 import { User, UserRole } from '@modules/users/entities/user'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 import { settingsOptions } from '@shared/infra/database/data'
 import type { Hash } from '@shared/infra/providers/hash'
@@ -22,7 +22,7 @@ interface Output {
 
 export class CreateUserUseCase {
 	constructor(
-		private readonly usersRepository: UsersRepository,
+		private readonly usersRepository: DomainUsersRepository,
 		private readonly hash: Hash,
 	) {}
 

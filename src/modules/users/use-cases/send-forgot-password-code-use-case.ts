@@ -5,8 +5,8 @@ import { Utils } from '@core/utils/string'
 
 import type { User } from '@modules/users/entities/user'
 import { UserToken } from '@modules/users/entities/user-token'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
-import type { UserTokensRepository } from '@modules/users/repositories/user-tokens-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
+import type { DomainUserTokensRepository } from '@modules/users/repositories/user-tokens-repository'
 
 import type { Queue } from '@shared/infra/providers/queue'
 import { jobs } from '@shared/infra/queue/jobs'
@@ -20,8 +20,8 @@ interface Input {
 
 export class SendForgotPasswordCodeUseCase {
 	constructor(
-		private readonly usersRepository: UsersRepository,
-		private readonly userTokenRepository: UserTokensRepository,
+		private readonly usersRepository: DomainUsersRepository,
+		private readonly userTokenRepository: DomainUserTokensRepository,
 		private readonly queueProvider: Queue,
 	) {}
 

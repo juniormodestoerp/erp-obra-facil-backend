@@ -2,7 +2,7 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import type { Account } from '@modules/accounts/entities/account'
 import type { DomainAccountsRepository } from '@modules/accounts/repositories/domain-accounts-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	userId: string
@@ -15,7 +15,7 @@ interface Output {
 export class FetchAccountsUseCase {
 	constructor(
 		private readonly bankDomainAccountsRepository: DomainAccountsRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({ userId }: Input): Promise<Output> {

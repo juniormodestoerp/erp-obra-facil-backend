@@ -1,13 +1,13 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	userId: string
 }
 
 export class RemoveUserUseCase {
-	constructor(private usersRepository: UsersRepository) {}
+	constructor(private usersRepository: DomainUsersRepository) {}
 
 	async execute({ userId }: Input): Promise<void> {
 		const user = await this.usersRepository.findById({

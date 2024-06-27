@@ -3,7 +3,7 @@ import { AppError } from '@core/domain/errors/app-error'
 
 import { Center } from '@modules/centers/entities/center'
 import type { DomainCentersRepository } from '@modules/centers/repositories/domain-centers-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	id: string
@@ -18,7 +18,7 @@ interface Output {
 export class SaveCenterUseCase {
 	constructor(
 		private readonly centersRepository: DomainCentersRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({ id, userId, name }: Input): Promise<Output> {

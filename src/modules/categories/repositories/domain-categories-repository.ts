@@ -3,7 +3,7 @@ import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 import type { IFindCategoryByNameDTO } from '@modules/categories/dtos/find-category-by-name-dto'
 import type { Category } from '@modules/categories/entities/category'
 
-export interface CategoriesRepository {
+export interface DomainCategoriesRepository {
 	findById(id: string): Promise<Category | null>
 	findByName({ userId, name }: IFindCategoryByNameDTO): Promise<Category | null>
 	findBySubcategoryName({

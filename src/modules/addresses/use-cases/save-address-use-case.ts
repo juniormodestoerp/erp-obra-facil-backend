@@ -2,8 +2,8 @@ import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
 import { Address } from '@modules/addresses/entities/address'
-import type { AddressesRepository } from '@modules/addresses/repositories/address-repository'
-import type { UsersRepository } from '@modules/users/repositories/user-repository'
+import type { DomainAddressesRepository } from '@modules/addresses/repositories/domain-addresses-repository'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
 	id: string
@@ -23,8 +23,8 @@ interface Output {
 
 export class SaveAddressUseCase {
 	constructor(
-		private readonly addressRepository: AddressesRepository,
-		private readonly usersRepository: UsersRepository,
+		private readonly addressRepository: DomainAddressesRepository,
+		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
 	async execute({

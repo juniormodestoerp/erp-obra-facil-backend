@@ -2,11 +2,11 @@ import type { PrismaClient } from '@prisma/client'
 
 import type { UserToken } from '@modules/users/entities/user-token'
 import { PrismaUserTokenMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-tokens-mapper'
-import type { UserTokensRepository } from '@modules/users/repositories/user-tokens-repository'
+import type { DomainUserTokensRepository } from '@modules/users/repositories/user-tokens-repository'
 
 import { prisma } from '@shared/infra/database/prisma'
 
-export class PrismaUserTokensRepository implements UserTokensRepository {
+export class PrismaUserTokensRepository implements DomainUserTokensRepository {
 	private repository: PrismaClient
 
 	constructor() {

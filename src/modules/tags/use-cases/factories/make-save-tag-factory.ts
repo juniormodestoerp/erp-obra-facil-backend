@@ -1,5 +1,5 @@
-import { PrismaTagsRepository } from '@modules/tags/repositories/prisma/repositories/tags-repository'
-import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
+import { PrismaTagsRepository } from '@modules/tags/repositories/prisma/repositories/prisma-tags-repository'
+import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/prisma-users-respository'
 
 import { SaveTagUseCase } from '@modules/tags/use-cases/save-tag-use-case'
 

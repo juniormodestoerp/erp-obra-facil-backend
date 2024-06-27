@@ -4,7 +4,7 @@ import {
 	Category,
 	type CategoryType,
 } from '@modules/categories/entities/category'
-import type { CategoriesRepository } from '@modules/categories/repositories/categories-repository'
+import type { DomainCategoriesRepository } from '@modules/categories/repositories/domain-categories-repository'
 
 interface Input {
 	userId: string
@@ -18,7 +18,9 @@ interface Output {
 }
 
 export class CreateCategoryUseCase {
-	constructor(private readonly categoriesRepository: CategoriesRepository) {}
+	constructor(
+		private readonly categoriesRepository: DomainCategoriesRepository,
+	) {}
 
 	async execute({ userId, type, name, subcategoryOf }: Input): Promise<Output> {
 		console.log({ userId, type, name, subcategoryOf })

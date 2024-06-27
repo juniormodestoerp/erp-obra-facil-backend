@@ -6,7 +6,7 @@ import type { Transaction } from '@modules/transactions/entities/transaction'
 export interface DomainTransactionsRepository {
 	findById({ userId, id }: IFindTransactionByIdDTO): Promise<Transaction | null>
 	findMany({
-		pageIndex,
+		// pageIndex,
 		userId,
 	}: IFindManyTransactionsDTO): Promise<Transaction[]>
 	fetchAll({ userId }: { userId: string }): Promise<Transaction[]>

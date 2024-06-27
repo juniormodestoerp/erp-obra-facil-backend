@@ -31,7 +31,7 @@ interface Input {
 	documentNumber: string | null
 	notes: string | null
 	competenceDate: string | null
-	tags: string[] | null
+	tag: string | null
 }
 
 interface Output {
@@ -61,7 +61,7 @@ export class CreateTransactionUseCase {
 		documentNumber,
 		notes,
 		competenceDate,
-		tags,
+		tag,
 	}: Input): Promise<Output> {
 		const user = await this.usersRepository.findById({
 			userId,
@@ -139,21 +139,19 @@ export class CreateTransactionUseCase {
 			}
 		}
 
-		let tagEntity: Tag[] = []
+		let tagEntity: Tag | null = null
 
-		if (tags) {
-			const existsTags = await prisma.tag.findMany({
+		if (tag) {
+			const existsTag = await prisma.tag.findUnique({
 				where: {
 					userId,
-					name: {
-						in: tags,
-					},
+					name: tag,
 				},
 			})
-			if (!existsTags) {
-				tagEntity = []
+			if (existsTag) {
+				tagEntity = PrismaTagsMapper.toDomain(existsTag)
 			} else {
-				tagEntity = existsTags.map((tag) => PrismaTagsMapper.toDomain(tag))
+				tagEntity = null
 			}
 		}
 
@@ -163,6 +161,7 @@ export class CreateTransactionUseCase {
 			categoryId: categoryEntity.id,
 			centerId: centerEntity ? centerEntity.id : null,
 			methodId: methodEntity ? methodEntity.id : null,
+			tagId: tagEntity ? tagEntity.id : null,
 			type,
 			date: Utils.parseDate(date),
 			amount,
@@ -178,7 +177,7 @@ export class CreateTransactionUseCase {
 			documentNumber,
 			notes,
 			competenceDate: competenceDate ? Utils.parseDate(competenceDate) : null,
-			tags: tagEntity,
+			tag: tagEntity,
 			user,
 		})
 

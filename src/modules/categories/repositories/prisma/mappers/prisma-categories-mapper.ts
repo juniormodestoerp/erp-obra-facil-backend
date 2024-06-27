@@ -24,20 +24,7 @@ export class PrismaCategoriesMapper {
 		}
 	}
 
-	static toDomain(
-		raw: RawCategory & {
-			user: RawUser
-			transactions?: RawTransaction[]
-		},
-	): Category {
-		const user = raw.user ? PrismaUsersMapper.toDomain(raw.user) : null
-
-		const transactions = raw.transactions
-			? raw.transactions.map((transaction: RawTransaction) => {
-					return PrismaTransactionsMapper.toDomain(transaction)
-				})
-			: []
-
+	static toDomain(raw: RawCategory): Category {
 		return Category.create(
 			{
 				userId: raw.userId,
@@ -48,8 +35,6 @@ export class PrismaCategoriesMapper {
 				createdAt: new Date(raw.createdAt),
 				updatedAt: new Date(raw.updatedAt),
 				deletedAt: raw.deletedAt ? new Date(raw.deletedAt) : null,
-				user,
-				transactions,
 			},
 			new UniqueEntityID(raw.id),
 		)

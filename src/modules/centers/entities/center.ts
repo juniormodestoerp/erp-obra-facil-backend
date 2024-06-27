@@ -2,17 +2,12 @@ import { Entity } from '@core/domain/entities/entity'
 import type { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import type { Optional } from '@core/domain/types/opcional'
 
-import type { Transaction } from '@modules/transactions/entities/transaction'
-import type { User } from '@modules/users/entities/user'
-
 interface Props {
 	userId: string
 	name: string
 	createdAt: Date
 	updatedAt: Date
 	deletedAt: Date | null
-	user: User | null
-	transactions: Transaction[]
 }
 
 export class Center extends Entity<Props> {
@@ -56,26 +51,10 @@ export class Center extends Entity<Props> {
 		this.props.deletedAt = deletedAt
 	}
 
-	get user(): User | null {
-		return this.props.user
-	}
-
-	set user(user: User | null) {
-		this.props.user = user
-	}
-
-	get transactions(): Transaction[] {
-		return this.props.transactions
-	}
-
-	set transactions(transactions: Transaction[]) {
-		this.props.transactions = transactions
-	}
-
 	static create(
 		props: Optional<
 			Props,
-			'createdAt' | 'updatedAt' | 'deletedAt' | 'user' | 'transactions'
+			'createdAt' | 'updatedAt' | 'deletedAt'
 		>,
 		id?: UniqueEntityID,
 	): Center {
@@ -85,8 +64,6 @@ export class Center extends Entity<Props> {
 				createdAt: props.createdAt ?? new Date(),
 				updatedAt: props.updatedAt ?? new Date(),
 				deletedAt: props.deletedAt ?? null,
-				user: props.user ?? null,
-				transactions: props.transactions ?? [],
 			},
 			id,
 		)

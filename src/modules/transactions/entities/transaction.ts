@@ -15,6 +15,7 @@ interface Props {
 	categoryId: string
 	centerId: string | null
 	methodId: string | null
+	tagId: string | null
 	type: string
 	date: Date
 	amount: number
@@ -35,7 +36,7 @@ interface Props {
 	category: Category | null
 	center: Center | null
 	method: Method | null
-	tags: Tag[]
+	tag: Tag | null
 }
 
 export class Transaction extends Entity<Props> {
@@ -77,6 +78,14 @@ export class Transaction extends Entity<Props> {
 
 	set methodId(value: string | null) {
 		this.props.methodId = value
+	}
+
+	get tagId(): string | null {
+		return this.props.tagId
+	}
+
+	set tagId(value: string | null) {
+		this.props.tagId = value
 	}
 
 	get type(): string {
@@ -231,16 +240,16 @@ export class Transaction extends Entity<Props> {
 		this.props.method = value
 	}
 
-	get tags(): Tag[] {
-		return this.props.tags
+	get tag(): Tag | null {
+		return this.props.tag
 	}
 
-	set tags(value: Tag[]) {
-		this.props.tags = value
+	set tag(value: Tag | null) {
+		this.props.tag = value
 	}
 
 	static create(
-		props: Optional<Props, 'createdAt' | 'updatedAt' | 'deletedAt'>,
+		props: Optional<Props, 'createdAt' | 'updatedAt' | 'deletedAt' | 'account'>,
 		id?: UniqueEntityID,
 	): Transaction {
 		return new Transaction(
@@ -249,6 +258,7 @@ export class Transaction extends Entity<Props> {
 				createdAt: props.createdAt ?? new Date(),
 				updatedAt: props.updatedAt ?? new Date(),
 				deletedAt: props.deletedAt ?? null,
+				account: props.account ?? null,
 			},
 			id,
 		)

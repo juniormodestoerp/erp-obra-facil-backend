@@ -5,14 +5,14 @@ import type { DomainTransactionsRepository } from '@modules/transactions/reposit
 import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
-	pageIndex: number
 	userId: string
-	searchTerm?: string
+	// pageIndex: number
+	// searchTerm?: string
 }
 
 interface Output {
 	transactions: Transaction[]
-	totalCount: number
+	// totalCount: number
 }
 
 export class FetchTransactionsUseCase {
@@ -21,7 +21,8 @@ export class FetchTransactionsUseCase {
 		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
-	async execute({ pageIndex, userId, searchTerm }: Input): Promise<Output> {
+	async execute({ userId }: Input): Promise<Output> {
+		// { pageIndex, userId, searchTerm }: Input
 		const user = await this.usersRepository.findById({
 			userId,
 		})
@@ -32,9 +33,9 @@ export class FetchTransactionsUseCase {
 		}
 
 		const transactions = await this.DomainTransactionsRepository.findMany({
-			pageIndex,
+			// pageIndex,
 			userId,
-			searchTerm,
+			// searchTerm,
 		})
 
 		if (transactions.length === 0) {
@@ -43,13 +44,11 @@ export class FetchTransactionsUseCase {
 			})
 		}
 
-		console.log(JSON.stringify(transactions, null, 2))
-
-		const totalCount = await this.DomainTransactionsRepository.count(searchTerm)
+		// const totalCount = await this.DomainTransactionsRepository.count(searchTerm)
 
 		return {
 			transactions,
-			totalCount,
+			// totalCount,
 		}
 	}
 }

@@ -7,6 +7,7 @@ import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/pris
 import { Transaction } from '@modules/transactions/entities/transaction'
 import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-users-mapper'
 import type {
+	Prisma,
 	Account as RawAccount,
 	Category as RawCategory,
 	Center as RawCenter,
@@ -25,6 +26,7 @@ export class PrismaTransactionsMapper {
 			categoryId: transaction.categoryId,
 			centerId: transaction.centerId,
 			methodId: transaction.methodId,
+			tagId: transaction.tagId,
 			type: transaction.type,
 			date: transaction.date,
 			amount: transaction.amount,
@@ -39,22 +41,17 @@ export class PrismaTransactionsMapper {
 			createdAt: transaction.createdAt,
 			updatedAt: transaction.updatedAt,
 			deletedAt: transaction.deletedAt,
-			tags: {
-				connect: transaction.tags.map((tag) => ({
-					id: tag.id,
-				})),
-			},
 		}
 	}
 
 	static toDomain(
 		raw: RawTransaction & {
 			user: RawUser
-			account: RawAccount
-			category: RawCategory
-			center: RawCenter | null
-			method: RawMethod | null
-			tags: RawTag[]
+			account: Omit<RawAccount, 'user'>
+			category: Omit<RawCategory, 'user'>
+			center: Omit<RawCenter, 'user'> | null
+			method: Omit<RawMethod, 'user'> | null
+			tag: Omit<RawTag, 'user'> | null
 		},
 	): Transaction {
 		return Transaction.create(
@@ -64,6 +61,7 @@ export class PrismaTransactionsMapper {
 				categoryId: raw.categoryId,
 				centerId: raw.centerId,
 				methodId: raw.methodId,
+				tagId: raw.tagId,
 				type: raw.type,
 				date: new Date(raw.date),
 				amount: raw.amount,
@@ -80,18 +78,12 @@ export class PrismaTransactionsMapper {
 				createdAt: new Date(raw.createdAt),
 				updatedAt: new Date(raw.updatedAt),
 				deletedAt: raw.deletedAt ? new Date(raw.deletedAt) : null,
-				user: raw.user ? PrismaUsersMapper.toDomain(raw.user) : null,
-				account: raw.account
-					? PrismaAccountsMapper.toDomain(raw.account)
-					: null,
-				category: raw.category
-					? PrismaCategoriesMapper.toDomain(raw.category)
-					: null,
+				user: PrismaUsersMapper.toDomain(raw.user),
+				account: PrismaAccountsMapper.toDomain(raw.account),
+				category: PrismaCategoriesMapper.toDomain(raw.category),
 				center: raw.center ? PrismaCentersMapper.toDomain(raw.center) : null,
 				method: raw.method ? PrismaMethodsMapper.toDomain(raw.method) : null,
-				tags: raw.tags
-					? raw.tags.map((tag: any) => PrismaTagsMapper.toDomain(tag))
-					: [],
+				tag: raw.tag ? PrismaTagsMapper.toDomain(raw.tag) : null,
 			},
 			new UniqueEntityID(raw.id),
 		)

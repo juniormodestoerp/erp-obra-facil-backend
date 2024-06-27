@@ -7,7 +7,6 @@ import type {
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { Account, LimitType } from '@modules/accounts/entities/account'
 import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
-import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-users-mapper'
 
 export class PrismaAccountsMapper {
 	static toPrisma(account: Account): any {
@@ -35,20 +34,7 @@ export class PrismaAccountsMapper {
 		}
 	}
 
-	static toDomain(
-		raw: RawAccount & {
-			user: RawUser
-			transactions?: RawTransaction[]
-		},
-	): Account {
-		const user = raw.user ? PrismaUsersMapper.toDomain(raw.user) : null
-
-		const transactions = raw.transactions
-			? raw.transactions.map((transaction: RawTransaction) => {
-					return PrismaTransactionsMapper.toDomain(transaction)
-				})
-			: []
-
+	static toDomain(raw: RawAccount): Account {
 		return Account.create(
 			{
 				userId: raw.userId,
@@ -72,8 +58,6 @@ export class PrismaAccountsMapper {
 				createdAt: new Date(raw.createdAt),
 				updatedAt: new Date(raw.updatedAt),
 				deletedAt: raw.deletedAt ? new Date(raw.deletedAt) : null,
-				user,
-				transactions,
 			},
 			new UniqueEntityID(raw.id),
 		)

@@ -23,6 +23,6 @@ export class RemoveTransactionUseCase {
 			})
 		}
 
-		await this.DomainTransactionsRepository.remove(id)
+		await this.DomainTransactionsRepository.remove({ userId, id })
 	}
 }

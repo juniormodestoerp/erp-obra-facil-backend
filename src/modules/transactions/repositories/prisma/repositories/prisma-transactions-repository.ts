@@ -11,7 +11,7 @@ import type { PrismaClient } from '@prisma/client'
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
 
-export class PrismaDomainTransactionsRepository
+export class PrismaTransactionsRepository
 	implements DomainTransactionsRepository
 {
 	private repository: PrismaClient
@@ -36,7 +36,7 @@ export class PrismaDomainTransactionsRepository
 				category: true,
 				center: true,
 				method: true,
-				tags: true,
+				tag: true,
 			},
 		})
 
@@ -48,37 +48,38 @@ export class PrismaDomainTransactionsRepository
 	}
 
 	async findMany({
-		pageIndex,
+		// pageIndex,
 		userId,
-		searchTerm,
+		// searchTerm,
 	}: IFindManyTransactionsDTO): Promise<Transaction[]> {
-		const skip = pageIndex * env.PER_PAGE
-
-		const whereClauses: ITransactionsWhereClauses = {
-			userId,
-			deletedAt: null,
-		}
-
-		if (searchTerm) {
-			whereClauses.OR = [
-				{ description: { contains: searchTerm, mode: 'insensitive' } },
-				{ categoryId: { contains: searchTerm, mode: 'insensitive' } },
-				{ transferAccount: { contains: searchTerm, mode: 'insensitive' } },
-				{ card: { contains: searchTerm, mode: 'insensitive' } },
-				{ contact: { contains: searchTerm, mode: 'insensitive' } },
-				{ project: { contains: searchTerm, mode: 'insensitive' } },
-				{ documentNumber: { contains: searchTerm, mode: 'insensitive' } },
-				{ notes: { contains: searchTerm, mode: 'insensitive' } },
-				{ bankName: { contains: searchTerm, mode: 'insensitive' } },
-				{ method: { contains: searchTerm, mode: 'insensitive' } },
-				{ status: { contains: searchTerm, mode: 'insensitive' } },
-			]
-		}
+		// const skip = pageIndex * env.PER_PAGE
+		// const whereClauses: ITransactionsWhereClauses = {
+		// 	userId,
+		// 	deletedAt: null,
+		// }
+		// if (searchTerm) {
+		// 	whereClauses.OR = [
+		// 		{ description: { contains: searchTerm, mode: 'insensitive' } },
+		// 		{ categoryId: { contains: searchTerm, mode: 'insensitive' } },
+		// 		{ transferAccount: { contains: searchTerm, mode: 'insensitive' } },
+		// 		{ card: { contains: searchTerm, mode: 'insensitive' } },
+		// 		{ contact: { contains: searchTerm, mode: 'insensitive' } },
+		// 		{ project: { contains: searchTerm, mode: 'insensitive' } },
+		// 		{ documentNumber: { contains: searchTerm, mode: 'insensitive' } },
+		// 		{ notes: { contains: searchTerm, mode: 'insensitive' } },
+		// 		{ bankName: { contains: searchTerm, mode: 'insensitive' } },
+		// 		{ method: { contains: searchTerm, mode: 'insensitive' } },
+		// 		{ status: { contains: searchTerm, mode: 'insensitive' } },
+		// 	]
+		// }
 
 		const transactions = await this.repository.transaction.findMany({
-			where: whereClauses,
-			skip,
-			take: env.PER_PAGE,
+			where: {
+				userId,
+				deletedAt: null,
+			},
+			// skip,
+			// take: env.PER_PAGE,
 			orderBy: {
 				updatedAt: 'desc',
 			},
@@ -88,7 +89,7 @@ export class PrismaDomainTransactionsRepository
 				account: true,
 				center: true,
 				method: true,
-				tags: true,
+				tag: true,
 			},
 		})
 
@@ -203,13 +204,10 @@ export class PrismaDomainTransactionsRepository
 	}
 
 	async remove({ userId, id }: IFindTransactionByIdDTO): Promise<void> {
-		await this.repository.transaction.update({
+		await this.repository.transaction.delete({
 			where: {
 				id,
 				userId,
-			},
-			data: {
-				deletedAt: new Date(),
 			},
 		})
 	}

@@ -15,3 +15,19 @@ export async function Router(app: FastifyInstance) {
 	app.patch('/settings/:id', saveSetting)
 	app.delete('/settings/:id', removeSetting)
 }
+// type: string
+// date: string
+// amount: number
+// description: string
+// account: string
+// status: string
+// category: string
+// card: string | null
+// contact: string | null
+// center: string | null
+// project: string | null
+// method: string | null
+// documentNumber: string | null
+// notes: string | null
+// competenceDate: string | null
+// tags: string[] | null

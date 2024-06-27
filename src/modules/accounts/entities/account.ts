@@ -28,9 +28,6 @@ interface Props {
 	createdAt: Date
 	updatedAt: Date
 	deletedAt: Date | null
-
-	user: User | null
-	transactions: Transaction[]
 }
 
 export class Account extends Entity<Props> {
@@ -168,22 +165,6 @@ export class Account extends Entity<Props> {
 
 	set deletedAt(deletedAt: Date | null) {
 		this.props.deletedAt = deletedAt
-	}
-
-	get user(): User | null {
-		return this.props.user
-	}
-
-	set user(user: User | null) {
-		this.props.user = user
-	}
-
-	get transactions(): Transaction[] {
-		return this.props.transactions
-	}
-
-	set transactions(transactions: Transaction[]) {
-		this.props.transactions = transactions
 	}
 
 	static create(

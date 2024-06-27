@@ -8,36 +8,39 @@ import { makeFetchTransactionsUseCase } from '@modules/transactions/use-cases/fa
 
 import { env } from '@shared/infra/config/env'
 
-const querySchema = z.object({
-	pageIndex: z.coerce
-		.number(numbMessage('índice da página'))
-		.int({ message: 'O índice da página deve ser um número inteiro.' })
-		.default(1),
-	searchTerm: z.string(strMessage('termo de busca')).optional(),
-})
+// const querySchema = z.object({
+// 	pageIndex: z.coerce
+// 		.number(numbMessage('índice da página'))
+// 		.int({ message: 'O índice da página deve ser um número inteiro.' })
+// 		.default(1),
+// 	searchTerm: z.string(strMessage('termo de busca')).optional(),
+// })
 
 export async function fetchTransactions(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const { pageIndex, searchTerm } = querySchema.parse(request.query)
+	// const { pageIndex, searchTerm } = querySchema.parse(request.query)
 
 	const fetchTransactionsUseCase = makeFetchTransactionsUseCase()
 
-	const { transactions, totalCount } = await fetchTransactionsUseCase.execute({
-		pageIndex,
+	const { transactions } = await fetchTransactionsUseCase.execute({
 		userId: request.user.sub,
-		searchTerm,
 	})
+	// 	{
+	// 	// pageIndex,
+	// 	// userId: request.user.sub,
+	// 	// searchTerm,
+	// }
 
 	return reply.status(200).send({
 		transactions: transactions.map(
 			(transaction) => TransactionViewModel.toHTTP(transaction) ?? [],
 		),
-		meta: {
-			pageIndex,
-			perPage: env.PER_PAGE,
-			totalCount,
-		},
+		// meta: {
+		// 	pageIndex,
+		// 	perPage: env.PER_PAGE,
+		// 	totalCount,
+		// },
 	})
 }

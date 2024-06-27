@@ -1,7 +1,7 @@
 export interface IFindManyTransactionsDTO {
-	pageIndex: number
+	// pageIndex: number
 	userId: string
-	searchTerm?: string
+	// searchTerm?: string
 }
 
 export interface ITransactionsWhereClauses {

@@ -194,7 +194,8 @@ model Transaction {
   methodId String?
   method   Method? @relation(fields: [methodId], references: [id])
 
-  tags Tag[]
+  tagId String?
+  tag   Tag?    @relation(fields: [tagId], references: [id])
 
   @@map("transactions")
 }

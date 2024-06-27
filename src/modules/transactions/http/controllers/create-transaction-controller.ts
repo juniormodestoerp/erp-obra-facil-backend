@@ -8,6 +8,7 @@ import {
 } from '@core/utils/custom-zod-error'
 
 import { makeCreateTransactionUseCase } from '@modules/transactions/use-cases/factories/make-create-transaction-factory'
+import { TransactionViewModel } from '../view-models/transaction-view-model'
 
 const schema = z.object({
 	type: z.string(strMessage('tipo')),
@@ -28,10 +29,7 @@ const schema = z.object({
 		.string(dateMessage('data competência'))
 		.nullable()
 		.default(null),
-	tags: z
-		.array(z.string(strMessage('tags')))
-		.nullable()
-		.default(null),
+	tag: z.string(strMessage('tag')).nullable().default(null),
 })
 
 export async function createTransaction(
@@ -54,7 +52,7 @@ export async function createTransaction(
 		documentNumber,
 		notes,
 		competenceDate,
-		tags,
+		tag,
 	} = schema.parse(request.body)
 
 	const createTransactionUseCase = makeCreateTransactionUseCase()
@@ -76,8 +74,8 @@ export async function createTransaction(
 		documentNumber,
 		notes,
 		competenceDate,
-		tags,
+		tag,
 	})
 
-	return reply.status(201).send()
+	return reply.status(201).send(TransactionViewModel.toHTTP(transaction))
 }

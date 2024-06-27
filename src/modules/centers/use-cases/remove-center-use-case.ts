@@ -1,18 +1,16 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { CostAndProfitCentersRepository } from '@modules/cost-and-profit-centers/repositories/cost-and-profit-centers-repository'
+import type { DomainCentersRepository } from '@modules/centers/repositories/domain-centers-repository'
 
 interface Input {
 	id: string
 }
 
 export class RemoveCostAndProfitCenterUseCase {
-	constructor(
-		private readonly costAndProfitCentersRepository: CostAndProfitCentersRepository,
-	) {}
+	constructor(private readonly centersRepository: DomainCentersRepository) {}
 
 	async execute({ id }: Input): Promise<void> {
-		const center = await this.costAndProfitCentersRepository.findById(id)
+		const center = await this.centersRepository.findById(id)
 
 		if (!center) {
 			throw new AppError({
@@ -20,6 +18,6 @@ export class RemoveCostAndProfitCenterUseCase {
 			})
 		}
 
-		await this.costAndProfitCentersRepository.remove(id)
+		await this.centersRepository.remove(id)
 	}
 }

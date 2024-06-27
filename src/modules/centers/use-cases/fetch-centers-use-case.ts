@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
-import type { CostAndProfitCentersRepository } from '@modules/cost-and-profit-centers/repositories/cost-and-profit-centers-repository'
+import type { Center } from '@modules/centers/entities/center'
+import type { DomainCentersRepository } from '@modules/centers/repositories/domain-centers-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
@@ -9,12 +9,12 @@ interface Input {
 }
 
 interface Output {
-	costAndProfitCenters: Center[]
+	centers: Center[]
 }
 
-export class FetchCostAndProfitCentersUseCase {
+export class FetchCentersUseCase {
 	constructor(
-		private readonly costAndProfitCentersRepository: CostAndProfitCentersRepository,
+		private readonly centersRepository: DomainCentersRepository,
 		private readonly usersRepository: UsersRepository,
 	) {}
 
@@ -29,17 +29,16 @@ export class FetchCostAndProfitCentersUseCase {
 			})
 		}
 
-		const costAndProfitCenters =
-			await this.costAndProfitCentersRepository.findMany(userId)
+		const centers = await this.centersRepository.findMany(userId)
 
-		if (costAndProfitCenters.length === 0) {
+		if (centers.length === 0) {
 			throw new AppError({
 				code: 'cost_and_profit_center.not_found',
 			})
 		}
 
 		return {
-			costAndProfitCenters,
+			centers,
 		}
 	}
 }

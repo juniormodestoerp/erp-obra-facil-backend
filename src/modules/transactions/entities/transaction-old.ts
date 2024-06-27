@@ -21,7 +21,7 @@ interface Props {
 	currentBalance: number
 	method: string
 	competencyDate: Date | null
-	costAndProfitCenters: string | null
+	centers: string | null
 	tags: string | null
 	documentNumber: string | null
 	associatedContracts: string | null
@@ -160,12 +160,12 @@ export class Transaction extends Entity<Props> {
 		this.props.competencyDate = value
 	}
 
-	get costAndProfitCenters(): string | null {
-		return this.props.costAndProfitCenters
+	get centers(): string | null {
+		return this.props.centers
 	}
 
-	set costAndProfitCenters(value: string | null) {
-		this.props.costAndProfitCenters = value
+	set centers(value: string | null) {
+		this.props.centers = value
 	}
 
 	get tags(): string | null {

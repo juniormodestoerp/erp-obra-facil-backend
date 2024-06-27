@@ -1,25 +1,19 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
-import { CostAndProfitCentersViewModel } from '@modules/cost-and-profit-centers/http/view-models/cost-and-profit-centers-view-model'
-import { makeFetchCostAndProfitCentersUseCase } from '@modules/cost-and-profit-centers/use-cases/factories/make-fetch-cost-and-profit-centers-factory'
+import { CentersViewModel } from '@modules/centers/http/view-models/centers-view-model'
+import { makeFetchCentersUseCase } from '@modules/centers/use-cases/factories/make-fetch-centers-factory'
 
-export async function fetchCostAndProfitCentersController(
+export async function fetchCentersController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const fetchCostAndProfitCentersUseCase =
-		makeFetchCostAndProfitCentersUseCase()
+	const fetchCentersUseCase = makeFetchCentersUseCase()
 
-	const { costAndProfitCenters } =
-		await fetchCostAndProfitCentersUseCase.execute({
-			userId: request.user.sub,
-		})
+	const { centers } = await fetchCentersUseCase.execute({
+		userId: request.user.sub,
+	})
 
 	return reply
 		.status(200)
-		.send(
-			costAndProfitCenters.map(
-				(center) => CostAndProfitCentersViewModel.toHTTP(center) ?? [],
-			),
-		)
+		.send(centers.map((center) => CentersViewModel.toHTTP(center) ?? []))
 }

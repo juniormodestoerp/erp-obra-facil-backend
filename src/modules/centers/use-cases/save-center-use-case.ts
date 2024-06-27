@@ -1,8 +1,8 @@
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
-import { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
-import type { CostAndProfitCentersRepository } from '@modules/cost-and-profit-centers/repositories/cost-and-profit-centers-repository'
+import { Center } from '@modules/centers/entities/center'
+import type { DomainCentersRepository } from '@modules/centers/repositories/domain-centers-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
@@ -17,7 +17,7 @@ interface Output {
 
 export class SaveCostAndProfitCenterUseCase {
 	constructor(
-		private readonly costAndProfitCentersRepository: CostAndProfitCentersRepository,
+		private readonly centersRepository: DomainCentersRepository,
 		private readonly usersRepository: UsersRepository,
 	) {}
 
@@ -32,8 +32,7 @@ export class SaveCostAndProfitCenterUseCase {
 			})
 		}
 
-		const previusCostAndProfitCenter =
-			await this.costAndProfitCentersRepository.findById(id)
+		const previusCostAndProfitCenter = await this.centersRepository.findById(id)
 
 		if (!previusCostAndProfitCenter) {
 			throw new AppError({
@@ -52,7 +51,7 @@ export class SaveCostAndProfitCenterUseCase {
 			new UniqueEntityID(id),
 		)
 
-		await this.costAndProfitCentersRepository.save(center)
+		await this.centersRepository.save(center)
 
 		return {
 			center,

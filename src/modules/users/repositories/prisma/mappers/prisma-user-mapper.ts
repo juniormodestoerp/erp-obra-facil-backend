@@ -14,10 +14,10 @@ import type {
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 
-import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-address-mapper'
 import { PrismaAccountMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-account-mapper'
+import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-address-mapper'
 import { PrismaCategoryMapper } from '@modules/categories/repositories/prisma/mappers/prisma-category-mapper'
-import { PrismaCenterMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-center-mapper'
+import { PrismaCenterMapper } from '@modules/centers/repositories/prisma/mappers/prisma-center-mapper'
 import { PrismaMethodMapper } from '@modules/methods/repositories/prisma/mappers/prisma-method-mapper'
 import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
 import { PrismaTagMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tag-mapper'

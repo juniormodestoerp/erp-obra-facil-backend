@@ -128,7 +128,7 @@ export class CreateConciliationUseCase {
 				currentBalance: 0, // Ajustar conforme necessário
 				method: file.TRNTYPE === 'DEBIT' ? 'debit' : 'credit',
 				competencyDate: null,
-				costAndProfitCenters: null,
+				centers: null,
 				tags: [],
 				documentNumber: file.FITID,
 				associatedContracts: null,

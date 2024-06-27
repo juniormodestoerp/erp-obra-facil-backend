@@ -3,8 +3,8 @@ import z from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { CostAndProfitCentersViewModel } from '@modules/cost-and-profit-centers/http/view-models/cost-and-profit-centers-view-model'
-import { makeSaveCostAndProfitCenterUseCase } from '@modules/cost-and-profit-centers/use-cases/factories/make-save-cost-and-profit-center-factory'
+import { CentersViewModel } from '@modules/centers/http/view-models/centers-view-model'
+import { makeSaveCostAndProfitCenterUseCase } from '@modules/centers/use-cases/factories/make-save-center-factory'
 
 const paramsSchema = z.object({
 	id: z
@@ -36,5 +36,5 @@ export async function saveCostAndProfitCenterController(
 		name,
 	})
 
-	return reply.status(200).send(CostAndProfitCentersViewModel.toHTTP(center))
+	return reply.status(200).send(CentersViewModel.toHTTP(center))
 }

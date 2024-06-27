@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
-import type { CostAndProfitCentersRepository } from '@modules/cost-and-profit-centers/repositories/cost-and-profit-centers-repository'
+import { Center } from '@modules/centers/entities/center'
+import type { DomainCentersRepository } from '@modules/centers/repositories/domain-centers-repository'
 
 interface Input {
 	userId: string
@@ -13,13 +13,11 @@ interface Output {
 }
 
 export class CreateCostAndProfitCenterUseCase {
-	constructor(
-		private readonly costAndProfitCentersRepository: CostAndProfitCentersRepository,
-	) {}
+	constructor(private readonly centersRepository: DomainCentersRepository) {}
 
 	async execute({ userId, name }: Input): Promise<Output> {
 		const existsCostAndProfitCenter =
-			await this.costAndProfitCentersRepository.findByName(name)
+			await this.centersRepository.findByName(name)
 
 		if (existsCostAndProfitCenter) {
 			throw new AppError({
@@ -35,7 +33,7 @@ export class CreateCostAndProfitCenterUseCase {
 			deletedAt: null,
 		})
 
-		await this.costAndProfitCentersRepository.create(center)
+		await this.centersRepository.create(center)
 
 		return {
 			center,

@@ -1,7 +1,7 @@
 import type { Center as RawCostAndProfitCenter } from '@prisma/client'
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
-import { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import { Center } from '@modules/centers/entities/center'
 
 export class PrismaCentersMapper {
 	static toPrisma(center: Center): RawCostAndProfitCenter {

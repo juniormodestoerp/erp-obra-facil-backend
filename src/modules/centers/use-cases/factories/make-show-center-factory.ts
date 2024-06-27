@@ -1,10 +1,9 @@
-import { PrismaCostAndProfitCentersRepository } from '@modules/cost-and-profit-centers/repositories/prisma/repositories/cost-and-profit-centers-respository'
+import { PrismaCentersRepository } from '@modules/centers/repositories/prisma/repositories/prisma-centers-respository'
 
-import { ShowCostAndProfitCenterUseCase } from '@modules/cost-and-profit-centers/use-cases/show-cost-and-profit-center-use-case'
+import { ShowCostAndProfitCenterUseCase } from '@modules/centers/use-cases/show-center-use-case'
 
 export function makeShowCostAndProfitCenterUseCase() {
-	const costAndProfitCentersRepository =
-		new PrismaCostAndProfitCentersRepository()
+	const centersRepository = new PrismaCentersRepository()
 
-	return new ShowCostAndProfitCenterUseCase(costAndProfitCentersRepository)
+	return new ShowCostAndProfitCenterUseCase(centersRepository)
 }

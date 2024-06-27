@@ -1,16 +1,14 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
-import { makeFetchSelectInputCostAndProfitCentersUseCase } from '@modules/cost-and-profit-centers/use-cases/factories/make-fetch-select-input-cost-and-profit-centers-factory'
+import { makeFetchSelectInputCentersUseCase } from '@modules/centers/use-cases/factories/make-fetch-select-input-centers-factory'
 
-export async function fetchSelectInputCostAndProfitCentersController(
+export async function fetchSelectInputCentersController(
 	_: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const fetchSelectInputCostAndProfitCentersUseCase =
-		makeFetchSelectInputCostAndProfitCentersUseCase()
+	const fetchSelectInputCentersUseCase = makeFetchSelectInputCentersUseCase()
 
-	const { costAndProfitCenters } =
-		await fetchSelectInputCostAndProfitCentersUseCase.execute()
+	const { centers } = await fetchSelectInputCentersUseCase.execute()
 
-	return reply.status(200).send(costAndProfitCenters)
+	return reply.status(200).send(centers)
 }

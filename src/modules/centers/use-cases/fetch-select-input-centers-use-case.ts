@@ -1,29 +1,26 @@
 import { AppError } from '@core/domain/errors/app-error'
 
 import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
-import type { CostAndProfitCentersRepository } from '@modules/cost-and-profit-centers/repositories/cost-and-profit-centers-repository'
+import type { DomainCentersRepository } from '@modules/centers/repositories/domain-centers-repository'
 
 interface Output {
-	costAndProfitCenters: ISelectInputDTO[]
+	centers: ISelectInputDTO[]
 }
 
-export class FetchSelectInputCostAndProfitCentersUseCase {
-	constructor(
-		private readonly costAndProfitCentersRepository: CostAndProfitCentersRepository,
-	) {}
+export class FetchSelectInputCentersUseCase {
+	constructor(private readonly centersRepository: DomainCentersRepository) {}
 
 	async execute(): Promise<Output> {
-		const costAndProfitCenters =
-			await this.costAndProfitCentersRepository.selectInput()
+		const centers = await this.centersRepository.selectInput()
 
-		if (costAndProfitCenters.length === 0) {
+		if (centers.length === 0) {
 			throw new AppError({
 				code: 'cost_and_profit_center.not_found',
 			})
 		}
 
 		return {
-			costAndProfitCenters,
+			centers,
 		}
 	}
 }

@@ -25,7 +25,7 @@ interface Input {
 	contact: string | null
 	card: string | null
 	competencyDate: string | null
-	costAndProfitCenters: string | null
+	centers: string | null
 	tags: string | null
 	documentNumber: string | null
 	associatedContracts: string | null
@@ -59,7 +59,7 @@ export class SaveTransactionUseCase {
 		contact,
 		card,
 		competencyDate,
-		costAndProfitCenters,
+		centers,
 		tags,
 		documentNumber,
 		associatedContracts,
@@ -93,7 +93,7 @@ export class SaveTransactionUseCase {
 				contact,
 				card,
 				competencyDate: competencyDate ? new Date(competencyDate) : null,
-				costAndProfitCenters,
+				centers,
 				tags,
 				documentNumber,
 				associatedContracts,

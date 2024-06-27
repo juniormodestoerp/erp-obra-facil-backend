@@ -24,7 +24,7 @@ interface Input {
 	currentBalance: number
 	method: string
 	competencyDate: Date | null
-	costAndProfitCenters: string | null
+	centers: string | null
 	tags: string | null
 	documentNumber: string | null
 	associatedContracts: string | null
@@ -66,7 +66,7 @@ export class AddTransactionUseCase {
 		currentBalance,
 		method,
 		competencyDate,
-		costAndProfitCenters,
+		centers,
 		tags,
 		documentNumber,
 		associatedContracts,
@@ -130,7 +130,7 @@ export class AddTransactionUseCase {
 							? 'Crédito'
 							: 'Débito',
 				competencyDate,
-				costAndProfitCenters,
+				centers,
 				tags,
 				documentNumber,
 				associatedContracts,

@@ -19,7 +19,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: 'b7cffeb2-3038-4950-9feb-5efd9ced0cb3',
-		fieldName: 'costAndProfitCenters',
+		fieldName: 'centers',
 		isFieldEnable: true,
 		isFieldRequired: false,
 		title: 'Centros de custo e lucros',

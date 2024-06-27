@@ -3,8 +3,8 @@ import z from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { CostAndProfitCentersViewModel } from '@modules/cost-and-profit-centers/http/view-models/cost-and-profit-centers-view-model'
-import { makeCreateCostAndProfitCenterUseCase } from '@modules/cost-and-profit-centers/use-cases/factories/make-create-cost-and-profit-center-factory'
+import { CentersViewModel } from '@modules/centers/http/view-models/centers-view-model'
+import { makeCreateCostAndProfitCenterUseCase } from '@modules/centers/use-cases/factories/make-create-center-factory'
 
 const bodySchema = z.object({
 	name: z.string(strMessage('nome do método de pagamento')),
@@ -24,5 +24,5 @@ export async function createCostAndProfitCenterController(
 		name,
 	})
 
-	return reply.status(201).send(CostAndProfitCentersViewModel.toHTTP(center))
+	return reply.status(201).send(CentersViewModel.toHTTP(center))
 }

@@ -3,7 +3,7 @@ import z from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { makeRemoveCostAndProfitCenterUseCase } from '@modules/cost-and-profit-centers/use-cases/factories/make-remove-cost-and-profit-center-factory'
+import { makeRemoveCostAndProfitCenterUseCase } from '@modules/centers/use-cases/factories/make-remove-center-factory'
 
 const paramsSchema = z.object({
 	id: z

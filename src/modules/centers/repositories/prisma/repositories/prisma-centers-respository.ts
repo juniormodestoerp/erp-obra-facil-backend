@@ -2,15 +2,13 @@ import type { PrismaClient } from '@prisma/client'
 
 import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 
-import type { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
-import type { CostAndProfitCentersRepository } from '@modules/cost-and-profit-centers/repositories/cost-and-profit-centers-repository'
-import { PrismaCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'
+import type { Center } from '@modules/centers/entities/center'
+import type { DomainCentersRepository } from '@modules/centers/repositories/domain-centers-repository'
+import { PrismaCentersMapper } from '@modules/centers/repositories/prisma/mappers/prisma-centers-mapper'
 
 import { prisma } from '@shared/infra/database/prisma'
 
-export class PrismaCostAndProfitCentersRepository
-	implements CostAndProfitCentersRepository
-{
+export class PrismaCentersRepository implements DomainCentersRepository {
 	private repository: PrismaClient
 
 	constructor() {
@@ -48,7 +46,7 @@ export class PrismaCostAndProfitCentersRepository
 	}
 
 	async findMany(userId: string): Promise<Center[]> {
-		const costAndProfitCenters = await this.repository.center.findMany({
+		const centers = await this.repository.center.findMany({
 			where: {
 				userId,
 				deletedAt: null,
@@ -58,17 +56,15 @@ export class PrismaCostAndProfitCentersRepository
 			},
 		})
 
-		if (!costAndProfitCenters) {
+		if (!centers) {
 			return []
 		}
 
-		return costAndProfitCenters.map((center) =>
-			PrismaCentersMapper.toDomain(center),
-		)
+		return centers.map((center) => PrismaCentersMapper.toDomain(center))
 	}
 
 	async selectInput(): Promise<ISelectInputDTO[]> {
-		const costAndProfitCenters = await this.repository.center.findMany({
+		const centers = await this.repository.center.findMany({
 			where: {
 				deletedAt: null,
 			},
@@ -81,11 +77,11 @@ export class PrismaCostAndProfitCentersRepository
 			},
 		})
 
-		if (!costAndProfitCenters) {
+		if (!centers) {
 			return []
 		}
 
-		return costAndProfitCenters.map((center) => {
+		return centers.map((center) => {
 			return {
 				field: center.name,
 				value: center.id,

@@ -1,8 +1,8 @@
 import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 
-import type { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import type { Center } from '@modules/centers/entities/center'
 
-export interface CostAndProfitCentersRepository {
+export interface DomainCentersRepository {
 	findById(id: string): Promise<Center | null>
 	findByName(name: string): Promise<Center | null>
 	findMany(userId: string): Promise<Center[]>

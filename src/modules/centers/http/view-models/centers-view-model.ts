@@ -1,6 +1,6 @@
-import type { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import type { Center } from '@modules/centers/entities/center'
 
-export class CostAndProfitCentersViewModel {
+export class CentersViewModel {
 	static toHTTP(center: Center) {
 		return {
 			id: center.id,

@@ -4,7 +4,7 @@ import type { Optional } from '@core/domain/types/opcional'
 
 import type { Account } from '@modules/accounts/entities/account'
 import type { Category } from '@modules/categories/entities/category'
-import type { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import type { Center } from '@modules/centers/entities/center'
 import type { Method } from '@modules/methods/entities/method'
 import type { Tag } from '@modules/tags/entities/tag'
 import type { User } from '@modules/users/entities/user'

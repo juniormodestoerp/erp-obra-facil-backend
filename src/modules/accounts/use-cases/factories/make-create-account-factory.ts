@@ -1,4 +1,4 @@
-import { PrismaAccountsRepository } from '@modules/accounts/repositories/prisma/repositories/prisma-accounts-respository'
+import { PrismaAccountsRepository } from '@modules/accounts/repositories/prisma/repositories/prisma-accounts-repository'
 
 import { CreateAccountUseCase } from '@modules/accounts/use-cases/create-account-use-case'
 

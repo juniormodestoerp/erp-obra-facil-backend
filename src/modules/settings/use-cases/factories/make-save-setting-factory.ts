@@ -1,5 +1,5 @@
 import { PrismaSettingsRepository } from '@modules/settings/repositories/prisma/repositories/settings-repository'
-import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
+import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/prisma-users-repository'
 
 import { SaveSettingUseCase } from '@modules/settings/use-cases/save-setting-use-case'
 

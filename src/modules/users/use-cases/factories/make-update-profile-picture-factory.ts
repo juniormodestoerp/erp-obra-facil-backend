@@ -1,5 +1,5 @@
-import { PrismaUserFilesRepository } from '@modules/users/repositories/prisma/repositories/user-files-repository'
-import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
+import { PrismaUserFilesRepository } from '@modules/users/repositories/prisma/repositories/prisma-user-files-repository'
+import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/prisma-users-repository'
 
 import { UpdateProfilePictureUseCase } from '@modules/users/use-cases/update-profile-picture-use-case'
 

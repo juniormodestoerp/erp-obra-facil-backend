@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
 import type { Transaction } from '@modules/transactions/entities/transaction'
-import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import type { DomainTransactionsRepository } from '@modules/transactions/repositories/domain-transactions-repository'
 
 interface Input {
 	id: string
@@ -14,11 +14,11 @@ interface Output {
 
 export class ShowTransactionUseCase {
 	constructor(
-		private readonly transactionsRepository: TransactionsRepository,
+		private readonly DomainTransactionsRepository: DomainTransactionsRepository,
 	) {}
 
 	async execute({ id, userId }: Input): Promise<Output> {
-		const transaction = await this.transactionsRepository.findById({
+		const transaction = await this.DomainTransactionsRepository.findById({
 			id,
 			userId,
 		})

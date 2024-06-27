@@ -1,36 +1,23 @@
 import type {
-	Account as RawAccount,
 	Address as RawAddress,
-	Category as RawCategory,
-	Center as RawCenter,
 	File as RawFiles,
-	Method as RawMethod,
 	Setting as RawSetting,
-	Tag as RawTag,
-	Transaction as RawTransaction,
 	User as RawUser,
-	UserToken as RawUserToken,
 } from '@prisma/client'
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
+import { Document } from '@core/domain/entities/value-object/document'
+import { Email } from '@core/domain/entities/value-object/email'
 
-import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-accounts-mapper'
 import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-addresses-mapper'
-import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
-import { PrismaCentersMapper } from '@modules/centers/repositories/prisma/mappers/prisma-centers-mapper'
-import { PrismaMethodsMapper } from '@modules/methods/repositories/prisma/mappers/prisma-methods-mapper'
 import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mappers/prisma-settings-mapper'
-import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tags-mapper'
-import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
 import { User, type UserRole } from '@modules/users/entities/user'
 import { PrismaUserFilesMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-files-mapper'
-import { PrismaUserTokenMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-tokens-mapper'
 
 export class PrismaUsersMapper {
 	static toPrisma(user: User) {
 		return {
-			id: user.id,
-			addressId: user.address ? user.addressId : null,
+			id: user.id.toString(),
 			name: user.name,
 			document: user.document,
 			email: user.email,
@@ -43,56 +30,9 @@ export class PrismaUsersMapper {
 			createdAt: user.createdAt,
 			updatedAt: user.updatedAt,
 			deletedAt: user.deletedAt,
+			addressId: user.address ? user.address.id.toString() : null,
 			fileId: user.files.length > 0 ? user.files[0].id.toString() : null,
 			profilePicture: user.profilePicture,
-			address: {
-				connect: user.address,
-			},
-			files: {
-				connect: user.files.map((file) => ({
-					id: file.id,
-				})),
-			},
-			settings: {
-				connect: user.settings.map((setting) => ({
-					id: setting.id,
-				})),
-			},
-			tags: {
-				connect: user.tags.map((tag) => ({
-					id: tag.id,
-				})),
-			},
-			centers: {
-				connect: user.centers.map((center) => ({
-					id: center.id,
-				})),
-			},
-			methods: {
-				connect: user.methods.map((method) => ({
-					id: method.id,
-				})),
-			},
-			accounts: {
-				connect: user.accounts.map((account) => ({
-					id: account.id,
-				})),
-			},
-			categories: {
-				connect: user.categories.map((category) => ({
-					id: category.id,
-				})),
-			},
-			userTokens: {
-				connect: user.userTokens.map((userToken) => ({
-					id: userToken.id,
-				})),
-			},
-			transactions: {
-				connect: user.transactions.map((transaction) => ({
-					id: transaction.id,
-				})),
-			},
 		}
 	}
 
@@ -101,13 +41,6 @@ export class PrismaUsersMapper {
 			address?: RawAddress | null
 			files?: RawFiles[]
 			settings?: RawSetting[]
-			tags?: RawTag[]
-			centers?: RawCenter[]
-			methods?: RawMethod[]
-			accounts?: RawAccount[]
-			categories?: RawCategory[]
-			userTokens?: RawUserToken[]
-			transactions?: RawTransaction[]
 		},
 	): User {
 		const address = raw.address
@@ -122,44 +55,16 @@ export class PrismaUsersMapper {
 			? raw.settings.map((setting) => PrismaSettingsMapper.toDomain(setting))
 			: []
 
-		const tags = raw.tags
-			? raw.tags.map((tag) => PrismaTagsMapper.toDomain(tag))
-			: []
+		const document = new Document(raw.document, 'CPF')
 
-		const centers = raw.centers
-			? raw.centers.map((center) => PrismaCentersMapper.toDomain(center))
-			: []
-
-		const methods = raw.methods
-			? raw.methods.map((method) => PrismaMethodsMapper.toDomain(method))
-			: []
-
-		const accounts = raw.accounts
-			? raw.accounts.map((account) => PrismaAccountsMapper.toDomain(account))
-			: []
-
-		const categories = raw.categories
-			? raw.categories.map((category) =>
-					PrismaCategoriesMapper.toDomain(category),
-				)
-			: []
-
-		const userTokens = raw.userTokens
-			? raw.userTokens.map((token) => PrismaUserTokenMapper.toDomain(token))
-			: []
-
-		const transactions = raw.transactions
-			? raw.transactions.map((transaction: RawTransaction) => {
-					return PrismaTransactionsMapper.toDomain(transaction)
-				})
-			: []
+		const email = new Email(raw.email)
 
 		return User.create(
 			{
-				addressId: raw.addressId,
+				addressId: address ? address.id : null,
 				name: raw.name,
-				document: raw.document,
-				email: raw.email,
+				document: document.value,
+				email: email.value,
 				phone: raw.phone,
 				birthDate: raw.birthDate,
 				password: raw.password,
@@ -173,13 +78,6 @@ export class PrismaUsersMapper {
 				address,
 				files,
 				settings,
-				tags,
-				centers,
-				methods,
-				accounts,
-				categories,
-				userTokens,
-				transactions,
 			},
 			new UniqueEntityID(raw.id),
 		)

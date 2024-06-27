@@ -2,7 +2,7 @@ import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
 import { Transaction } from '@modules/transactions/entities/transaction'
-import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import type { DomainTransactionsRepository } from '@modules/transactions/repositories/domain-transactions-repository'
 import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
@@ -35,7 +35,7 @@ interface Input {
 
 export class SaveTransactionUseCase {
 	constructor(
-		private readonly transactionsRepository: TransactionsRepository,
+		private readonly DomainTransactionsRepository: DomainTransactionsRepository,
 		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
@@ -103,6 +103,6 @@ export class SaveTransactionUseCase {
 			id ? new UniqueEntityID(id) : undefined,
 		)
 
-		await this.transactionsRepository.save(transaction)
+		await this.DomainTransactionsRepository.save(transaction)
 	}
 }

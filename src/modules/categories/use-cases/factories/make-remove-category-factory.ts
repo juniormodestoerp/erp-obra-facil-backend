@@ -1,4 +1,4 @@
-import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/prisma-categories-respository'
+import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/prisma-categories-repository'
 
 import { RemoveCategoryUseCase } from '@modules/categories/use-cases/remove-category-use-case'
 

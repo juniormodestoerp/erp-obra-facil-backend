@@ -1,5 +1,5 @@
-import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
-import { PrismaUserTokensRepository } from '@modules/users/repositories/prisma/repositories/user-tokens-repository'
+import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/prisma-users-repository'
+import { PrismaUserTokensRepository } from '@modules/users/repositories/prisma/repositories/prisma-user-tokens-repository'
 
 import { ResetForgotPasswordUseCase } from '@modules/users/use-cases/reset-forgot-password-use-case'
 

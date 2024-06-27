@@ -3,13 +3,13 @@ import { Utils } from '@core/utils/string'
 import type { MultipartFile } from '@fastify/multipart'
 import type { DomainCategoriesRepository } from '@modules/categories/repositories/domain-categories-repository'
 
+import { Transaction } from '@modules/transactions/entities/transaction'
+import type { DomainTransactionsRepository } from '@modules/transactions/repositories/domain-transactions-repository'
+import type { User } from '@modules/users/entities/user'
 import { createWriteStream, existsSync, mkdirSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { pipeline } from 'node:stream'
 import util from 'node:util'
-import { Transaction } from '@modules/transactions/entities/transaction'
-import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
-import type { User } from '@modules/users/entities/user'
 
 import { parse } from 'ofx-js'
 
@@ -45,7 +45,7 @@ interface Output {
 
 export class CreateConciliationUseCase {
 	constructor(
-		private readonly transactionsRepository: TransactionsRepository,
+		private readonly DomainTransactionsRepository: DomainTransactionsRepository,
 		private readonly categoriesRepository: DomainCategoriesRepository,
 	) {}
 
@@ -194,7 +194,7 @@ export class CreateConciliationUseCase {
 		}
 
 		const existingTransactions: Transaction[] =
-			await this.transactionsRepository.fetchAll({
+			await this.DomainTransactionsRepository.fetchAll({
 				userId: user.id,
 			})
 

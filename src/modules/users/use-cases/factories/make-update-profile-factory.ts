@@ -1,5 +1,5 @@
-import { PrismaAddressesRepository } from '@modules/addresses/repositories/prisma/repositories/address-repository'
-import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
+import { PrismaAddressesRepository } from '@modules/addresses/repositories/prisma/repositories/prisma-addresses-repository'
+import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/prisma-users-repository'
 
 import { UpdateProfileUseCase } from '@modules/users/use-cases/update-profile-use-case'
 

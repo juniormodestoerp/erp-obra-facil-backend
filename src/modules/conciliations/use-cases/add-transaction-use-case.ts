@@ -3,7 +3,7 @@ import { AppError } from '@core/domain/errors/app-error'
 import type { DomainCategoriesRepository } from '@modules/categories/repositories/domain-categories-repository'
 
 import { Transaction } from '@modules/transactions/entities/transaction'
-import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import type { DomainTransactionsRepository } from '@modules/transactions/repositories/domain-transactions-repository'
 import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
@@ -43,7 +43,7 @@ interface Output {
 
 export class AddTransactionUseCase {
 	constructor(
-		private readonly transactionsRepository: TransactionsRepository,
+		private readonly DomainTransactionsRepository: DomainTransactionsRepository,
 		private readonly usersRepository: DomainUsersRepository,
 		private readonly categoriesRepository: DomainCategoriesRepository,
 	) {}
@@ -86,10 +86,12 @@ export class AddTransactionUseCase {
 			})
 		}
 
-		const alreadyTransaction = await this.transactionsRepository.findById({
-			userId,
-			id,
-		})
+		const alreadyTransaction = await this.DomainTransactionsRepository.findById(
+			{
+				userId,
+				id,
+			},
+		)
 
 		if (alreadyTransaction) {
 			throw new AppError({
@@ -145,7 +147,7 @@ export class AddTransactionUseCase {
 			new UniqueEntityID(id),
 		)
 
-		await this.transactionsRepository.create(transaction)
+		await this.DomainTransactionsRepository.create(transaction)
 
 		user.balance = user.balance + amount
 

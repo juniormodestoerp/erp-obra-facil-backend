@@ -1,4 +1,4 @@
-import { PrismaCentersRepository } from '@modules/centers/repositories/prisma/repositories/prisma-centers-respository'
+import { PrismaCentersRepository } from '@modules/centers/repositories/prisma/repositories/prisma-centers-repository'
 
 import { RemoveCenterUseCase } from '@modules/centers/use-cases/remove-center-use-case'
 

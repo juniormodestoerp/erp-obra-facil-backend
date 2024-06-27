@@ -10,7 +10,7 @@ import type { Tag } from '@modules/tags/entities/tag'
 import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tags-mapper'
 
 import { Transaction } from '@modules/transactions/entities/transaction'
-import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import type { DomainTransactionsRepository } from '@modules/transactions/repositories/domain-transactions-repository'
 import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 import { prisma } from '@shared/infra/database/prisma'
 
@@ -40,7 +40,7 @@ interface Output {
 
 export class CreateTransactionUseCase {
 	constructor(
-		private readonly transactionsRepository: TransactionsRepository,
+		private readonly DomainTransactionsRepository: DomainTransactionsRepository,
 		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
@@ -73,12 +73,13 @@ export class CreateTransactionUseCase {
 			})
 		}
 
-		const existsTransaction = await this.transactionsRepository.verifyIfExists({
-			userId,
-			date: Utils.parseDate(date),
-			amount,
-			description,
-		})
+		const existsTransaction =
+			await this.DomainTransactionsRepository.verifyIfExists({
+				userId,
+				date: Utils.parseDate(date),
+				amount,
+				description,
+			})
 
 		if (existsTransaction) {
 			throw new AppError({
@@ -181,7 +182,7 @@ export class CreateTransactionUseCase {
 			user,
 		})
 
-		await this.transactionsRepository.create(transaction)
+		await this.DomainTransactionsRepository.create(transaction)
 
 		return {
 			transaction,

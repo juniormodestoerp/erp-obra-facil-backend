@@ -4,8 +4,8 @@ import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mapp
 import type { IFindManyUsersDTO } from '@modules/users/dtos/find-many-users-dto'
 import type { IFindUserByIdDTO } from '@modules/users/dtos/find-user-by-id-dto'
 import type { User } from '@modules/users/entities/user'
-import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-users-mapper'
+import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-addresses-mapper'
 import { env } from '@shared/infra/config/env'

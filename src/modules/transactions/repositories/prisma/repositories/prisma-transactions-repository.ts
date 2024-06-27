@@ -6,12 +6,14 @@ import type { IFindTransactionByIdDTO } from '@modules/transactions/dtos/find-tr
 import type { IVerifyIfTransactionExistsDTO } from '@modules/transactions/dtos/verify-if-transaction-exists-dto-'
 import type { Transaction } from '@modules/transactions/entities/transaction'
 import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
-import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import type { DomainTransactionsRepository } from '@modules/transactions/repositories/domain-transactions-repository'
 import type { PrismaClient } from '@prisma/client'
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
 
-export class PrismaTransactionsRepository implements TransactionsRepository {
+export class PrismaDomainTransactionsRepository
+	implements DomainTransactionsRepository
+{
 	private repository: PrismaClient
 
 	constructor() {

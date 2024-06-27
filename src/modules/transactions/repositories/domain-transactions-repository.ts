@@ -3,7 +3,7 @@ import type { IFindTransactionByIdDTO } from '@modules/transactions/dtos/find-tr
 import type { IVerifyIfTransactionExistsDTO } from '@modules/transactions/dtos/verify-if-transaction-exists-dto-'
 import type { Transaction } from '@modules/transactions/entities/transaction'
 
-export interface TransactionsRepository {
+export interface DomainTransactionsRepository {
 	findById({ userId, id }: IFindTransactionByIdDTO): Promise<Transaction | null>
 	findMany({
 		pageIndex,

@@ -1,5 +1,6 @@
 export interface ISettingOption {
 	id: string
+	userId: string
 	fieldName: string
 	isFieldEnable: boolean
 	isFieldRequired: boolean
@@ -10,6 +11,7 @@ export interface ISettingOption {
 export const settingsOptions: ISettingOption[] = [
 	{
 		id: '1d132d36-ee83-47c3-aeaa-de9c6a68e575',
+		userId: '',
 		fieldName: 'competencyDate',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -19,6 +21,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: 'b7cffeb2-3038-4950-9feb-5efd9ced0cb3',
+		userId: '',
 		fieldName: 'centers',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -28,6 +31,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: 'aab16add-c98f-46a6-9c4a-54bd6a4ec549',
+		userId: '',
 		fieldName: 'tags',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -37,6 +41,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: 'ef5502fe-053b-4b96-ab6a-e29bac122550',
+		userId: '',
 		fieldName: 'enablePasswordProtection',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -46,6 +51,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: 'fdf8e077-1c1c-4dbe-a659-a6e05fa11f2a',
+		userId: '',
 		fieldName: 'installmentConfiguration',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -55,6 +61,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: 'c850fd74-4086-4958-b5a1-2283dfae3955',
+		userId: '',
 		fieldName: 'includeResidualBalancesInReports',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -64,6 +71,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: 'cfdaee47-ae55-45bc-83e1-39cbc81a6d78',
+		userId: '',
 		fieldName: 'method',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -73,6 +81,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: '4b6e1fef-0703-4977-bd37-54b910b8c7a5',
+		userId: '',
 		fieldName: 'documentNumber',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -82,6 +91,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: 'c37a86ce-246e-4623-aa81-624abccaea50',
+		userId: '',
 		fieldName: 'enableReceiptExpenseGoals',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -91,6 +101,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: '2036cac2-365c-408c-be4c-91fc4b4fb2b3',
+		userId: '',
 		fieldName: 'associatedContracts',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -100,6 +111,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: '354e3be6-fb8a-4127-9125-9bd623b53452',
+		userId: '',
 		fieldName: 'associatedProjects',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -109,6 +121,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: '4a4a60f1-2118-4a14-918c-d41d3488894c',
+		userId: '',
 		fieldName: 'additionalComments',
 		isFieldEnable: true,
 		isFieldRequired: false,
@@ -118,6 +131,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: 'f7274eca-55f5-4de1-bb65-dc7619bcc06a',
+		userId: '',
 		fieldName: 'showPending',
 		isFieldEnable: true,
 		isFieldRequired: false,

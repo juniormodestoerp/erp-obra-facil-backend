@@ -2,16 +2,9 @@ import { Entity } from '@core/domain/entities/entity'
 import type { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import type { Optional } from '@core/domain/types/opcional'
 
-import type { Account } from '@modules/accounts/entities/account'
 import type { Address } from '@modules/addresses/entities/address'
-import type { Category } from '@modules/categories/entities/category'
-import type { Center } from '@modules/centers/entities/center'
-import type { Method } from '@modules/methods/entities/method'
 import type { Setting } from '@modules/settings/entities/setting'
-import type { Tag } from '@modules/tags/entities/tag'
-import type { Transaction } from '@modules/transactions/entities/transaction'
 import type { File } from '@modules/users/entities/file'
-import type { UserToken } from '@modules/users/entities/user-token'
 
 export enum UserRole {
 	ADMIN = 'ADMIN',
@@ -33,17 +26,9 @@ interface Props {
 	createdAt: Date
 	updatedAt: Date
 	deletedAt: Date | null
-
-	address: Address | null
 	files: File[]
+	address: Address | null
 	settings: Setting[]
-	tags: Tag[]
-	centers: Center[]
-	methods: Method[]
-	accounts: Account[]
-	categories: Category[]
-	userTokens: UserToken[]
-	transactions: Transaction[]
 }
 
 export class User extends Entity<Props> {
@@ -183,78 +168,10 @@ export class User extends Entity<Props> {
 		this.props.settings = settings
 	}
 
-	get tags(): Tag[] {
-		return this.props.tags
-	}
-
-	set tags(tags: Tag[]) {
-		this.props.tags = tags
-	}
-
-	get centers(): Center[] {
-		return this.props.centers
-	}
-
-	set centers(centers: Center[]) {
-		this.props.centers = centers
-	}
-
-	get methods(): Method[] {
-		return this.props.methods
-	}
-
-	set methods(methods: Method[]) {
-		this.props.methods = methods
-	}
-
-	get accounts(): Account[] {
-		return this.props.accounts
-	}
-
-	set accounts(accounts: Account[]) {
-		this.props.accounts = accounts
-	}
-
-	get categories(): Category[] {
-		return this.props.categories
-	}
-
-	set categories(categories: Category[]) {
-		this.props.categories = categories
-	}
-
-	get userTokens(): UserToken[] {
-		return this.props.userTokens
-	}
-
-	set userTokens(userTokens: UserToken[]) {
-		this.props.userTokens = userTokens
-	}
-
-	get transactions(): Transaction[] {
-		return this.props.transactions
-	}
-
-	set transactions(transactions: Transaction[]) {
-		this.props.transactions = transactions
-	}
-
 	static create(
 		props: Optional<
 			Props,
-			| 'createdAt'
-			| 'updatedAt'
-			| 'deletedAt'
-			| 'settings'
-			| 'address'
-			| 'files'
-			| 'tags'
-			| 'centers'
-			| 'methods'
-			| 'accounts'
-			| 'categories'
-			| 'userTokens'
-			| 'transactions'
+			'createdAt' | 'updatedAt' | 'deletedAt' | 'settings' | 'address' | 'files'
 		>,
 		id?: UniqueEntityID,
 	): User {
@@ -267,13 +184,6 @@ export class User extends Entity<Props> {
 				settings: props.settings ?? [],
 				files: props.files ?? [],
 				address: props.address ?? null,
-				tags: props.tags ?? [],
-				centers: props.centers ?? [],
-				methods: props.methods ?? [],
-				accounts: props.accounts ?? [],
-				categories: props.categories ?? [],
-				userTokens: props.userTokens ?? [],
-				transactions: props.transactions ?? [],
 			},
 			id,
 		)

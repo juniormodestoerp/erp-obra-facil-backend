@@ -5,7 +5,7 @@ import {
 	strMessage,
 } from '@core/utils/custom-zod-error'
 import { Utils } from '@core/utils/string'
-import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-bank-accounts-mapper'
+import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-accounts-mapper'
 import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
 import { PrismaCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'
 import { PrismaMethodsMapper } from '@modules/methods/repositories/prisma/mappers/prisma-methods-mapper'

@@ -1,6 +1,6 @@
 import { AppError } from '@core/domain/errors/app-error'
 import { Utils } from '@core/utils/string'
-import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-bank-accounts-mapper'
+import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-accounts-mapper'
 import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
 import type { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
 import { PrismaCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'

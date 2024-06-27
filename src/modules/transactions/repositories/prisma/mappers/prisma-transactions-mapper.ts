@@ -1,5 +1,5 @@
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
-import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-bank-accounts-mapper'
+import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-accounts-mapper'
 import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
 import { PrismaCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'
 import { PrismaMethodsMapper } from '@modules/methods/repositories/prisma/mappers/prisma-methods-mapper'
@@ -7,7 +7,7 @@ import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/pris
 import { Transaction } from '@modules/transactions/entities/transaction'
 import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
 import type {
-	Account as RawBankAccount,
+	Account as RawAccount,
 	Category as RawCategory,
 	Center as RawCenter,
 	Method as RawMethod,
@@ -50,7 +50,7 @@ export class PrismaTransactionsMapper {
 	static toDomain(
 		raw: RawTransaction & {
 			user: RawUser
-			account: RawBankAccount
+			account: RawAccount
 			category: RawCategory
 			center: RawCenter | null
 			method: RawMethod | null

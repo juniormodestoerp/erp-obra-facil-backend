@@ -1,4 +1,4 @@
-import { PrismaTransactionsRepository } from '@modules/transactions/repositories/prisma/repositories/transactions-respository'
+import { PrismaTransactionsRepository } from '@modules/transactions/repositories/prisma/repositories/transactions-repository'
 
 import { RemoveTransactionUseCase } from '@modules/transactions/use-cases/remove-transaction-use-case'
 

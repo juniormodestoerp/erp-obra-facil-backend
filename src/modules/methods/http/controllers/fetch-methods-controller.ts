@@ -1,23 +1,19 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
-import { PaymentMethodsViewModel } from '@modules/methods/http/view-models/methods-view-model'
-import { makeFetchPaymentMethodsUseCase } from '@modules/methods/use-cases/factories/make-fetch-methods-factory'
+import { MethodsViewModel } from '@modules/methods/http/view-models/methods-view-model'
+import { makeFetchMethodsUseCase } from '@modules/methods/use-cases/factories/make-fetch-methods-factory'
 
-export async function fetchPaymentMethodsController(
+export async function fetchMethodsController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const fetchPaymentMethodsUseCase = makeFetchPaymentMethodsUseCase()
+	const fetchMethodsUseCase = makeFetchMethodsUseCase()
 
-	const { paymentMethods } = await fetchPaymentMethodsUseCase.execute({
+	const { paymentMethods } = await fetchMethodsUseCase.execute({
 		userId: request.user.sub,
 	})
 
 	return reply
 		.status(200)
-		.send(
-			paymentMethods.map(
-				(method) => PaymentMethodsViewModel.toHTTP(method) ?? [],
-			),
-		)
+		.send(paymentMethods.map((method) => MethodsViewModel.toHTTP(method) ?? []))
 }

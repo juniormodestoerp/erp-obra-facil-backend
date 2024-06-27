@@ -3,8 +3,8 @@ import z from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { PaymentMethodsViewModel } from '@modules/methods/http/view-models/methods-view-model'
-import { makeSavePaymentMethodUseCase } from '@modules/methods/use-cases/factories/make-save-method-factory'
+import { MethodsViewModel } from '@modules/methods/http/view-models/methods-view-model'
+import { makeSaveMethodUseCase } from '@modules/methods/use-cases/factories/make-save-method-factory'
 
 const paramsSchema = z.object({
 	id: z
@@ -20,7 +20,7 @@ const bodySchema = z.object({
 	name: z.string(strMessage('nome do método de pagamento')),
 })
 
-export async function savePaymentMethodController(
+export async function saveMethodController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
@@ -28,13 +28,13 @@ export async function savePaymentMethodController(
 
 	const { name } = bodySchema.parse(request.body)
 
-	const savePaymentMethodUseCase = makeSavePaymentMethodUseCase()
+	const saveMethodUseCase = makeSaveMethodUseCase()
 
-	const { method } = await savePaymentMethodUseCase.execute({
+	const { method } = await saveMethodUseCase.execute({
 		id,
 		userId: request.user.sub,
 		name,
 	})
 
-	return reply.status(200).send(PaymentMethodsViewModel.toHTTP(method))
+	return reply.status(200).send(MethodsViewModel.toHTTP(method))
 }

@@ -1,6 +1,6 @@
 import type { Method } from '@modules/methods/entities/method'
 
-export class PaymentMethodsViewModel {
+export class MethodsViewModel {
 	static toHTTP(method: Method) {
 		return {
 			id: method.id,

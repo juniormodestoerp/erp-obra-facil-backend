@@ -2,7 +2,7 @@ import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
 import { Method } from '@modules/methods/entities/method'
-import type { PaymentMethodsRepository } from '@modules/methods/repositories/methods-repository'
+import type { DomainMethodsRepository } from '@modules/methods/repositories/domain-methods-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
@@ -15,9 +15,9 @@ interface Output {
 	method: Method
 }
 
-export class SavePaymentMethodUseCase {
+export class SaveMethodUseCase {
 	constructor(
-		private readonly paymentMethodsRepository: PaymentMethodsRepository,
+		private readonly paymentMethodsRepository: DomainMethodsRepository,
 		private readonly usersRepository: UsersRepository,
 	) {}
 
@@ -32,10 +32,9 @@ export class SavePaymentMethodUseCase {
 			})
 		}
 
-		const previusPaymentMethod =
-			await this.paymentMethodsRepository.findById(id)
+		const previusMethod = await this.paymentMethodsRepository.findById(id)
 
-		if (!previusPaymentMethod) {
+		if (!previusMethod) {
 			throw new AppError({
 				code: 'payment_method.not_found',
 			})
@@ -45,9 +44,9 @@ export class SavePaymentMethodUseCase {
 			{
 				userId,
 				name,
-				createdAt: previusPaymentMethod.createdAt,
+				createdAt: previusMethod.createdAt,
 				updatedAt: new Date(),
-				deletedAt: previusPaymentMethod.deletedAt,
+				deletedAt: previusMethod.deletedAt,
 			},
 			new UniqueEntityID(id),
 		)

@@ -1,4 +1,4 @@
-import { PrismaDomainAccountsRepository } from '@modules/accounts/repositories/prisma/repositories/prisma-accounts-respository'
+import { PrismaDomainAccountsRepository } from '@modules/accounts/repositories/prisma/repositories/prisma-accounts-repository'
 
 import { RemoveAccountUseCase } from '@modules/accounts/use-cases/remove-account-use-case'
 

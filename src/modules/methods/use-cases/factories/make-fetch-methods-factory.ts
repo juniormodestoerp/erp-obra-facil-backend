@@ -1,14 +1,11 @@
-import { PrismaPaymentMethodsRepository } from '@modules/methods/repositories/prisma/repositories/methods-respository'
+import { PrismaMethodsRepository } from '@modules/methods/repositories/prisma/repositories/prisma-methods-repository'
 import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-respository'
 
-import { FetchPaymentMethodsUseCase } from '@modules/methods/use-cases/fetch-methods-use-case'
+import { FetchMethodsUseCase } from '@modules/methods/use-cases/fetch-methods-use-case'
 
-export function makeFetchPaymentMethodsUseCase() {
-	const paymentMethodsRepository = new PrismaPaymentMethodsRepository()
+export function makeFetchMethodsUseCase() {
+	const paymentMethodsRepository = new PrismaMethodsRepository()
 	const usersRepository = new PrismaUsersRepository()
 
-	return new FetchPaymentMethodsUseCase(
-		paymentMethodsRepository,
-		usersRepository,
-	)
+	return new FetchMethodsUseCase(paymentMethodsRepository, usersRepository)
 }

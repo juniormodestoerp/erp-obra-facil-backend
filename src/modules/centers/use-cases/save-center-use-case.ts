@@ -15,7 +15,7 @@ interface Output {
 	center: Center
 }
 
-export class SaveCostAndProfitCenterUseCase {
+export class SaveCenterUseCase {
 	constructor(
 		private readonly centersRepository: DomainCentersRepository,
 		private readonly usersRepository: UsersRepository,
@@ -32,9 +32,9 @@ export class SaveCostAndProfitCenterUseCase {
 			})
 		}
 
-		const previusCostAndProfitCenter = await this.centersRepository.findById(id)
+		const previusCenter = await this.centersRepository.findById(id)
 
-		if (!previusCostAndProfitCenter) {
+		if (!previusCenter) {
 			throw new AppError({
 				code: 'cost_and_profit_center.not_found',
 			})
@@ -44,9 +44,9 @@ export class SaveCostAndProfitCenterUseCase {
 			{
 				userId,
 				name,
-				createdAt: previusCostAndProfitCenter.createdAt,
+				createdAt: previusCenter.createdAt,
 				updatedAt: new Date(),
-				deletedAt: previusCostAndProfitCenter.deletedAt,
+				deletedAt: previusCenter.deletedAt,
 			},
 			new UniqueEntityID(id),
 		)

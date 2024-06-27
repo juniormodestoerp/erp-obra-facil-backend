@@ -9,8 +9,6 @@ import swagger from '@fastify/swagger'
 import swaggerUI from '@fastify/swagger-ui'
 import fastify from 'fastify'
 
-import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-respository'
-import { makeShowUserProfileUseCase } from '@modules/users/use-cases/factories/make-show-user-profile-factory'
 import CorsConfig from '@shared/infra/config/cors'
 import HelmetConfig from '@shared/infra/config/helmet'
 import {

@@ -2,7 +2,7 @@ import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 
 import type { Method } from '@modules/methods/entities/method'
 
-export interface PaymentMethodsRepository {
+export interface DomainMethodsRepository {
 	findById(id: string): Promise<Method | null>
 	findByName(name: string): Promise<Method | null>
 	findMany(userId: string): Promise<Method[]>

@@ -1,16 +1,14 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
-import { makeFetchSelectInputPaymentMethodsUseCase } from '@modules/methods/use-cases/factories/make-fetch-select-input-methods-factory'
+import { makeFetchSelectInputMethodsUseCase } from '@modules/methods/use-cases/factories/make-fetch-select-input-methods-factory'
 
-export async function fetchSelectInputPaymentMethodsController(
+export async function fetchSelectInputMethodsController(
 	_: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const fetchSelectInputPaymentMethodsUseCase =
-		makeFetchSelectInputPaymentMethodsUseCase()
+	const fetchSelectInputMethodsUseCase = makeFetchSelectInputMethodsUseCase()
 
-	const { paymentMethods } =
-		await fetchSelectInputPaymentMethodsUseCase.execute()
+	const { paymentMethods } = await fetchSelectInputMethodsUseCase.execute()
 
 	return reply.status(200).send(paymentMethods)
 }

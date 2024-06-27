@@ -1,5 +1,5 @@
-import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/categories-respository'
-import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-respository'
+import { PrismaCategoriesRepository } from '@modules/categories/repositories/prisma/repositories/categories-repository'
+import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
 
 import { SaveCategoryUseCase } from '@modules/categories/use-cases/save-category-use-case'
 

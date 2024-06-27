@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
 import type { Method } from '@modules/methods/entities/method'
-import type { PaymentMethodsRepository } from '@modules/methods/repositories/methods-repository'
+import type { DomainMethodsRepository } from '@modules/methods/repositories/domain-methods-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 interface Input {
@@ -12,9 +12,9 @@ interface Output {
 	paymentMethods: Method[]
 }
 
-export class FetchPaymentMethodsUseCase {
+export class FetchMethodsUseCase {
 	constructor(
-		private readonly paymentMethodsRepository: PaymentMethodsRepository,
+		private readonly paymentMethodsRepository: DomainMethodsRepository,
 		private readonly usersRepository: UsersRepository,
 	) {}
 

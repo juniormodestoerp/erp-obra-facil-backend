@@ -1,4 +1,4 @@
-import { PrismaCentersRepository } from '@modules/centers/repositories/prisma/repositories/prisma-centers-respository'
+import { PrismaCentersRepository } from '@modules/centers/repositories/prisma/repositories/prisma-centers-repository'
 
 import { FetchSelectInputCentersUseCase } from '@modules/centers/use-cases/fetch-select-input-centers-use-case'
 

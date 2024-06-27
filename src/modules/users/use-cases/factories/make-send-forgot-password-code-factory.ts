@@ -1,5 +1,5 @@
-import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-respository'
-import { PrismaUserTokensRepository } from '@modules/users/repositories/prisma/repositories/user-tokens-respository'
+import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
+import { PrismaUserTokensRepository } from '@modules/users/repositories/prisma/repositories/user-tokens-repository'
 
 import { SendForgotPasswordCodeUseCase } from '@modules/users/use-cases/send-forgot-password-code-use-case'
 

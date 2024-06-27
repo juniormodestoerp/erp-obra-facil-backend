@@ -1,4 +1,4 @@
-import { PrismaSettingsRepository } from '@modules/settings/repositories/prisma/repositories/settings-respository'
+import { PrismaSettingsRepository } from '@modules/settings/repositories/prisma/repositories/settings-repository'
 
 import { RemoveSettingUseCase } from '@modules/settings/use-cases/remove-setting-use-case'
 

@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
-import type { UserTokensRepository } from '@modules/users/repositories/user-tokens-respository'
+import type { UserTokensRepository } from '@modules/users/repositories/user-tokens-repository'
 
 import { DateInstance } from '@shared/infra/providers/date'
 import type { Hash } from '@shared/infra/providers/hash'

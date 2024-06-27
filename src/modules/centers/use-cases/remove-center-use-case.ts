@@ -6,7 +6,7 @@ interface Input {
 	id: string
 }
 
-export class RemoveCostAndProfitCenterUseCase {
+export class RemoveCenterUseCase {
 	constructor(private readonly centersRepository: DomainCentersRepository) {}
 
 	async execute({ id }: Input): Promise<void> {

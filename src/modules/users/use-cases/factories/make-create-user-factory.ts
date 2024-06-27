@@ -1,4 +1,4 @@
-import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-respository'
+import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
 
 import { CreateUserUseCase } from '@modules/users/use-cases/create-user-use-case'
 

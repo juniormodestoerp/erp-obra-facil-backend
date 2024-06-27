@@ -1,7 +1,7 @@
 import { AppError } from '@core/domain/errors/app-error'
 
 import { Method } from '@modules/methods/entities/method'
-import type { PaymentMethodsRepository } from '@modules/methods/repositories/methods-repository'
+import type { DomainMethodsRepository } from '@modules/methods/repositories/domain-methods-repository'
 
 interface Input {
 	userId: string
@@ -12,16 +12,15 @@ interface Output {
 	method: Method
 }
 
-export class CreatePaymentMethodUseCase {
+export class CreateMethodUseCase {
 	constructor(
-		private readonly paymentMethodsRepository: PaymentMethodsRepository,
+		private readonly paymentMethodsRepository: DomainMethodsRepository,
 	) {}
 
 	async execute({ userId, name }: Input): Promise<Output> {
-		const existsPaymentMethod =
-			await this.paymentMethodsRepository.findByName(name)
+		const existsMethod = await this.paymentMethodsRepository.findByName(name)
 
-		if (existsPaymentMethod) {
+		if (existsMethod) {
 			throw new AppError({
 				code: 'payment_method.already_exists',
 			})

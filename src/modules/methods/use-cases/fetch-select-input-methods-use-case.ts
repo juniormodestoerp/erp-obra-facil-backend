@@ -1,15 +1,15 @@
 import { AppError } from '@core/domain/errors/app-error'
 
 import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
-import type { PaymentMethodsRepository } from '@modules/methods/repositories/methods-repository'
+import type { DomainMethodsRepository } from '@modules/methods/repositories/domain-methods-repository'
 
 interface Output {
 	paymentMethods: ISelectInputDTO[]
 }
 
-export class FetchSelectInputPaymentMethodsUseCase {
+export class FetchSelectInputMethodsUseCase {
 	constructor(
-		private readonly paymentMethodsRepository: PaymentMethodsRepository,
+		private readonly paymentMethodsRepository: DomainMethodsRepository,
 	) {}
 
 	async execute(): Promise<Output> {

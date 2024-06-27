@@ -3,7 +3,7 @@ import z from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { makeRemoveCostAndProfitCenterUseCase } from '@modules/centers/use-cases/factories/make-remove-center-factory'
+import { makeRemoveCenterUseCase } from '@modules/centers/use-cases/factories/make-remove-center-factory'
 
 const paramsSchema = z.object({
 	id: z
@@ -15,16 +15,15 @@ const paramsSchema = z.object({
 		.min(1, 'O campo identificador do método de pagamento é obrigatório.'),
 })
 
-export async function removeCostAndProfitCenterController(
+export async function removeCenterController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
 	const { id } = paramsSchema.parse(request.params)
 
-	const removeCostAndProfitCenterUseCase =
-		makeRemoveCostAndProfitCenterUseCase()
+	const removeCenterUseCase = makeRemoveCenterUseCase()
 
-	await removeCostAndProfitCenterUseCase.execute({
+	await removeCenterUseCase.execute({
 		id,
 	})
 

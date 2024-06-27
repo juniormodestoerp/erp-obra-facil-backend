@@ -1,10 +1,10 @@
-import type { Method as RawPaymentMethod } from '@prisma/client'
+import type { Method as RawMethod } from '@prisma/client'
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { Method } from '@modules/methods/entities/method'
 
 export class PrismaMethodsMapper {
-	static toPrisma(method: Method): RawPaymentMethod {
+	static toPrisma(method: Method): RawMethod {
 		return {
 			id: method.id,
 			userId: method.userId,
@@ -15,7 +15,7 @@ export class PrismaMethodsMapper {
 		}
 	}
 
-	static toDomain(raw: RawPaymentMethod): Method {
+	static toDomain(raw: RawMethod): Method {
 		return Method.create(
 			{
 				userId: raw.userId,

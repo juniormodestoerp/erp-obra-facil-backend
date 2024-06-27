@@ -4,7 +4,7 @@ import z from 'zod'
 import { strMessage } from '@core/utils/custom-zod-error'
 
 import { CentersViewModel } from '@modules/centers/http/view-models/centers-view-model'
-import { makeShowCostAndProfitCenterUseCase } from '@modules/centers/use-cases/factories/make-show-center-factory'
+import { makeShowCenterUseCase } from '@modules/centers/use-cases/factories/make-show-center-factory'
 
 const paramsSchema = z.object({
 	id: z
@@ -16,15 +16,15 @@ const paramsSchema = z.object({
 		.min(1, 'O campo identificador do método de pagamento é obrigatório.'),
 })
 
-export async function showCostAndProfitCenterController(
+export async function showCenterController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
 	const { id } = paramsSchema.parse(request.params)
 
-	const showCostAndProfitCenterUseCase = makeShowCostAndProfitCenterUseCase()
+	const showCenterUseCase = makeShowCenterUseCase()
 
-	const { center } = await showCostAndProfitCenterUseCase.execute({
+	const { center } = await showCenterUseCase.execute({
 		id,
 	})
 

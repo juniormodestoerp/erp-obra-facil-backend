@@ -1,9 +1,9 @@
-import { PrismaCentersRepository } from '@modules/centers/repositories/prisma/repositories/prisma-centers-respository'
+import { PrismaCentersRepository } from '@modules/centers/repositories/prisma/repositories/prisma-centers-repository'
 
-import { RemoveCostAndProfitCenterUseCase } from '@modules/centers/use-cases/remove-center-use-case'
+import { RemoveCenterUseCase } from '@modules/centers/use-cases/remove-center-use-case'
 
-export function makeRemoveCostAndProfitCenterUseCase() {
+export function makeRemoveCenterUseCase() {
 	const centersRepository = new PrismaCentersRepository()
 
-	return new RemoveCostAndProfitCenterUseCase(centersRepository)
+	return new RemoveCenterUseCase(centersRepository)
 }

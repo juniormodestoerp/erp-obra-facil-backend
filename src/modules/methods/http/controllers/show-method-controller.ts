@@ -3,8 +3,8 @@ import z from 'zod'
 
 import { strMessage } from '@core/utils/custom-zod-error'
 
-import { PaymentMethodsViewModel } from '@modules/methods/http/view-models/methods-view-model'
-import { makeShowPaymentMethodUseCase } from '@modules/methods/use-cases/factories/make-show-method-factory'
+import { MethodsViewModel } from '@modules/methods/http/view-models/methods-view-model'
+import { makeShowMethodUseCase } from '@modules/methods/use-cases/factories/make-show-method-factory'
 
 const paramsSchema = z.object({
 	id: z
@@ -16,17 +16,17 @@ const paramsSchema = z.object({
 		.min(1, 'O campo identificador do método de pagamento é obrigatório.'),
 })
 
-export async function showPaymentMethodController(
+export async function showMethodController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
 	const { id } = paramsSchema.parse(request.params)
 
-	const showPaymentMethodUseCase = makeShowPaymentMethodUseCase()
+	const showMethodUseCase = makeShowMethodUseCase()
 
-	const { method } = await showPaymentMethodUseCase.execute({
+	const { method } = await showMethodUseCase.execute({
 		id,
 	})
 
-	return reply.status(200).send(PaymentMethodsViewModel.toHTTP(method))
+	return reply.status(200).send(MethodsViewModel.toHTTP(method))
 }

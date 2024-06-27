@@ -1,10 +1,10 @@
-import type { Center as RawCostAndProfitCenter } from '@prisma/client'
+import type { Center as RawCenter } from '@prisma/client'
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { Center } from '@modules/centers/entities/center'
 
 export class PrismaCentersMapper {
-	static toPrisma(center: Center): RawCostAndProfitCenter {
+	static toPrisma(center: Center): RawCenter {
 		return {
 			id: center.id,
 			userId: center.userId,
@@ -15,7 +15,7 @@ export class PrismaCentersMapper {
 		}
 	}
 
-	static toDomain(raw: RawCostAndProfitCenter): Center {
+	static toDomain(raw: RawCenter): Center {
 		return Center.create(
 			{
 				userId: raw.userId,

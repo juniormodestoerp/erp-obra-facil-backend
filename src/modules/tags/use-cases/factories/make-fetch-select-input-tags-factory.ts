@@ -1,4 +1,4 @@
-import { PrismaTagsRepository } from '@modules/tags/repositories/prisma/repositories/tags-respository'
+import { PrismaTagsRepository } from '@modules/tags/repositories/prisma/repositories/tags-repository'
 
 import { FetchSelectInputTagsUseCase } from '@modules/tags/use-cases/fetch-select-input-tags-use-case'
 

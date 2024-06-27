@@ -159,7 +159,7 @@ model Account {
 
   user User @relation(fields: [userId], references: [id])
 
-  @@map("bank_accounts")
+  @@map("accounts")
 }
 
 model Transaction {

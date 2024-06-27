@@ -6,7 +6,7 @@ import { Utils } from '@core/utils/string'
 import type { User } from '@modules/users/entities/user'
 import { UserToken } from '@modules/users/entities/user-token'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
-import type { UserTokensRepository } from '@modules/users/repositories/user-tokens-respository'
+import type { UserTokensRepository } from '@modules/users/repositories/user-tokens-repository'
 
 import type { Queue } from '@shared/infra/providers/queue'
 import { jobs } from '@shared/infra/queue/jobs'

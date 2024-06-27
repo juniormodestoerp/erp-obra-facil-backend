@@ -1,11 +1,11 @@
-import { PrismaCentersRepository } from '@modules/centers/repositories/prisma/repositories/prisma-centers-respository'
-import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-respository'
+import { PrismaCentersRepository } from '@modules/centers/repositories/prisma/repositories/prisma-centers-repository'
+import { PrismaUsersRepository } from '@modules/users/repositories/prisma/repositories/user-repository'
 
-import { SaveCostAndProfitCenterUseCase } from '@modules/centers/use-cases/save-center-use-case'
+import { SaveCenterUseCase } from '@modules/centers/use-cases/save-center-use-case'
 
-export function makeSaveCostAndProfitCenterUseCase() {
+export function makeSaveCenterUseCase() {
 	const centersRepository = new PrismaCentersRepository()
 	const usersRepository = new PrismaUsersRepository()
 
-	return new SaveCostAndProfitCenterUseCase(centersRepository, usersRepository)
+	return new SaveCenterUseCase(centersRepository, usersRepository)
 }

@@ -2,7 +2,7 @@ import type { PrismaClient } from '@prisma/client'
 
 import type { UserToken } from '@modules/users/entities/user-token'
 import { PrismaUserTokenMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-tokens-mapper'
-import type { UserTokensRepository } from '@modules/users/repositories/user-tokens-respository'
+import type { UserTokensRepository } from '@modules/users/repositories/user-tokens-repository'
 
 import { prisma } from '@shared/infra/database/prisma'
 

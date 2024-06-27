@@ -4,7 +4,7 @@ import z from 'zod'
 import { strMessage } from '@core/utils/custom-zod-error'
 
 import { CentersViewModel } from '@modules/centers/http/view-models/centers-view-model'
-import { makeSaveCostAndProfitCenterUseCase } from '@modules/centers/use-cases/factories/make-save-center-factory'
+import { makeSaveCenterUseCase } from '@modules/centers/use-cases/factories/make-save-center-factory'
 
 const paramsSchema = z.object({
 	id: z
@@ -20,7 +20,7 @@ const bodySchema = z.object({
 	name: z.string(strMessage('nome do método de pagamento')),
 })
 
-export async function saveCostAndProfitCenterController(
+export async function saveCenterController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
@@ -28,9 +28,9 @@ export async function saveCostAndProfitCenterController(
 
 	const { name } = bodySchema.parse(request.body)
 
-	const saveCostAndProfitCenterUseCase = makeSaveCostAndProfitCenterUseCase()
+	const saveCenterUseCase = makeSaveCenterUseCase()
 
-	const { center } = await saveCostAndProfitCenterUseCase.execute({
+	const { center } = await saveCenterUseCase.execute({
 		id,
 		userId: request.user.sub,
 		name,

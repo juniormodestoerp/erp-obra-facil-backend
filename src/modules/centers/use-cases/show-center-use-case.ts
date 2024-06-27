@@ -11,7 +11,7 @@ interface Output {
 	center: Center
 }
 
-export class ShowCostAndProfitCenterUseCase {
+export class ShowCenterUseCase {
 	constructor(private readonly centersRepository: DomainCentersRepository) {}
 
 	async execute({ id }: Input): Promise<Output> {

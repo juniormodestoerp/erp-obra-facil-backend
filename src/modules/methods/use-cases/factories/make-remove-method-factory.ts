@@ -1,9 +1,9 @@
-import { PrismaPaymentMethodsRepository } from '@modules/methods/repositories/prisma/repositories/methods-respository'
+import { PrismaMethodsRepository } from '@modules/methods/repositories/prisma/repositories/prisma-methods-repository'
 
-import { RemovePaymentMethodUseCase } from '@modules/methods/use-cases/remove-method-use-case'
+import { RemoveMethodUseCase } from '@modules/methods/use-cases/remove-method-use-case'
 
-export function makeRemovePaymentMethodUseCase() {
-	const paymentMethodsRepository = new PrismaPaymentMethodsRepository()
+export function makeRemoveMethodUseCase() {
+	const paymentMethodsRepository = new PrismaMethodsRepository()
 
-	return new RemovePaymentMethodUseCase(paymentMethodsRepository)
+	return new RemoveMethodUseCase(paymentMethodsRepository)
 }

@@ -3,14 +3,12 @@ import type { PrismaClient } from '@prisma/client'
 import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 
 import type { Method } from '@modules/methods/entities/method'
-import type { PaymentMethodsRepository } from '@modules/methods/repositories/methods-repository'
+import type { DomainMethodsRepository } from '@modules/methods/repositories/domain-methods-repository'
 import { PrismaMethodsMapper } from '@modules/methods/repositories/prisma/mappers/prisma-methods-mapper'
 
 import { prisma } from '@shared/infra/database/prisma'
 
-export class PrismaPaymentMethodsRepository
-	implements PaymentMethodsRepository
-{
+export class PrismaMethodsRepository implements DomainMethodsRepository {
 	private repository: PrismaClient
 
 	constructor() {
@@ -92,22 +90,22 @@ export class PrismaPaymentMethodsRepository
 	}
 
 	async create(method: Method): Promise<void> {
-		const prismaPaymentMethodData = PrismaMethodsMapper.toPrisma(method)
+		const prismaMethodData = PrismaMethodsMapper.toPrisma(method)
 
 		await this.repository.method.create({
-			data: prismaPaymentMethodData,
+			data: prismaMethodData,
 		})
 	}
 
 	async save(method: Method): Promise<void> {
-		const prismaPaymentMethodData = PrismaMethodsMapper.toPrisma(method)
+		const prismaMethodData = PrismaMethodsMapper.toPrisma(method)
 
 		await this.repository.method.update({
 			where: {
 				id: method.id,
 				deletedAt: null,
 			},
-			data: prismaPaymentMethodData,
+			data: prismaMethodData,
 		})
 	}
 

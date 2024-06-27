@@ -12,14 +12,13 @@ interface Output {
 	center: Center
 }
 
-export class CreateCostAndProfitCenterUseCase {
+export class CreateCenterUseCase {
 	constructor(private readonly centersRepository: DomainCentersRepository) {}
 
 	async execute({ userId, name }: Input): Promise<Output> {
-		const existsCostAndProfitCenter =
-			await this.centersRepository.findByName(name)
+		const existsCenter = await this.centersRepository.findByName(name)
 
-		if (existsCostAndProfitCenter) {
+		if (existsCenter) {
 			throw new AppError({
 				code: 'cost_and_profit_center.already_exists',
 			})

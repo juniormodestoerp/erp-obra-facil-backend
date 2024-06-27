@@ -90,22 +90,22 @@ export class PrismaCentersRepository implements DomainCentersRepository {
 	}
 
 	async create(center: Center): Promise<void> {
-		const prismaCostAndProfitCenterData = PrismaCentersMapper.toPrisma(center)
+		const prismaCenterData = PrismaCentersMapper.toPrisma(center)
 
 		await this.repository.center.create({
-			data: prismaCostAndProfitCenterData,
+			data: prismaCenterData,
 		})
 	}
 
 	async save(center: Center): Promise<void> {
-		const prismaCostAndProfitCenterData = PrismaCentersMapper.toPrisma(center)
+		const prismaCenterData = PrismaCentersMapper.toPrisma(center)
 
 		await this.repository.center.update({
 			where: {
 				id: center.id,
 				deletedAt: null,
 			},
-			data: prismaCostAndProfitCenterData,
+			data: prismaCenterData,
 		})
 	}
 

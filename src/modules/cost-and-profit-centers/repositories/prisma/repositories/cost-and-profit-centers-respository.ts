@@ -2,9 +2,9 @@ import type { PrismaClient } from '@prisma/client'
 
 import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 
-import type { CostAndProfitCenter } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import type { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
 import type { CostAndProfitCentersRepository } from '@modules/cost-and-profit-centers/repositories/cost-and-profit-centers-repository'
-import { PrismaCostAndProfitCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'
+import { PrismaCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'
 
 import { prisma } from '@shared/infra/database/prisma'
 
@@ -17,102 +17,96 @@ export class PrismaCostAndProfitCentersRepository
 		this.repository = prisma
 	}
 
-	async findById(id: string): Promise<CostAndProfitCenter | null> {
-		const costAndProfitCenter =
-			await this.repository.costAndProfitCenter.findUnique({
-				where: {
-					id,
-					deletedAt: null,
-				},
-			})
+	async findById(id: string): Promise<Center | null> {
+		const center = await this.repository.center.findUnique({
+			where: {
+				id,
+				deletedAt: null,
+			},
+		})
 
-		if (!costAndProfitCenter) {
+		if (!center) {
 			return null
 		}
 
-		return PrismaCostAndProfitCentersMapper.toDomain(costAndProfitCenter)
+		return PrismaCentersMapper.toDomain(center)
 	}
 
-	async findByName(name: string): Promise<CostAndProfitCenter | null> {
-		const costAndProfitCenter =
-			await this.repository.costAndProfitCenter.findFirst({
-				where: {
-					name,
-					deletedAt: null,
-				},
-			})
+	async findByName(name: string): Promise<Center | null> {
+		const center = await this.repository.center.findFirst({
+			where: {
+				name,
+				deletedAt: null,
+			},
+		})
 
-		if (!costAndProfitCenter) {
+		if (!center) {
 			return null
 		}
 
-		return PrismaCostAndProfitCentersMapper.toDomain(costAndProfitCenter)
+		return PrismaCentersMapper.toDomain(center)
 	}
 
-	async findMany(userId: string): Promise<CostAndProfitCenter[]> {
-		const costAndProfitCenters =
-			await this.repository.costAndProfitCenter.findMany({
-				where: {
-					userId,
-					deletedAt: null,
-				},
-				orderBy: {
-					updatedAt: 'desc',
-				},
-			})
+	async findMany(userId: string): Promise<Center[]> {
+		const costAndProfitCenters = await this.repository.center.findMany({
+			where: {
+				userId,
+				deletedAt: null,
+			},
+			orderBy: {
+				updatedAt: 'desc',
+			},
+		})
 
 		if (!costAndProfitCenters) {
 			return []
 		}
 
-		return costAndProfitCenters.map((costAndProfitCenter) =>
-			PrismaCostAndProfitCentersMapper.toDomain(costAndProfitCenter),
+		return costAndProfitCenters.map((center) =>
+			PrismaCentersMapper.toDomain(center),
 		)
 	}
 
 	async selectInput(): Promise<ISelectInputDTO[]> {
-		const costAndProfitCenters =
-			await this.repository.costAndProfitCenter.findMany({
-				where: {
-					deletedAt: null,
-				},
-				orderBy: {
-					updatedAt: 'desc',
-				},
-				select: {
-					id: true,
-					name: true,
-				},
-			})
+		const costAndProfitCenters = await this.repository.center.findMany({
+			where: {
+				deletedAt: null,
+			},
+			orderBy: {
+				updatedAt: 'desc',
+			},
+			select: {
+				id: true,
+				name: true,
+			},
+		})
 
 		if (!costAndProfitCenters) {
 			return []
 		}
 
-		return costAndProfitCenters.map((costAndProfitCenter) => {
+		return costAndProfitCenters.map((center) => {
 			return {
-				field: costAndProfitCenter.name,
-				value: costAndProfitCenter.id,
+				field: center.name,
+				value: center.id,
 			}
 		})
 	}
 
-	async create(costAndProfitCenter: CostAndProfitCenter): Promise<void> {
-		const prismaCostAndProfitCenterData =
-			PrismaCostAndProfitCentersMapper.toPrisma(costAndProfitCenter)
+	async create(center: Center): Promise<void> {
+		const prismaCostAndProfitCenterData = PrismaCentersMapper.toPrisma(center)
 
-		await this.repository.costAndProfitCenter.create({
+		await this.repository.center.create({
 			data: prismaCostAndProfitCenterData,
 		})
 	}
 
-	async save(costAndProfitCenter: CostAndProfitCenter): Promise<void> {
-		const prismaCostAndProfitCenterData =
-			PrismaCostAndProfitCentersMapper.toPrisma(costAndProfitCenter)
+	async save(center: Center): Promise<void> {
+		const prismaCostAndProfitCenterData = PrismaCentersMapper.toPrisma(center)
 
-		await this.repository.costAndProfitCenter.update({
+		await this.repository.center.update({
 			where: {
-				id: costAndProfitCenter.id,
+				id: center.id,
 				deletedAt: null,
 			},
 			data: prismaCostAndProfitCenterData,
@@ -120,7 +114,7 @@ export class PrismaCostAndProfitCentersRepository
 	}
 
 	async remove(id: string): Promise<void> {
-		await this.repository.costAndProfitCenter.delete({
+		await this.repository.center.delete({
 			where: {
 				id,
 				deletedAt: null,

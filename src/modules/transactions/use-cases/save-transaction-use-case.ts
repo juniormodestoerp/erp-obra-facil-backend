@@ -17,7 +17,7 @@ interface Input {
 	previousBalance: number
 	amount: number
 	currentBalance: number
-	paymentMethod: string
+	method: string
 	status: string
 	accountType: string
 	fitId: string | null
@@ -51,7 +51,7 @@ export class SaveTransactionUseCase {
 		previousBalance,
 		amount,
 		currentBalance,
-		paymentMethod,
+		method,
 		status,
 		accountType,
 		fitId,
@@ -87,7 +87,7 @@ export class SaveTransactionUseCase {
 				previousBalance,
 				amount,
 				currentBalance,
-				paymentMethod,
+				method,
 				status,
 				accountToTransfer,
 				contact,

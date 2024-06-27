@@ -5,11 +5,10 @@ import {
 	strMessage,
 } from '@core/utils/custom-zod-error'
 import { Utils } from '@core/utils/string'
-import { BankAccount } from '@modules/bank-accounts/entities/bank-account'
-import { PrismaBankAccountsMapper } from '@modules/bank-accounts/repositories/prisma/mappers/prisma-bank-accounts-mapper'
+import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-bank-accounts-mapper'
 import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
-import { PrismaCostAndProfitCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'
-import { PrismaPaymentMethodsMapper } from '@modules/payment-methods/repositories/prisma/mappers/prisma-payment-methods-mapper'
+import { PrismaCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'
+import { PrismaMethodsMapper } from '@modules/methods/repositories/prisma/mappers/prisma-methods-mapper'
 import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tags-mapper'
 import { Transaction } from '@modules/transactions/entities/transaction'
 import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
@@ -17,43 +16,26 @@ import { prisma } from '@shared/infra/database/prisma'
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-interface ITransactionInput {
-	id?: string
-	date: string
-	amount: number
-	description: string
-	account: string | null
-	transferAccount: string | null
-	card: string | null
-	category: string | null
-	subcategory: string | null
-	contact: string | null
-	center: string | null
-	project: string | null
-	method: string | null
-	documentNumber: string | null
-	notes: string | null
-	competenceDate: string | null
-	tags: string | null
-}
-
 const bodySchema = z.object({
+	type: z.string(strMessage('tipo')),
 	date: z.string(dateMessage('data')),
 	amount: z.number(numbMessage('valor')),
 	description: z.string(strMessage('descrição')),
-	account: z.string(strMessage('conta')).nullable(),
-	transferAccount: z.string(strMessage('conta transferência')).nullable(),
-	card: z.string(strMessage('cartão')).nullable(),
-	category: z.string(strMessage('Categoria')).nullable(),
-	subcategory: z.string(strMessage('Subcategoria')).nullable(),
-	contact: z.string(strMessage('Contato')).nullable(),
-	center: z.string(strMessage('Centro')).nullable(),
-	project: z.string(strMessage('Projeto')).nullable(),
-	method: z.string(strMessage('Forma')).nullable(),
-	documentNumber: z.string(strMessage('N. Documento')).nullable(),
-	notes: z.string(strMessage('Observações')).nullable(),
-	competenceDate: z.coerce.string(dateMessage('Data Competência')).nullable(),
-	tags: z.string(strMessage('Tags')).nullable(),
+	account: z.string(strMessage('conta')),
+	status: z.string(strMessage('status')),
+	card: z.string(strMessage('cartão')).nullable().default(null),
+	category: z.string(strMessage('categoria')).nullable().default(null),
+	contact: z.string(strMessage('contato')).nullable().default(null),
+	center: z.string(strMessage('centro')).nullable().default(null),
+	project: z.string(strMessage('projeto')).nullable().default(null),
+	method: z.string(strMessage('forma')).nullable().default(null),
+	documentNumber: z.string(strMessage('nº documento')).nullable().default(null),
+	notes: z.string(strMessage('observações')).nullable().default(null),
+	competenceDate: z
+		.string(dateMessage('data competência'))
+		.nullable()
+		.default(null),
+	tags: z.string(strMessage('tags')).nullable().default(null),
 })
 
 type ITransaction = z.infer<typeof bodySchema>
@@ -90,14 +72,14 @@ export async function addOneController(
 		})
 	}
 
-	const bankAccount = await prisma.bankAccount.findFirst({
+	const account = await prisma.account.findFirst({
 		where: {
 			userId: request.user.sub,
 			name: formattedBody.account as string,
 		},
 	})
 
-	if (!bankAccount) {
+	if (!account) {
 		throw new AppError({
 			code: 'bank_account.not_found',
 		})
@@ -110,14 +92,14 @@ export async function addOneController(
 		},
 	})
 
-	const center = await prisma.costAndProfitCenter.findFirst({
+	const center = await prisma.center.findFirst({
 		where: {
 			userId: request.user.sub,
 			name: formattedBody.center as string,
 		},
 	})
 
-	const method = await prisma.paymentMethod.findFirst({
+	const method = await prisma.method.findFirst({
 		where: {
 			userId: request.user.sub,
 			name: formattedBody.method as string,
@@ -146,10 +128,10 @@ export async function addOneController(
 		createdAt: new Date(),
 		updatedAt: new Date(),
 		user: request.user.data,
-		account: PrismaBankAccountsMapper.toDomain(bankAccount),
+		account: PrismaAccountsMapper.toDomain(account),
 		category: category ? PrismaCategoriesMapper.toDomain(category) : null,
-		center: center ? PrismaCostAndProfitCentersMapper.toDomain(center) : null,
-		method: method ? PrismaPaymentMethodsMapper.toDomain(method) : null,
+		center: center ? PrismaCentersMapper.toDomain(center) : null,
+		method: method ? PrismaMethodsMapper.toDomain(method) : null,
 		tags: tags ? [PrismaTagsMapper.toDomain(tags)] : [],
 	})
 

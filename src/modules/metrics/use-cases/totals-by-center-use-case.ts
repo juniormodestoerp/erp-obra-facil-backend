@@ -7,7 +7,7 @@ interface Input {
 
 interface ITotalsByCenter {
 	id: string
-	centerId: string | null
+	center: string | null
 	amount: number
 }
 
@@ -42,7 +42,7 @@ export class TotalsByCenterUseCase {
 		const totalsByCenter = transactions.reduce(
 			(acc, transaction) => {
 				const centerId = transaction.center
-					? transaction.center.id
+					? transaction.center.name
 					: 'Não informado'
 				if (!acc[centerId]) {
 					acc[centerId] = { amount: 0, ids: [] }
@@ -57,7 +57,7 @@ export class TotalsByCenterUseCase {
 		const result: ITotalsByCenter[] = Object.keys(totalsByCenter).map(
 			(centerId) => ({
 				id: totalsByCenter[centerId].ids.join(', '),
-				centerId: centerId === 'Não informado' ? null : centerId,
+				center: centerId === 'Não informado' ? null : centerId,
 				amount: totalsByCenter[centerId].amount,
 			}),
 		)

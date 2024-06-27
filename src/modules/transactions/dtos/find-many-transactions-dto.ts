@@ -18,7 +18,7 @@ export interface ITransactionsWhereClauses {
 			documentNumber: { contains: string; mode: 'insensitive' }
 			notes: { contains: string; mode: 'insensitive' }
 			bankName: { contains: string; mode: 'insensitive' }
-			paymentMethod: { contains: string; mode: 'insensitive' }
+			method: { contains: string; mode: 'insensitive' }
 			status: { contains: string; mode: 'insensitive' }
 		}>
 	>

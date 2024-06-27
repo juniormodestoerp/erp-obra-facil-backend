@@ -1,24 +1,22 @@
-import type { CostAndProfitCenter as RawCostAndProfitCenter } from '@prisma/client'
+import type { Center as RawCostAndProfitCenter } from '@prisma/client'
 
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
-import { CostAndProfitCenter } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
 
-export class PrismaCostAndProfitCentersMapper {
-	static toPrisma(
-		costAndProfitCenter: CostAndProfitCenter,
-	): RawCostAndProfitCenter {
+export class PrismaCentersMapper {
+	static toPrisma(center: Center): RawCostAndProfitCenter {
 		return {
-			id: costAndProfitCenter.id,
-			userId: costAndProfitCenter.userId,
-			name: costAndProfitCenter.name,
-			createdAt: costAndProfitCenter.createdAt,
-			updatedAt: costAndProfitCenter.updatedAt,
-			deletedAt: costAndProfitCenter.deletedAt,
+			id: center.id,
+			userId: center.userId,
+			name: center.name,
+			createdAt: center.createdAt,
+			updatedAt: center.updatedAt,
+			deletedAt: center.deletedAt,
 		}
 	}
 
-	static toDomain(raw: RawCostAndProfitCenter): CostAndProfitCenter {
-		return CostAndProfitCenter.create(
+	static toDomain(raw: RawCostAndProfitCenter): Center {
+		return Center.create(
 			{
 				userId: raw.userId,
 				name: raw.name,

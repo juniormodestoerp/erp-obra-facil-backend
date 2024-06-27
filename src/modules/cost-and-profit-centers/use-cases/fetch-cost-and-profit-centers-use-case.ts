@@ -1,6 +1,6 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import type { CostAndProfitCenter } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import type { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
 import type { CostAndProfitCentersRepository } from '@modules/cost-and-profit-centers/repositories/cost-and-profit-centers-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
@@ -9,7 +9,7 @@ interface Input {
 }
 
 interface Output {
-	costAndProfitCenters: CostAndProfitCenter[]
+	costAndProfitCenters: Center[]
 }
 
 export class FetchCostAndProfitCentersUseCase {

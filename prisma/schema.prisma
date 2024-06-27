@@ -40,16 +40,17 @@ model User {
   updatedAt      DateTime  @updatedAt
   deletedAt      DateTime?
 
-  address             Address?              @relation(fields: [addressId], references: [id])
-  categories          Category[]
-  files               File[]
-  settings            Setting[]
-  userTokens          UserToken[]
-  transactions        Transaction[]
-  BankAccount         BankAccount[]
-  Tag                 Tag[]
-  PaymentMethod       PaymentMethod[]
-  CostAndProfitCenter CostAndProfitCenter[]
+  Tag          Tag[]
+  files        File[]
+  Center       Center[]
+  Method       Method[]
+  settings     Setting[]
+  Account      Account[]
+  categories   Category[]
+  userTokens   UserToken[]
+  transactions Transaction[]
+
+  address Address? @relation(fields: [addressId], references: [id])
 
   @@map("users")
 }
@@ -76,7 +77,7 @@ model Category {
   userId        String
   transactionId String?      @unique
   type          CategoryType
-  name          String
+  name          String       @unique
   subcategoryOf String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
@@ -89,36 +90,25 @@ model Category {
   @@map("categories")
 }
 
-model Transfer {
-  id        String    @id @default(uuid())
-  name      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
-
-  transferOption TransferOption[]
-
-  @@map("transfers")
-}
-
 model Tag {
   id        String    @id @default(uuid())
   userId    String
-  name      String
+  name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  user         User          @relation(fields: [userId], references: [id])
   transactions Transaction[]
+
+  user User @relation(fields: [userId], references: [id])
 
   @@map("tags")
 }
 
-model CostAndProfitCenter {
+model Center {
   id        String    @id @default(uuid())
   userId    String
-  name      String
+  name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -127,13 +117,13 @@ model CostAndProfitCenter {
 
   user User @relation(fields: [userId], references: [id])
 
-  @@map("cost_and_profit_centers")
+  @@map("centers")
 }
 
-model PaymentMethod {
+model Method {
   id        String    @id @default(uuid())
   userId    String
-  name      String
+  name      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   deletedAt DateTime?
@@ -142,29 +132,14 @@ model PaymentMethod {
 
   user User @relation(fields: [userId], references: [id])
 
-  @@map("payment_methods")
+  @@map("methods")
 }
 
-model TransferOption {
-  id                 String    @id @default(uuid())
-  transactionId      String
-  transferId         String
-  sourceAccount      String
-  destinationAccount String
-  createdAt          DateTime  @default(now())
-  updatedAt          DateTime  @updatedAt
-  deletedAt          DateTime?
-
-  transfer Transfer @relation(fields: [transferId], references: [id])
-
-  @@map("transfer_options")
-}
-
-model BankAccount {
+model Account {
   id                  String     @id @default(uuid())
   userId              String
   accountType         String
-  name                String
+  name                String     @unique
   currency            String
   logo                String?
   limit               Float?
@@ -188,32 +163,38 @@ model BankAccount {
 }
 
 model Transaction {
-  id              String    @id @default(uuid())
-  userId          String
-  date            DateTime
-  amount          Float
-  description     String
-  transferAccount String?
-  card            String?
-  contact         String?
-  project         String?
-  documentNumber  String?
-  notes           String?
-  competenceDate  DateTime?
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  deletedAt       DateTime?
+  id             String    @id @default(uuid())
+  type           String
+  date           DateTime
+  amount         Float
+  description    String
+  status         String
+  card           String?
+  contact        String?
+  project        String?
+  documentNumber String?
+  notes          String?
+  competenceDate DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
 
-  user       User?                @relation(fields: [userId], references: [id])
-  account    BankAccount?         @relation(fields: [accountId], references: [id])
-  accountId  String?
-  category   Category?            @relation(fields: [categoryId], references: [id])
-  categoryId String?
-  center     CostAndProfitCenter? @relation(fields: [centerId], references: [id])
-  centerId   String?
-  method     PaymentMethod?       @relation(fields: [methodId], references: [id])
-  methodId   String?
-  tags       Tag[]
+  userId String
+  user   User?  @relation(fields: [userId], references: [id])
+
+  accountId String
+  account   Account? @relation(fields: [accountId], references: [id])
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  centerId String?
+  center   Center? @relation(fields: [centerId], references: [id])
+
+  methodId String?
+  method   Method? @relation(fields: [methodId], references: [id])
+
+  tags Tag[]
 
   @@map("transactions")
 }
@@ -266,43 +247,3 @@ model Address {
 
   @@map("addresses")
 }
-
-// model Transaction {
-//   id                String   @id @default(uuid())
-//   userId            String
-//   fitId             String
-//   accountType       String
-//   name              String
-//   description       String
-//   categoryId        String?
-//   establishmentName String
-//   bankName          String
-//   date   DateTime
-//   previousBalance   Float
-//   amount       Float
-//   currentBalance    Float
-//   paymentMethod     String
-//   status            String
-
-//   competencyDate       DateTime?
-//   costAndProfitCenters String?
-//   tags                 String?
-//   documentNumber       String?
-//   associatedContracts  String?
-//   associatedProjects   String?
-//   additionalComments   String?
-//   accountToTransfer    String?
-//   contact              String?
-//   card                 String?
-
-//   createdAt DateTime  @default(now())
-//   updatedAt DateTime  @updatedAt
-//   deletedAt DateTime?
-
-//   user          User?        @relation(fields: [userId], references: [id])
-//   category      Category?    @relation(fields: [categoryId], references: [id])
-//   BankAccount   BankAccount? @relation(fields: [bankAccountId], references: [id])
-//   bankAccountId String?
-
-//   @@map("transactions")
-// }

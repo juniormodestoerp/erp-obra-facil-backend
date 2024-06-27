@@ -1,11 +1,11 @@
-import type { CostAndProfitCenter } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import type { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
 
 export class CostAndProfitCentersViewModel {
-	static toHTTP(costAndProfitCenter: CostAndProfitCenter) {
+	static toHTTP(center: Center) {
 		return {
-			id: costAndProfitCenter.id,
-			name: costAndProfitCenter.name,
-			createdAt: costAndProfitCenter.createdAt,
+			id: center.id,
+			name: center.name,
+			createdAt: center.createdAt,
 		}
 	}
 }

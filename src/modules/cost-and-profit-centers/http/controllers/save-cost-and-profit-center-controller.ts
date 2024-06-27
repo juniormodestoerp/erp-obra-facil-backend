@@ -30,13 +30,11 @@ export async function saveCostAndProfitCenterController(
 
 	const saveCostAndProfitCenterUseCase = makeSaveCostAndProfitCenterUseCase()
 
-	const { costAndProfitCenter } = await saveCostAndProfitCenterUseCase.execute({
+	const { center } = await saveCostAndProfitCenterUseCase.execute({
 		id,
 		userId: request.user.sub,
 		name,
 	})
 
-	return reply
-		.status(200)
-		.send(CostAndProfitCentersViewModel.toHTTP(costAndProfitCenter))
+	return reply.status(200).send(CostAndProfitCentersViewModel.toHTTP(center))
 }

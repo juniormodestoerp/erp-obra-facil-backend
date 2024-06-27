@@ -5,10 +5,10 @@ import {
 	strMessage,
 } from '@core/utils/custom-zod-error'
 import { Utils } from '@core/utils/string'
-import { PrismaBankAccountsMapper } from '@modules/bank-accounts/repositories/prisma/mappers/prisma-bank-accounts-mapper'
+import { PrismaAccountsMapper } from '@modules/accounts/repositories/prisma/mappers/prisma-bank-accounts-mapper'
 import { PrismaCategoriesMapper } from '@modules/categories/repositories/prisma/mappers/prisma-categories-mapper'
-import { PrismaCostAndProfitCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'
-import { PrismaPaymentMethodsMapper } from '@modules/payment-methods/repositories/prisma/mappers/prisma-payment-methods-mapper'
+import { PrismaCentersMapper } from '@modules/cost-and-profit-centers/repositories/prisma/mappers/prisma-cost-and-profit-centers-mapper'
+import { PrismaMethodsMapper } from '@modules/methods/repositories/prisma/mappers/prisma-methods-mapper'
 import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tags-mapper'
 import { Transaction } from '@modules/transactions/entities/transaction'
 import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
@@ -93,14 +93,14 @@ export async function addManyController(
 			})
 		}
 
-		const bankAccount = await prisma.bankAccount.findFirst({
+		const account = await prisma.account.findFirst({
 			where: {
 				userId: request.user.sub,
 				name: transaction.account as string,
 			},
 		})
 
-		if (!bankAccount) {
+		if (!account) {
 			throw new AppError({
 				code: 'bank_account.not_found',
 			})
@@ -113,14 +113,14 @@ export async function addManyController(
 			},
 		})
 
-		const center = await prisma.costAndProfitCenter.findFirst({
+		const center = await prisma.center.findFirst({
 			where: {
 				userId: request.user.sub,
 				name: transaction.center as string,
 			},
 		})
 
-		const method = await prisma.paymentMethod.findFirst({
+		const method = await prisma.method.findFirst({
 			where: {
 				userId: request.user.sub,
 				name: transaction.method as string,
@@ -149,10 +149,10 @@ export async function addManyController(
 			createdAt: new Date(),
 			updatedAt: new Date(),
 			user: request.user.data,
-			account: PrismaBankAccountsMapper.toDomain(bankAccount),
+			account: PrismaAccountsMapper.toDomain(account),
 			category: category ? PrismaCategoriesMapper.toDomain(category) : null,
-			center: center ? PrismaCostAndProfitCentersMapper.toDomain(center) : null,
-			method: method ? PrismaPaymentMethodsMapper.toDomain(method) : null,
+			center: center ? PrismaCentersMapper.toDomain(center) : null,
+			method: method ? PrismaMethodsMapper.toDomain(method) : null,
 			tags: tags ? [PrismaTagsMapper.toDomain(tags)] : [],
 		})
 

@@ -64,7 +64,7 @@ async function reconcileTransactions(filePath, userId) {
           categoryId: 'categoria-id',
           status: 'RECONCILED',
           bankName: 'Bank Name',
-          paymentMethod: 'Payment Method',
+          method: 'Payment Method',
           previusBalance: 0, // aqui vai precisar de uma lógica para pegar o saldo anterior
           total: parseFloat(ofxTransaction.TRNAMT),
           currentBalance: 0, // aqui vai precisar de uma lógica para pegar o saldo atual

@@ -4,7 +4,7 @@ import { PrismaSettingsMapper } from '@modules/settings/repositories/prisma/mapp
 import type { IFindManyUsersDTO } from '@modules/users/dtos/find-many-users-dto'
 import type { IFindUserByIdDTO } from '@modules/users/dtos/find-user-by-id-dto'
 import type { User } from '@modules/users/entities/user'
-import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
+import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
 import { PrismaAddressesMapper } from '@modules/addresses/repositories/prisma/mappers/prisma-address-mapper'
@@ -29,7 +29,7 @@ export class PrismaUsersRepository implements UsersRepository {
 			return null
 		}
 
-		return PrismaUserMapper.toDomain(user)
+		return PrismaUsersMapper.toDomain(user)
 	}
 
 	async findProfile({ userId }: IFindUserByIdDTO): Promise<User | null> {
@@ -68,7 +68,7 @@ export class PrismaUsersRepository implements UsersRepository {
 
 		user.address = address
 
-		return PrismaUserMapper.toDomain(user)
+		return PrismaUsersMapper.toDomain(user)
 	}
 
 	async findByDocument(document: string): Promise<User | null> {
@@ -83,7 +83,7 @@ export class PrismaUsersRepository implements UsersRepository {
 			return null
 		}
 
-		return PrismaUserMapper.toDomain(user)
+		return PrismaUsersMapper.toDomain(user)
 	}
 
 	async findByEmail(email: string): Promise<User | null> {
@@ -98,7 +98,7 @@ export class PrismaUsersRepository implements UsersRepository {
 			return null
 		}
 
-		return PrismaUserMapper.toDomain(user)
+		return PrismaUsersMapper.toDomain(user)
 	}
 
 	async findByPhone(phone: string): Promise<User | null> {
@@ -113,7 +113,7 @@ export class PrismaUsersRepository implements UsersRepository {
 			return null
 		}
 
-		return PrismaUserMapper.toDomain(user as any)
+		return PrismaUsersMapper.toDomain(user as any)
 	}
 
 	async findMany({ pageIndex, role }: IFindManyUsersDTO): Promise<User[]> {
@@ -135,11 +135,11 @@ export class PrismaUsersRepository implements UsersRepository {
 			return []
 		}
 
-		return users.map((user) => PrismaUserMapper.toDomain(user as any))
+		return users.map((user) => PrismaUsersMapper.toDomain(user as any))
 	}
 
 	async create(user: User): Promise<void> {
-		const prismaUserData = PrismaUserMapper.toPrisma(user)
+		const prismaUserData = PrismaUsersMapper.toPrisma(user)
 
 		const prismaSettingsData = user.settings.map((setting) => {
 			return PrismaSettingsMapper.toPrisma(setting)
@@ -162,7 +162,7 @@ export class PrismaUsersRepository implements UsersRepository {
 	}
 
 	async save(user: User): Promise<void> {
-		const prismaUserData = PrismaUserMapper.toPrisma(user)
+		const prismaUserData = PrismaUsersMapper.toPrisma(user)
 
 		// Mapeando os dados do endereço, se existir
 		const prismaAddressData = user.address

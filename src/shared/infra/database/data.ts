@@ -64,7 +64,7 @@ export const settingsOptions: ISettingOption[] = [
 	},
 	{
 		id: 'cfdaee47-ae55-45bc-83e1-39cbc81a6d78',
-		fieldName: 'paymentMethod',
+		fieldName: 'method',
 		isFieldEnable: true,
 		isFieldRequired: false,
 		title: 'Formas de pagamento',

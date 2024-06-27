@@ -43,6 +43,8 @@ export class FetchTransactionsUseCase {
 			})
 		}
 
+		console.log(JSON.stringify(transactions, null, 2))
+
 		const totalCount = await this.transactionsRepository.count(searchTerm)
 
 		return {

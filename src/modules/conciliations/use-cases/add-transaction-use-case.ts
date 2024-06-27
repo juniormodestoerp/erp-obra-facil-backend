@@ -22,7 +22,7 @@ interface Input {
 	previousBalance: number
 	amount: number
 	currentBalance: number
-	paymentMethod: string
+	method: string
 	competencyDate: Date | null
 	costAndProfitCenters: string | null
 	tags: string | null
@@ -64,7 +64,7 @@ export class AddTransactionUseCase {
 		previousBalance,
 		amount,
 		currentBalance,
-		paymentMethod,
+		method,
 		competencyDate,
 		costAndProfitCenters,
 		tags,
@@ -123,8 +123,8 @@ export class AddTransactionUseCase {
 				previousBalance: user.balance,
 				amount,
 				currentBalance: user.balance + amount,
-				paymentMethod:
-					paymentMethod === 'credit'
+				method:
+					method === 'credit'
 						? 'Crédito'
 						: 'Débito' ?? trnType === 'credit'
 							? 'Crédito'

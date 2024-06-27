@@ -126,7 +126,7 @@ export class CreateConciliationUseCase {
 				previousBalance: 0, // Ajustar conforme necessário
 				amount: Number.parseFloat(file.TRNAMT),
 				currentBalance: 0, // Ajustar conforme necessário
-				paymentMethod: file.TRNTYPE === 'DEBIT' ? 'debit' : 'credit',
+				method: file.TRNTYPE === 'DEBIT' ? 'debit' : 'credit',
 				competencyDate: null,
 				costAndProfitCenters: null,
 				tags: [],

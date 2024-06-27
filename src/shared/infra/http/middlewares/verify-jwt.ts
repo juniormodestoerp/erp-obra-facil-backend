@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
-import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
+import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
 
 import { prisma } from '@shared/infra/database/prisma'
 
@@ -30,7 +30,7 @@ export async function verifyJwt(request: FastifyRequest, reply: FastifyReply) {
 		}
 
 		request.user = {
-			data: PrismaUserMapper.toDomain(user),
+			data: PrismaUsersMapper.toDomain(user),
 			sub: user.id,
 			role: user.role,
 		}

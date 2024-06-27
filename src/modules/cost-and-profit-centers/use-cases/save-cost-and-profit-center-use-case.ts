@@ -1,7 +1,7 @@
 import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { AppError } from '@core/domain/errors/app-error'
 
-import { CostAndProfitCenter } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
 import type { CostAndProfitCentersRepository } from '@modules/cost-and-profit-centers/repositories/cost-and-profit-centers-repository'
 import type { UsersRepository } from '@modules/users/repositories/user-repository'
 
@@ -12,7 +12,7 @@ interface Input {
 }
 
 interface Output {
-	costAndProfitCenter: CostAndProfitCenter
+	center: Center
 }
 
 export class SaveCostAndProfitCenterUseCase {
@@ -41,7 +41,7 @@ export class SaveCostAndProfitCenterUseCase {
 			})
 		}
 
-		const costAndProfitCenter = CostAndProfitCenter.create(
+		const center = Center.create(
 			{
 				userId,
 				name,
@@ -52,10 +52,10 @@ export class SaveCostAndProfitCenterUseCase {
 			new UniqueEntityID(id),
 		)
 
-		await this.costAndProfitCentersRepository.save(costAndProfitCenter)
+		await this.costAndProfitCentersRepository.save(center)
 
 		return {
-			costAndProfitCenter,
+			center,
 		}
 	}
 }

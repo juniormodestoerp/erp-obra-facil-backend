@@ -2,19 +2,24 @@ import { Entity } from '@core/domain/entities/entity'
 import type { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import type { Optional } from '@core/domain/types/opcional'
 
-import type { BankAccount as Account } from '@modules/bank-accounts/entities/bank-account'
+import type { Account } from '@modules/accounts/entities/account'
 import type { Category } from '@modules/categories/entities/category'
-import type { CostAndProfitCenter as Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
-import type { PaymentMethod as Method } from '@modules/payment-methods/entities/payment-method'
+import type { Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
+import type { Method } from '@modules/methods/entities/method'
 import type { Tag } from '@modules/tags/entities/tag'
 import type { User } from '@modules/users/entities/user'
 
 interface Props {
 	userId: string
+	accountId: string
+	categoryId: string
+	centerId: string | null
+	methodId: string | null
+	type: string
 	date: Date
 	amount: number
 	description: string
-	transferAccount: string | null
+	status: string
 	card: string | null
 	contact: string | null
 	project: string | null
@@ -25,8 +30,8 @@ interface Props {
 	updatedAt: Date
 	deletedAt: Date | null
 
-	user: User
-	account: Account
+	user: User | null
+	account: Account | null
 	category: Category | null
 	center: Center | null
 	method: Method | null
@@ -40,6 +45,46 @@ export class Transaction extends Entity<Props> {
 
 	set userId(value: string) {
 		this.props.userId = value
+	}
+
+	get accountId(): string {
+		return this.props.accountId
+	}
+
+	set accountId(value: string) {
+		this.props.accountId = value
+	}
+
+	get categoryId(): string {
+		return this.props.categoryId
+	}
+
+	set categoryId(value: string) {
+		this.props.categoryId = value
+	}
+
+	get centerId(): string | null {
+		return this.props.centerId
+	}
+
+	set centerId(value: string | null) {
+		this.props.centerId = value
+	}
+
+	get methodId(): string | null {
+		return this.props.methodId
+	}
+
+	set methodId(value: string | null) {
+		this.props.methodId = value
+	}
+
+	get type(): string {
+		return this.props.type
+	}
+
+	set type(value: string) {
+		this.props.type = value
 	}
 
 	get date(): Date {
@@ -66,12 +111,12 @@ export class Transaction extends Entity<Props> {
 		this.props.description = value
 	}
 
-	get transferAccount(): string | null {
-		return this.props.transferAccount
+	get status(): string {
+		return this.props.status
 	}
 
-	set transferAccount(value: string | null) {
-		this.props.transferAccount = value
+	set status(value: string) {
+		this.props.status = value
 	}
 
 	get card(): string | null {
@@ -146,19 +191,19 @@ export class Transaction extends Entity<Props> {
 		this.props.deletedAt = value
 	}
 
-	get user(): User {
+	get user(): User | null {
 		return this.props.user
 	}
 
-	set user(value: User) {
+	set user(value: User | null) {
 		this.props.user = value
 	}
 
-	get account(): Account {
+	get account(): Account | null {
 		return this.props.account
 	}
 
-	set account(value: Account) {
+	set account(value: Account | null) {
 		this.props.account = value
 	}
 

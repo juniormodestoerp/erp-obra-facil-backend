@@ -3,6 +3,7 @@ import type {
 	ITransactionsWhereClauses,
 } from '@modules/transactions/dtos/find-many-transactions-dto'
 import type { IFindTransactionByIdDTO } from '@modules/transactions/dtos/find-transaction-by-id-dto'
+import type { IVerifyIfTransactionExistsDTO } from '@modules/transactions/dtos/verify-if-transaction-exists-dto-'
 import type { Transaction } from '@modules/transactions/entities/transaction'
 import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
 import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
@@ -29,8 +30,8 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 			},
 			include: {
 				user: true,
-				category: true,
 				account: true,
+				category: true,
 				center: true,
 				method: true,
 				tags: true,
@@ -67,7 +68,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				{ documentNumber: { contains: searchTerm, mode: 'insensitive' } },
 				{ notes: { contains: searchTerm, mode: 'insensitive' } },
 				{ bankName: { contains: searchTerm, mode: 'insensitive' } },
-				{ paymentMethod: { contains: searchTerm, mode: 'insensitive' } },
+				{ method: { contains: searchTerm, mode: 'insensitive' } },
 				{ status: { contains: searchTerm, mode: 'insensitive' } },
 			]
 		}
@@ -96,6 +97,33 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 		return transactions.map((transaction) =>
 			PrismaTransactionsMapper.toDomain(transaction),
 		)
+	}
+
+	async verifyIfExists({
+		userId,
+		date,
+		amount,
+		description,
+	}: IVerifyIfTransactionExistsDTO): Promise<boolean> {
+		const transaction = await this.repository.transaction.findFirst({
+			where: {
+				userId,
+				date,
+				amount,
+				description,
+			},
+			select: {
+				date: true,
+				amount: true,
+				description: true,
+			},
+		})
+
+		if (transaction) {
+			return true
+		}
+
+		return false
 	}
 
 	async fetchAll({ userId }: { userId: string }): Promise<Transaction[]> {
@@ -142,7 +170,7 @@ export class PrismaTransactionsRepository implements TransactionsRepository {
 				{ documentNumber: { contains: searchTerm, mode: 'insensitive' } },
 				{ notes: { contains: searchTerm, mode: 'insensitive' } },
 				{ bankName: { contains: searchTerm, mode: 'insensitive' } },
-				{ paymentMethod: { contains: searchTerm, mode: 'insensitive' } },
+				{ method: { contains: searchTerm, mode: 'insensitive' } },
 				{ status: { contains: searchTerm, mode: 'insensitive' } },
 			]
 		}

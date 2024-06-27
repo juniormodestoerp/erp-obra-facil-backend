@@ -19,8 +19,7 @@ export async function fetchCostAndProfitCentersController(
 		.status(200)
 		.send(
 			costAndProfitCenters.map(
-				(costAndProfitCenter) =>
-					CostAndProfitCentersViewModel.toHTTP(costAndProfitCenter) ?? [],
+				(center) => CostAndProfitCentersViewModel.toHTTP(center) ?? [],
 			),
 		)
 }

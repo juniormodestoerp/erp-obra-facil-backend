@@ -19,13 +19,10 @@ export async function createCostAndProfitCenterController(
 	const createCostAndProfitCenterUseCase =
 		makeCreateCostAndProfitCenterUseCase()
 
-	const { costAndProfitCenter } =
-		await createCostAndProfitCenterUseCase.execute({
-			userId: request.user.sub,
-			name,
-		})
+	const { center } = await createCostAndProfitCenterUseCase.execute({
+		userId: request.user.sub,
+		name,
+	})
 
-	return reply
-		.status(201)
-		.send(CostAndProfitCentersViewModel.toHTTP(costAndProfitCenter))
+	return reply.status(201).send(CostAndProfitCentersViewModel.toHTTP(center))
 }

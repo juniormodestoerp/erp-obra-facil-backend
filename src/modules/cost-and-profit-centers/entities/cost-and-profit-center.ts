@@ -10,7 +10,7 @@ interface Props {
 	deletedAt: Date | null
 }
 
-export class CostAndProfitCenter extends Entity<Props> {
+export class Center extends Entity<Props> {
 	get userId(): string {
 		return this.props.userId
 	}
@@ -54,8 +54,8 @@ export class CostAndProfitCenter extends Entity<Props> {
 	static create(
 		props: Optional<Props, 'createdAt' | 'updatedAt' | 'deletedAt'>,
 		id?: UniqueEntityID,
-	): CostAndProfitCenter {
-		return new CostAndProfitCenter(
+	): Center {
+		return new Center(
 			{
 				...props,
 				createdAt: props.createdAt ?? new Date(),

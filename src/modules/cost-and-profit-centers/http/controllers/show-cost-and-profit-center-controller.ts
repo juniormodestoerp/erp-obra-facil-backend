@@ -24,11 +24,9 @@ export async function showCostAndProfitCenterController(
 
 	const showCostAndProfitCenterUseCase = makeShowCostAndProfitCenterUseCase()
 
-	const { costAndProfitCenter } = await showCostAndProfitCenterUseCase.execute({
+	const { center } = await showCostAndProfitCenterUseCase.execute({
 		id,
 	})
 
-	return reply
-		.status(200)
-		.send(CostAndProfitCentersViewModel.toHTTP(costAndProfitCenter))
+	return reply.status(200).send(CostAndProfitCentersViewModel.toHTTP(center))
 }

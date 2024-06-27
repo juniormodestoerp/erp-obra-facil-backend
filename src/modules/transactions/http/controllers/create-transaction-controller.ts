@@ -10,25 +10,28 @@ import {
 import { makeCreateTransactionUseCase } from '@modules/transactions/use-cases/factories/make-create-transaction-factory'
 
 const schema = z.object({
-	name: z.string(strMessage('nome do lançamento')),
+	type: z.string(strMessage('tipo')),
+	date: z.string(dateMessage('data')),
+	amount: z.number(numbMessage('valor')),
 	description: z.string(strMessage('descrição')),
-	categoryId: z.string(strMessage('categoria')),
-	establishmentName: z.string(strMessage('nome do estabelecimento')),
-	bankName: z.string(strMessage('nome do banco')),
-	date: z.coerce.date(dateMessage('data da transação')),
-	previousBalance: z.coerce.number(numbMessage('saldo anterior')),
-	amount: z.coerce.number(numbMessage('valor base do procedimento')),
-	currentBalance: z.coerce.number(numbMessage('valor base do procedimento')),
-	paymentMethod: z.string(strMessage('forma de pagamento')),
-
-	// Configurações opcionais adicionais
-	competencyDate: z.coerce.date(dateMessage('data de competência')).nullable(),
-	costAndProfitCenters: z.string(strMessage('centro de custo')).nullable(),
-	tags: z.string(strMessage('tags')).nullable(),
-	documentNumber: z.string(strMessage('número do documento')).nullable(),
-	associatedContracts: z.string(strMessage('contratos assosiados')).nullable(),
-	associatedProjects: z.string(strMessage('projetos assosiados')).nullable(),
-	additionalComments: z.string(strMessage('comentários adicionais')).nullable(),
+	account: z.string(strMessage('conta')),
+	status: z.string(strMessage('status')),
+	category: z.string(strMessage('categoria')),
+	card: z.string(strMessage('cartão')).nullable().default(null),
+	contact: z.string(strMessage('contato')).nullable().default(null),
+	center: z.string(strMessage('centro')).nullable().default(null),
+	project: z.string(strMessage('projeto')).nullable().default(null),
+	method: z.string(strMessage('forma')).nullable().default(null),
+	documentNumber: z.string(strMessage('nº documento')).nullable().default(null),
+	notes: z.string(strMessage('observações')).nullable().default(null),
+	competenceDate: z
+		.string(dateMessage('data competência'))
+		.nullable()
+		.default(null),
+	tags: z
+		.array(z.string(strMessage('tags')))
+		.nullable()
+		.default(null),
 })
 
 export async function createTransaction(
@@ -36,46 +39,44 @@ export async function createTransaction(
 	reply: FastifyReply,
 ) {
 	const {
-		name,
-		description,
-		categoryId,
-		establishmentName,
-		bankName,
+		type,
 		date,
-		previousBalance,
 		amount,
-		currentBalance,
-		paymentMethod,
-		competencyDate,
-		costAndProfitCenters,
-		tags,
+		description,
+		account,
+		status,
+		card,
+		category,
+		contact,
+		center,
+		project,
+		method,
 		documentNumber,
-		associatedContracts,
-		associatedProjects,
-		additionalComments,
+		notes,
+		competenceDate,
+		tags,
 	} = schema.parse(request.body)
 
 	const createTransactionUseCase = makeCreateTransactionUseCase()
 
-	await createTransactionUseCase.execute({
+	const { transaction } = await createTransactionUseCase.execute({
 		userId: request.user.sub,
-		name,
-		description,
-		categoryId,
-		establishmentName,
-		bankName,
+		type,
 		date,
-		previousBalance,
 		amount,
-		currentBalance,
-		paymentMethod,
-		competencyDate,
-		costAndProfitCenters,
-		tags,
+		description,
+		account,
+		status,
+		card,
+		category,
+		contact,
+		center,
+		project,
+		method,
 		documentNumber,
-		associatedContracts,
-		associatedProjects,
-		additionalComments,
+		notes,
+		competenceDate,
+		tags,
 	})
 
 	return reply.status(201).send()

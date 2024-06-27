@@ -6,7 +6,7 @@ import type {
 	// File as RawFiles,
 	Setting as RawSetting,
 } from '@prisma/client'
-// import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
+// import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
 
 export class PrismaSettingsMapper {
 	static toPrisma(setting: Setting): RawSetting {

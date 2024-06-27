@@ -19,7 +19,7 @@ interface Props {
 	previousBalance: number
 	amount: number
 	currentBalance: number
-	paymentMethod: string
+	method: string
 	competencyDate: Date | null
 	costAndProfitCenters: string | null
 	tags: string | null
@@ -144,12 +144,12 @@ export class Transaction extends Entity<Props> {
 		this.props.currentBalance = value
 	}
 
-	get paymentMethod(): string {
-		return this.props.paymentMethod
+	get method(): string {
+		return this.props.method
 	}
 
-	set paymentMethod(value: string) {
-		this.props.paymentMethod = value
+	set method(value: string) {
+		this.props.method = value
 	}
 
 	get competencyDate(): Date | null {

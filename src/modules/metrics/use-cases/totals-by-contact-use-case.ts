@@ -36,6 +36,8 @@ export class TotalsByContactUseCase {
 
 		const totalsByContact = transactions.reduce(
 			(acc, transaction) => {
+				console.log('transaction', transaction)
+
 				const contact = transaction.contact || 'unknown'
 				if (!acc[contact]) {
 					acc[contact] = { amount: 0, ids: [] }

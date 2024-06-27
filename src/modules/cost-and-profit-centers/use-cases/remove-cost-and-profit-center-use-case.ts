@@ -12,10 +12,9 @@ export class RemoveCostAndProfitCenterUseCase {
 	) {}
 
 	async execute({ id }: Input): Promise<void> {
-		const costAndProfitCenter =
-			await this.costAndProfitCentersRepository.findById(id)
+		const center = await this.costAndProfitCentersRepository.findById(id)
 
-		if (!costAndProfitCenter) {
+		if (!center) {
 			throw new AppError({
 				code: 'cost_and_profit_center.not_found',
 			})

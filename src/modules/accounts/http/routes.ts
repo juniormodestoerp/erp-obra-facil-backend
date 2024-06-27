@@ -13,9 +13,9 @@ export async function Router(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
 	app.get('/accounts/:id', showAccountController)
-	app.get('/bank-accounts', fetchAccountsController)
+	app.get('/accounts', fetchAccountsController)
 	app.get('/accounts/select-input', fetchSelectInputAccountsController)
-	app.post('/bank-accounts', createAccountController)
+	app.post('/accounts', createAccountController)
 	app.patch('/accounts/:id', saveAccountController)
 	app.delete('/accounts/:id', removeAccountController)
 }

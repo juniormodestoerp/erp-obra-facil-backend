@@ -12,7 +12,7 @@ import { PrismaUsersMapper } from '@modules/users/repositories/prisma/mappers/pr
 export class PrismaCategoriesMapper {
 	static toPrisma(category: Category): any {
 		return {
-			id: category.id.toString(),
+			id: category.id,
 			userId: category.userId,
 			transactionId: category.transactionId,
 			type: category.type,
@@ -21,17 +21,6 @@ export class PrismaCategoriesMapper {
 			createdAt: category.createdAt,
 			updatedAt: category.updatedAt,
 			deletedAt: category.deletedAt,
-			user: category.user
-				? { connect: { id: category.user.id.toString() } }
-				: undefined,
-			transactions:
-				category.transactions.length > 0
-					? {
-							connect: category.transactions.map((transaction) => ({
-								id: transaction.id.toString(),
-							})),
-						}
-					: undefined,
 		}
 	}
 

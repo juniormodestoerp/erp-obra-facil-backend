@@ -32,15 +32,6 @@ export class PrismaAccountsMapper {
 			createdAt: account.createdAt,
 			updatedAt: account.updatedAt,
 			deletedAt: account.deletedAt,
-			user: account.user ? { connect: { id: account.user.id } } : null,
-			transactions:
-				account.transactions.length > 0
-					? {
-							connect: account.transactions.map((transaction) => ({
-								id: transaction.id.toString(),
-							})),
-						}
-					: null,
 		}
 	}
 

@@ -13,7 +13,8 @@ export class FetchSelectInputCostAndProfitCentersUseCase {
 	) {}
 
 	async execute(): Promise<Output> {
-		const costAndProfitCenters = await this.costAndProfitCentersRepository.selectInput()
+		const costAndProfitCenters =
+			await this.costAndProfitCentersRepository.selectInput()
 
 		if (costAndProfitCenters.length === 0) {
 			throw new AppError({

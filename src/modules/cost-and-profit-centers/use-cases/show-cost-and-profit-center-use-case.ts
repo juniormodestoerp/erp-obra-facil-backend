@@ -17,7 +17,8 @@ export class ShowCostAndProfitCenterUseCase {
 	) {}
 
 	async execute({ id }: Input): Promise<Output> {
-		const costAndProfitCenter = await this.costAndProfitCentersRepository.findById(id)
+		const costAndProfitCenter =
+			await this.costAndProfitCentersRepository.findById(id)
 
 		if (!costAndProfitCenter) {
 			throw new AppError({

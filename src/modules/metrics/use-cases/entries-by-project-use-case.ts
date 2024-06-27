@@ -8,9 +8,9 @@ interface Input {
 interface IEntriesByProject {
 	id: string
 	project: string | null
-	name: string
-	totalAmount: number
-	transactionDate: string
+	description: string
+	amount: number
+	date: string
 }
 
 interface Output {
@@ -25,10 +25,10 @@ export class EntriesByProjectUseCase {
 			},
 			select: {
 				id: true,
-				associatedProjects: true,
-				name: true,
-				totalAmount: true,
-				transactionDate: true,
+				project: true,
+				description: true,
+				amount: true,
+				date: true,
 			},
 		})
 
@@ -41,8 +41,8 @@ export class EntriesByProjectUseCase {
 		const formattedTransactions: IEntriesByProject[] = transactions.map(
 			(transaction) => ({
 				...transaction,
-				project: transaction.associatedProjects || 'Projeto não informado',
-				transactionDate: transaction.transactionDate.toISOString(),
+				project: transaction.project ?? 'Projeto não informado',
+				date: transaction.date.toISOString(),
 			}),
 		)
 

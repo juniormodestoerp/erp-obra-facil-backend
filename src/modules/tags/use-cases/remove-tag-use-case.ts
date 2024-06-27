@@ -7,9 +7,7 @@ interface Input {
 }
 
 export class RemoveTagUseCase {
-	constructor(
-		private readonly tagsRepository: TagsRepository,
-	) {}
+	constructor(private readonly tagsRepository: TagsRepository) {}
 
 	async execute({ id }: Input): Promise<void> {
 		const tag = await this.tagsRepository.findById(id)

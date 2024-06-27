@@ -14,9 +14,7 @@ export async function createTagController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const { name } = bodySchema.parse(
-		request.body,
-	)
+	const { name } = bodySchema.parse(request.body)
 
 	const createTagUseCase = makeCreateTagUseCase()
 

@@ -10,7 +10,7 @@ interface Input {
 
 interface IEvolution {
 	date: string
-	totalAmount: number
+	amount: number
 	percentageChange: number
 	accumulatedTotal: number
 }
@@ -35,8 +35,8 @@ export class EvolutionByCategoryUseCase {
 			select: {
 				id: true,
 				categoryId: true,
-				totalAmount: true,
-				transactionDate: true,
+				amount: true,
+				date: true,
 				category: {
 					select: {
 						id: true,
@@ -56,7 +56,7 @@ export class EvolutionByCategoryUseCase {
 		const evolutionByCategory = transactions.reduce(
 			(acc, transaction) => {
 				const categoryId = transaction.categoryId || 'uncategorized'
-				const date = transaction.transactionDate.toISOString().slice(0, 7)
+				const date = transaction.date.toISOString().slice(0, 7)
 
 				if (!acc[categoryId]) {
 					acc[categoryId] = {
@@ -67,11 +67,10 @@ export class EvolutionByCategoryUseCase {
 				}
 
 				if (!acc[categoryId].transactions[date]) {
-					acc[categoryId].transactions[date] = { totalAmount: 0, ids: [] }
+					acc[categoryId].transactions[date] = { amount: 0, ids: [] }
 				}
 
-				acc[categoryId].transactions[date].totalAmount +=
-					transaction.totalAmount
+				acc[categoryId].transactions[date].amount += transaction.amount
 				acc[categoryId].transactions[date].ids.push(transaction.id)
 				return acc
 			},
@@ -80,7 +79,7 @@ export class EvolutionByCategoryUseCase {
 				{
 					categoryName: string
 					createdAt: Date
-					transactions: Record<string, { totalAmount: number; ids: string[] }>
+					transactions: Record<string, { amount: number; ids: string[] }>
 				}
 			>,
 		)
@@ -102,20 +101,20 @@ export class EvolutionByCategoryUseCase {
 					const currentDate = addMonths(startDate, i)
 					const currentMonth = currentDate.toISOString().slice(0, 7)
 
-					const totalAmount = transactions[currentMonth]?.totalAmount || 0
-					accumulatedTotal += totalAmount
+					const amount = transactions[currentMonth]?.amount || 0
+					accumulatedTotal += amount
 
 					const previousMonth = addMonths(currentDate, -1)
 						.toISOString()
 						.slice(0, 7)
-					const previousAmount = transactions[previousMonth]?.totalAmount || 0
+					const previousAmount = transactions[previousMonth]?.amount || 0
 					const percentageChange = previousAmount
-						? ((totalAmount - previousAmount) / previousAmount) * 100
+						? ((amount - previousAmount) / previousAmount) * 100
 						: 0
 
 					evolution.push({
 						date: currentMonth,
-						totalAmount,
+						amount,
 						percentageChange,
 						accumulatedTotal,
 					})

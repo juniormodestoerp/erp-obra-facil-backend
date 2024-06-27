@@ -11,9 +11,9 @@ interface Input {
 	categoryId: string
 	establishmentName: string
 	bankName: string
-	transactionDate: Date
+	date: Date
 	previousBalance: number
-	totalAmount: number
+	amount: number
 	currentBalance: number
 	paymentMethod: string
 	// Additional optional configurations
@@ -39,9 +39,9 @@ export class CreateTransactionUseCase {
 		categoryId,
 		establishmentName,
 		bankName,
-		transactionDate,
+		date,
 		previousBalance,
-		totalAmount,
+		amount,
 		currentBalance,
 		paymentMethod,
 		// Additional optional configurations
@@ -70,9 +70,9 @@ export class CreateTransactionUseCase {
 			categoryId: '4fdf8ff9-6e93-400e-b214-f9c547b2daf4',
 			establishmentName,
 			bankName,
-			transactionDate,
+			date,
 			previousBalance,
-			totalAmount,
+			amount,
 			currentBalance,
 			paymentMethod,
 			// Additional optional configurations

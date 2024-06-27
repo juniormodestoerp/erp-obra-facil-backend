@@ -102,7 +102,7 @@ export class CreateConciliationUseCase {
 		}: IMapTransactions): Promise<Partial<Transaction>> => {
 			const datePattern = /(\d{4})(\d{2})(\d{2})\d{6}\[-\d+:BRT\]/
 			const match = file.DTPOSTED.match(datePattern)
-			const transactionDate = match
+			const date = match
 				? new Date(`${match[1]}-${match[2]}-${match[3]}`)
 				: new Date()
 
@@ -122,14 +122,14 @@ export class CreateConciliationUseCase {
 				categoryId,
 				establishmentName: file.MEMO.split(' - ')[1] || '',
 				bankName: file.MEMO.split(' - ')[3] || '',
-				transactionDate,
+				date,
 				previousBalance: 0, // Ajustar conforme necessário
-				totalAmount: Number.parseFloat(file.TRNAMT),
+				amount: Number.parseFloat(file.TRNAMT),
 				currentBalance: 0, // Ajustar conforme necessário
 				paymentMethod: file.TRNTYPE === 'DEBIT' ? 'debit' : 'credit',
 				competencyDate: null,
 				costAndProfitCenters: null,
-				tags: null,
+				tags: [],
 				documentNumber: file.FITID,
 				associatedContracts: null,
 				associatedProjects: null,
@@ -166,8 +166,7 @@ export class CreateConciliationUseCase {
 
 				const existingTransaction = existingTransactions.find(
 					(txn) =>
-						txn.transactionDate.getTime() ===
-							mappedTransaction?.transactionDate?.getTime() &&
+						txn.date.getTime() === mappedTransaction?.date?.getTime() &&
 						txn.fitId === mappedTransaction.fitId,
 				)
 
@@ -176,7 +175,7 @@ export class CreateConciliationUseCase {
 					newTransactions.push(transaction)
 					// Removido o salvamento no banco de dados
 				} else if (
-					existingTransaction.totalAmount !== mappedTransaction.totalAmount ||
+					existingTransaction.amount !== mappedTransaction.amount ||
 					existingTransaction.description !== mappedTransaction.description
 				) {
 					conflictingTransactions.push(existingTransaction)

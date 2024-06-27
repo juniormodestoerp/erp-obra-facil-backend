@@ -1,4 +1,3 @@
-import type { PrismaClient } from '@prisma/client'
 import type {
 	IFindManyTransactionsDTO,
 	ITransactionsWhereClauses,
@@ -7,6 +6,7 @@ import type { IFindTransactionByIdDTO } from '@modules/transactions/dtos/find-tr
 import type { Transaction } from '@modules/transactions/entities/transaction'
 import { PrismaTransactionsMapper } from '@modules/transactions/repositories/prisma/mappers/prisma-transactions-mapper'
 import type { TransactionsRepository } from '@modules/transactions/repositories/transactions-repository'
+import type { PrismaClient } from '@prisma/client'
 import { env } from '@shared/infra/config/env'
 import { prisma } from '@shared/infra/database/prisma'
 

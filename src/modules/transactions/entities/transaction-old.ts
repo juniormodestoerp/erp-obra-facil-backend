@@ -15,9 +15,9 @@ interface Props {
 	categoryName?: string
 	establishmentName: string
 	bankName: string
-	transactionDate: Date
+	date: Date
 	previousBalance: number
-	totalAmount: number
+	amount: number
 	currentBalance: number
 	paymentMethod: string
 	competencyDate: Date | null
@@ -112,12 +112,12 @@ export class Transaction extends Entity<Props> {
 		this.props.bankName = value
 	}
 
-	get transactionDate(): Date {
-		return this.props.transactionDate
+	get date(): Date {
+		return this.props.date
 	}
 
-	set transactionDate(value: Date) {
-		this.props.transactionDate = value
+	set date(value: Date) {
+		this.props.date = value
 	}
 
 	get previousBalance(): number {
@@ -128,12 +128,12 @@ export class Transaction extends Entity<Props> {
 		this.props.previousBalance = value
 	}
 
-	get totalAmount(): number {
-		return this.props.totalAmount
+	get amount(): number {
+		return this.props.amount
 	}
 
-	set totalAmount(value: number) {
-		this.props.totalAmount = value
+	set amount(value: number) {
+		this.props.amount = value
 	}
 
 	get currentBalance(): number {

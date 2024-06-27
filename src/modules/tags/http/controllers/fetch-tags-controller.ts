@@ -15,9 +15,5 @@ export async function fetchTagsController(
 
 	return reply
 		.status(200)
-		.send(
-			tags.map(
-				(tag) => TagsViewModel.toHTTP(tag) ?? [],
-			),
-		)
+		.send(tags.map((tag) => TagsViewModel.toHTTP(tag) ?? []))
 }

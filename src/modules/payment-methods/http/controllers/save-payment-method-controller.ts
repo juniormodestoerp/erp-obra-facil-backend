@@ -10,7 +10,8 @@ const paramsSchema = z.object({
 	id: z
 		.string(strMessage('identificador do método de pagamento'))
 		.uuid({
-			message: 'O campo identificador do método de pagamento deve ser um UUID válido.',
+			message:
+				'O campo identificador do método de pagamento deve ser um UUID válido.',
 		})
 		.min(1, 'O campo identificador do método de pagamento é obrigatório.'),
 })
@@ -25,9 +26,7 @@ export async function savePaymentMethodController(
 ) {
 	const { id } = paramsSchema.parse(request.params)
 
-	const { name } = bodySchema.parse(
-		request.body,
-	)
+	const { name } = bodySchema.parse(request.body)
 
 	const savePaymentMethodUseCase = makeSavePaymentMethodUseCase()
 

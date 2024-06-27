@@ -14,9 +14,7 @@ export async function createTransferController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const { name } = bodySchema.parse(
-		request.body,
-	)
+	const { name } = bodySchema.parse(request.body)
 
 	const createTransferUseCase = makeCreateTransferUseCase()
 

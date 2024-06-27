@@ -13,10 +13,12 @@ export async function fetchBankAccountsController(
 		userId: request.user.sub,
 	})
 
-	console.log('bankAccounts', bankAccounts.map(
-		(bankAccount) => BankAccountsViewModel.toHTTP(bankAccount) ?? [],
-	));
-	
+	console.log(
+		'bankAccounts',
+		bankAccounts.map(
+			(bankAccount) => BankAccountsViewModel.toHTTP(bankAccount) ?? [],
+		),
+	)
 
 	return reply
 		.status(200)

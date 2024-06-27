@@ -9,7 +9,8 @@ export async function fetchSelectInputCostAndProfitCentersController(
 	const fetchSelectInputCostAndProfitCentersUseCase =
 		makeFetchSelectInputCostAndProfitCentersUseCase()
 
-	const { costAndProfitCenters } = await fetchSelectInputCostAndProfitCentersUseCase.execute()
+	const { costAndProfitCenters } =
+		await fetchSelectInputCostAndProfitCentersUseCase.execute()
 
 	return reply.status(200).send(costAndProfitCenters)
 }

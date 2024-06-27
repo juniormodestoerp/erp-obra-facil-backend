@@ -10,7 +10,8 @@ const paramsSchema = z.object({
 	id: z
 		.string(strMessage('identificador da transferência'))
 		.uuid({
-			message: 'O campo identificador da transferência deve ser um UUID válido.',
+			message:
+				'O campo identificador da transferência deve ser um UUID válido.',
 		})
 		.min(1, 'O campo identificador da transferência é obrigatório.'),
 })
@@ -25,9 +26,7 @@ export async function saveTransferController(
 ) {
 	const { id } = paramsSchema.parse(request.params)
 
-	const { name } = bodySchema.parse(
-		request.body,
-	)
+	const { name } = bodySchema.parse(request.body)
 
 	const saveTransferUseCase = makeSaveTransferUseCase()
 

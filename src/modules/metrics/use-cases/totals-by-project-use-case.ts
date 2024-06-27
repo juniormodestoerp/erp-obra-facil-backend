@@ -8,7 +8,7 @@ interface Input {
 interface ITotalsByProject {
 	id: string
 	associatedProject: string | null
-	totalAmount: number
+	amount: number
 }
 
 interface Output {
@@ -23,8 +23,8 @@ export class TotalsByProjectUseCase {
 			},
 			select: {
 				id: true,
-				associatedProjects: true,
-				totalAmount: true,
+				project: true,
+				amount: true,
 			},
 		})
 
@@ -36,24 +36,23 @@ export class TotalsByProjectUseCase {
 
 		const totalsByProject = transactions.reduce(
 			(acc, transaction) => {
-				const associatedProject =
-					transaction.associatedProjects || 'uncategorized'
+				const associatedProject = transaction.project || 'Não informado'
 				if (!acc[associatedProject]) {
-					acc[associatedProject] = { totalAmount: 0, ids: [] }
+					acc[associatedProject] = { amount: 0, ids: [] }
 				}
-				acc[associatedProject].totalAmount += transaction.totalAmount
+				acc[associatedProject].amount += transaction.amount
 				acc[associatedProject].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, { totalAmount: number; ids: string[] }>,
+			{} as Record<string, { amount: number; ids: string[] }>,
 		)
 
 		const result: ITotalsByProject[] = Object.keys(totalsByProject).map(
 			(associatedProject) => ({
 				id: totalsByProject[associatedProject].ids.join(', '),
 				associatedProject:
-					associatedProject === 'uncategorized' ? null : associatedProject,
-				totalAmount: totalsByProject[associatedProject].totalAmount,
+					associatedProject === 'Não informado' ? null : associatedProject,
+				amount: totalsByProject[associatedProject].amount,
 			}),
 		)
 

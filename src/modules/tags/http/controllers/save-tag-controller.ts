@@ -25,9 +25,7 @@ export async function saveTagController(
 ) {
 	const { id } = paramsSchema.parse(request.params)
 
-	const { name } = bodySchema.parse(
-		request.body,
-	)
+	const { name } = bodySchema.parse(request.body)
 
 	const saveTagUseCase = makeSaveTagUseCase()
 

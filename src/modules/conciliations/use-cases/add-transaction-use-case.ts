@@ -18,9 +18,9 @@ interface Input {
 	categoryName?: string
 	establishmentName: string
 	bankName: string
-	transactionDate: Date
+	date: Date
 	previousBalance: number
-	totalAmount: number
+	amount: number
 	currentBalance: number
 	paymentMethod: string
 	competencyDate: Date | null
@@ -60,9 +60,9 @@ export class AddTransactionUseCase {
 		categoryName,
 		establishmentName,
 		bankName,
-		transactionDate,
+		date,
 		previousBalance,
-		totalAmount,
+		amount,
 		currentBalance,
 		paymentMethod,
 		competencyDate,
@@ -119,10 +119,10 @@ export class AddTransactionUseCase {
 				categoryName,
 				establishmentName,
 				bankName,
-				transactionDate,
+				date,
 				previousBalance: user.balance,
-				totalAmount,
-				currentBalance: user.balance + totalAmount,
+				amount,
+				currentBalance: user.balance + amount,
 				paymentMethod:
 					paymentMethod === 'credit'
 						? 'Crédito'
@@ -147,7 +147,7 @@ export class AddTransactionUseCase {
 
 		await this.transactionsRepository.create(transaction)
 
-		user.balance = user.balance + totalAmount
+		user.balance = user.balance + amount
 
 		await this.usersRepository.save(user)
 

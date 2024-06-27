@@ -8,7 +8,7 @@ interface Input {
 interface ITotalsByCenter {
 	id: string
 	centerId: string | null
-	totalAmount: number
+	amount: number
 }
 
 interface Output {
@@ -23,8 +23,13 @@ export class TotalsByCenterUseCase {
 			},
 			select: {
 				id: true,
-				costAndProfitCenters: true,
-				totalAmount: true,
+				center: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+				amount: true,
 			},
 		})
 
@@ -36,22 +41,24 @@ export class TotalsByCenterUseCase {
 
 		const totalsByCenter = transactions.reduce(
 			(acc, transaction) => {
-				const centerId = transaction.costAndProfitCenters || 'uncategorized'
+				const centerId = transaction.center
+					? transaction.center.id
+					: 'Não informado'
 				if (!acc[centerId]) {
-					acc[centerId] = { totalAmount: 0, ids: [] }
+					acc[centerId] = { amount: 0, ids: [] }
 				}
-				acc[centerId].totalAmount += transaction.totalAmount
+				acc[centerId].amount += transaction.amount
 				acc[centerId].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, { totalAmount: number; ids: string[] }>,
+			{} as Record<string, { amount: number; ids: string[] }>,
 		)
 
 		const result: ITotalsByCenter[] = Object.keys(totalsByCenter).map(
 			(centerId) => ({
 				id: totalsByCenter[centerId].ids.join(', '),
-				centerId: centerId === 'uncategorized' ? null : centerId,
-				totalAmount: totalsByCenter[centerId].totalAmount,
+				centerId: centerId === 'Não informado' ? null : centerId,
+				amount: totalsByCenter[centerId].amount,
 			}),
 		)
 

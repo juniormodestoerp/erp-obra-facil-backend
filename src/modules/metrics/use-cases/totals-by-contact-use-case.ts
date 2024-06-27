@@ -8,7 +8,7 @@ interface Input {
 interface ITotalsByContact {
 	id: string
 	contact: string | null
-	totalAmount: number
+	amount: number
 }
 
 interface Output {
@@ -24,7 +24,7 @@ export class TotalsByContactUseCase {
 			select: {
 				id: true,
 				contact: true,
-				totalAmount: true,
+				amount: true,
 			},
 		})
 
@@ -38,20 +38,20 @@ export class TotalsByContactUseCase {
 			(acc, transaction) => {
 				const contact = transaction.contact || 'unknown'
 				if (!acc[contact]) {
-					acc[contact] = { totalAmount: 0, ids: [] }
+					acc[contact] = { amount: 0, ids: [] }
 				}
-				acc[contact].totalAmount += transaction.totalAmount
+				acc[contact].amount += transaction.amount
 				acc[contact].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, { totalAmount: number; ids: string[] }>,
+			{} as Record<string, { amount: number; ids: string[] }>,
 		)
 
 		const result: ITotalsByContact[] = Object.keys(totalsByContact).map(
 			(contact) => ({
 				id: totalsByContact[contact].ids.join(', '),
 				contact: contact === 'unknown' ? null : contact,
-				totalAmount: totalsByContact[contact].totalAmount,
+				amount: totalsByContact[contact].amount,
 			}),
 		)
 

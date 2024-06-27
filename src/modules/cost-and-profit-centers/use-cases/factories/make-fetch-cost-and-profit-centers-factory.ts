@@ -4,8 +4,12 @@ import { PrismaUsersRepository } from '@modules/users/repositories/prisma/reposi
 import { FetchCostAndProfitCentersUseCase } from '@modules/cost-and-profit-centers/use-cases/fetch-cost-and-profit-centers-use-case'
 
 export function makeFetchCostAndProfitCentersUseCase() {
-	const costAndProfitCentersRepository = new PrismaCostAndProfitCentersRepository()
+	const costAndProfitCentersRepository =
+		new PrismaCostAndProfitCentersRepository()
 	const usersRepository = new PrismaUsersRepository()
 
-	return new FetchCostAndProfitCentersUseCase(costAndProfitCentersRepository, usersRepository)
+	return new FetchCostAndProfitCentersUseCase(
+		costAndProfitCentersRepository,
+		usersRepository,
+	)
 }

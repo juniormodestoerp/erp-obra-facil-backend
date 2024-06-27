@@ -16,8 +16,6 @@ export async function fetchTransfersController(
 	return reply
 		.status(200)
 		.send(
-			transfers.map(
-				(transfer) => TransfersViewModel.toHTTP(transfer) ?? [],
-			),
+			transfers.map((transfer) => TransfersViewModel.toHTTP(transfer) ?? []),
 		)
 }

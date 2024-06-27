@@ -2,12 +2,12 @@ import { Entity } from '@core/domain/entities/entity'
 import type { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import type { Optional } from '@core/domain/types/opcional'
 
-import type { User } from '@modules/users/entities/user'
 import type { BankAccount as Account } from '@modules/bank-accounts/entities/bank-account'
 import type { Category } from '@modules/categories/entities/category'
 import type { CostAndProfitCenter as Center } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
 import type { PaymentMethod as Method } from '@modules/payment-methods/entities/payment-method'
 import type { Tag } from '@modules/tags/entities/tag'
+import type { User } from '@modules/users/entities/user'
 
 interface Props {
 	userId: string
@@ -27,9 +27,9 @@ interface Props {
 
 	user: User
 	account: Account
-	category: Category
-	center: Center
-	method: Method
+	category: Category | null
+	center: Center | null
+	method: Method | null
 	tags: Tag[]
 }
 
@@ -162,27 +162,27 @@ export class Transaction extends Entity<Props> {
 		this.props.account = value
 	}
 
-	get category(): Category {
+	get category(): Category | null {
 		return this.props.category
 	}
 
-	set category(value: Category) {
+	set category(value: Category | null) {
 		this.props.category = value
 	}
 
-	get center(): Center {
+	get center(): Center | null {
 		return this.props.center
 	}
 
-	set center(value: Center) {
+	set center(value: Center | null) {
 		this.props.center = value
 	}
 
-	get method(): Method {
+	get method(): Method | null {
 		return this.props.method
 	}
 
-	set method(value: Method) {
+	set method(value: Method | null) {
 		this.props.method = value
 	}
 

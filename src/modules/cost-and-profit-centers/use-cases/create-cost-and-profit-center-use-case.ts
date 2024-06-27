@@ -13,10 +13,13 @@ interface Output {
 }
 
 export class CreateCostAndProfitCenterUseCase {
-	constructor(private readonly costAndProfitCentersRepository: CostAndProfitCentersRepository) {}
+	constructor(
+		private readonly costAndProfitCentersRepository: CostAndProfitCentersRepository,
+	) {}
 
 	async execute({ userId, name }: Input): Promise<Output> {
-		const existsCostAndProfitCenter = await this.costAndProfitCentersRepository.findByName(name)
+		const existsCostAndProfitCenter =
+			await this.costAndProfitCentersRepository.findByName(name)
 
 		if (existsCostAndProfitCenter) {
 			throw new AppError({

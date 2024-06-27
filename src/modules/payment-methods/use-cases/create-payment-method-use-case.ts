@@ -13,10 +13,13 @@ interface Output {
 }
 
 export class CreatePaymentMethodUseCase {
-	constructor(private readonly paymentMethodsRepository: PaymentMethodsRepository) {}
+	constructor(
+		private readonly paymentMethodsRepository: PaymentMethodsRepository,
+	) {}
 
 	async execute({ userId, name }: Input): Promise<Output> {
-		const existsPaymentMethod = await this.paymentMethodsRepository.findByName(name)
+		const existsPaymentMethod =
+			await this.paymentMethodsRepository.findByName(name)
 
 		if (existsPaymentMethod) {
 			throw new AppError({

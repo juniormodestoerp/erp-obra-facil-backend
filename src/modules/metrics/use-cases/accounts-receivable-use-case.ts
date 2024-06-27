@@ -7,11 +7,11 @@ interface Input {
 
 interface IAccountsReceivable {
 	id: string
-	name: string
-	totalAmount: number
-	transactionDate: string
-	tags: string | null
-	paymentMethod: string
+	description: string
+	amount: number
+	date: string
+	tags: string[] | null
+	method: string | null
 }
 
 interface Output {
@@ -23,20 +23,20 @@ export class AccountsReceivableUseCase {
 		const transactions = await prisma.transaction.findMany({
 			where: {
 				userId,
-				totalAmount: {
+				amount: {
 					gt: 0,
 				},
-				transactionDate: {
+				date: {
 					gt: new Date(),
 				},
 			},
 			select: {
 				id: true,
-				name: true,
-				totalAmount: true,
-				transactionDate: true,
+				description: true,
+				amount: true,
+				date: true,
 				tags: true,
-				paymentMethod: true,
+				method: true,
 			},
 		})
 
@@ -49,11 +49,11 @@ export class AccountsReceivableUseCase {
 		const formattedTransactions: IAccountsReceivable[] = transactions.map(
 			(transaction) => ({
 				id: transaction.id,
-				name: transaction.name,
-				totalAmount: transaction.totalAmount,
-				transactionDate: transaction.transactionDate.toISOString(),
-				tags: transaction.tags,
-				paymentMethod: transaction.paymentMethod,
+				description: transaction.description,
+				amount: transaction.amount,
+				date: transaction.date.toISOString(),
+				tags: transaction.tags.map((tag) => tag.name),
+				method: transaction.method ? transaction.method.name : null,
 			}),
 		)
 

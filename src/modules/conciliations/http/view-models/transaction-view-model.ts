@@ -4,29 +4,22 @@ export class TransactionViewModel {
 	static toHTTP(transaction: Transaction) {
 		return {
 			id: transaction.id,
-			userId: transaction.userId,
-			name: transaction.name,
+			date: transaction.date?.toISOString(),
+			amount: transaction.amount,
 			description: transaction.description,
-			categoryId: transaction.categoryId,
-			categoryName: transaction.categoryName,
-			establishmentName: transaction.establishmentName,
-			bankName: transaction.bankName,
-			transactionDate: transaction.transactionDate.toISOString(),
-			previousBalance: transaction.previousBalance,
-			totalAmount: transaction.totalAmount,
-			currentBalance: transaction.currentBalance,
-			paymentMethod: transaction.paymentMethod,
-			competencyDate: transaction.competencyDate
-				? transaction.competencyDate.toISOString()
-				: null,
-			costAndProfitCenters: transaction.costAndProfitCenters,
-			tags: transaction.tags,
+			transferAccount: transaction.transferAccount,
+			card: transaction.card,
+			contact: transaction.contact,
+			project: transaction.project,
 			documentNumber: transaction.documentNumber,
-			associatedContracts: transaction.associatedContracts,
-			associatedProjects: transaction.associatedProjects,
-			additionalComments: transaction.additionalComments,
-			status: transaction.status,
-			createdAt: transaction.createdAt.toISOString(),
+			notes: transaction.notes,
+			competenceDate: transaction.competenceDate?.toISOString(),
+			account: transaction.account,
+			category: transaction.category,
+			center: transaction.center,
+			method: transaction.method,
+			tags: transaction.tags,
+			createdAt: transaction.createdAt?.toISOString(),
 		}
 	}
 }

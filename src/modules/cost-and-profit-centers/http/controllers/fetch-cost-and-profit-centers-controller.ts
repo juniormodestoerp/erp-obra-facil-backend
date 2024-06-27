@@ -7,17 +7,20 @@ export async function fetchCostAndProfitCentersController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const fetchCostAndProfitCentersUseCase = makeFetchCostAndProfitCentersUseCase()
+	const fetchCostAndProfitCentersUseCase =
+		makeFetchCostAndProfitCentersUseCase()
 
-	const { costAndProfitCenters } = await fetchCostAndProfitCentersUseCase.execute({
-		userId: request.user.sub,
-	})
+	const { costAndProfitCenters } =
+		await fetchCostAndProfitCentersUseCase.execute({
+			userId: request.user.sub,
+		})
 
 	return reply
 		.status(200)
 		.send(
 			costAndProfitCenters.map(
-				(costAndProfitCenter) => CostAndProfitCentersViewModel.toHTTP(costAndProfitCenter) ?? [],
+				(costAndProfitCenter) =>
+					CostAndProfitCentersViewModel.toHTTP(costAndProfitCenter) ?? [],
 			),
 		)
 }

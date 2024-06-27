@@ -8,8 +8,8 @@ interface Input {
 
 interface ICashFlow {
 	id: string
-	totalAmount: number
-	transactionDate: string
+	amount: number
+	date: string
 	description: string
 }
 
@@ -35,12 +35,12 @@ export class CashFlowUseCase {
 			},
 			select: {
 				id: true,
-				totalAmount: true,
-				transactionDate: true,
+				amount: true,
+				date: true,
 				description: true,
 			},
 			orderBy: {
-				transactionDate: 'asc',
+				date: 'asc',
 			},
 		})
 
@@ -52,13 +52,13 @@ export class CashFlowUseCase {
 
 		const groupedTransactions = transactions.reduce(
 			(acc, transaction) => {
-				const date = transaction.transactionDate.toISOString().split('T')[0]
+				const date = transaction.date.toISOString().split('T')[0]
 				if (!acc[date]) {
 					acc[date] = []
 				}
 				acc[date].push({
 					...transaction,
-					transactionDate: transaction.transactionDate.toISOString(),
+					date: transaction.date.toISOString(),
 				})
 				return acc
 			},
@@ -70,11 +70,11 @@ export class CashFlowUseCase {
 			(date) => {
 				const dayTransactions = groupedTransactions[date]
 				const totalEntries = dayTransactions
-					.filter((t) => t.totalAmount > 0)
-					.reduce((sum, t) => sum + t.totalAmount, 0)
+					.filter((t) => t.amount > 0)
+					.reduce((sum, t) => sum + t.amount, 0)
 				const totalExits = dayTransactions
-					.filter((t) => t.totalAmount < 0)
-					.reduce((sum, t) => sum + t.totalAmount, 0)
+					.filter((t) => t.amount < 0)
+					.reduce((sum, t) => sum + t.amount, 0)
 				const total = totalEntries + totalExits
 				const endOfDayBalance = previousDayBalance + total
 

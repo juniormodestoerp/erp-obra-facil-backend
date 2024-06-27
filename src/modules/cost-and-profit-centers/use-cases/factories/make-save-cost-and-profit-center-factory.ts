@@ -4,8 +4,12 @@ import { PrismaUsersRepository } from '@modules/users/repositories/prisma/reposi
 import { SaveCostAndProfitCenterUseCase } from '@modules/cost-and-profit-centers/use-cases/save-cost-and-profit-center-use-case'
 
 export function makeSaveCostAndProfitCenterUseCase() {
-	const costAndProfitCentersRepository = new PrismaCostAndProfitCentersRepository()
+	const costAndProfitCentersRepository =
+		new PrismaCostAndProfitCentersRepository()
 	const usersRepository = new PrismaUsersRepository()
 
-	return new SaveCostAndProfitCenterUseCase(costAndProfitCentersRepository, usersRepository)
+	return new SaveCostAndProfitCenterUseCase(
+		costAndProfitCentersRepository,
+		usersRepository,
+	)
 }

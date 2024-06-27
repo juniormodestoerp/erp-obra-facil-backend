@@ -7,10 +7,10 @@ interface Input {
 
 interface IEntriesByCenter {
 	id: string
-	costAndProfitCenters: string | null
-	totalAmount: number
-	transactionDate: string
-	name: string
+	center: string | null
+	amount: number
+	date: string
+	description: string
 }
 
 interface Output {
@@ -25,10 +25,10 @@ export class EntriesByCenterUseCase {
 			},
 			select: {
 				id: true,
-				costAndProfitCenters: true,
-				totalAmount: true,
-				transactionDate: true,
-				name: true,
+				center: true,
+				amount: true,
+				date: true,
+				description: true,
 			},
 		})
 
@@ -42,9 +42,8 @@ export class EntriesByCenterUseCase {
 		const formattedTransactions: IEntriesByCenter[] = transactions.map(
 			(transaction) => ({
 				...transaction,
-				costAndProfitCenters:
-					transaction.costAndProfitCenters || 'Centro não informado',
-				transactionDate: transaction.transactionDate.toISOString(),
+				center: transaction.center?.name ?? 'Centro não informado',
+				date: transaction.date.toISOString(),
 			}),
 		)
 

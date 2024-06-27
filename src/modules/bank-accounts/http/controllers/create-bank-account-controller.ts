@@ -7,9 +7,9 @@ import {
 	strMessage,
 } from '@core/utils/custom-zod-error'
 
+import { LimitType } from '@modules/bank-accounts/entities/bank-account'
 import { BankAccountsViewModel } from '@modules/bank-accounts/http/view-models/bank-accounts-view-model'
 import { makeCreateBankAccountUseCase } from '@modules/bank-accounts/use-cases/factories/make-create-bank-account-factory'
-import { LimitType } from '@modules/bank-accounts/entities/bank-account'
 
 const bodySchema = z.object({
 	accountType: z

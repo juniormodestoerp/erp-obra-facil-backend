@@ -21,11 +21,7 @@ export class SaveCostAndProfitCenterUseCase {
 		private readonly usersRepository: UsersRepository,
 	) {}
 
-	async execute({
-		id,
-		userId,
-		name,
-	}: Input): Promise<Output> {
+	async execute({ id, userId, name }: Input): Promise<Output> {
 		const user = await this.usersRepository.findById({
 			userId,
 		})
@@ -36,7 +32,8 @@ export class SaveCostAndProfitCenterUseCase {
 			})
 		}
 
-		const previusCostAndProfitCenter = await this.costAndProfitCentersRepository.findById(id)
+		const previusCostAndProfitCenter =
+			await this.costAndProfitCentersRepository.findById(id)
 
 		if (!previusCostAndProfitCenter) {
 			throw new AppError({

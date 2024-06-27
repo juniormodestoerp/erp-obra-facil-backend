@@ -9,7 +9,8 @@ export async function fetchSelectInputPaymentMethodsController(
 	const fetchSelectInputPaymentMethodsUseCase =
 		makeFetchSelectInputPaymentMethodsUseCase()
 
-	const { paymentMethods } = await fetchSelectInputPaymentMethodsUseCase.execute()
+	const { paymentMethods } =
+		await fetchSelectInputPaymentMethodsUseCase.execute()
 
 	return reply.status(200).send(paymentMethods)
 }

@@ -11,9 +11,9 @@ export class TransactionViewModel {
 			categoryName: transaction.categoryName,
 			establishmentName: transaction.establishmentName,
 			bankName: transaction.bankName,
-			transactionDate: transaction.transactionDate.toISOString(),
+			date: transaction.date.toISOString(),
 			previousBalance: transaction.previousBalance,
-			totalAmount: transaction.totalAmount,
+			amount: transaction.amount,
 			currentBalance: transaction.currentBalance,
 			paymentMethod: transaction.paymentMethod,
 			competencyDate: transaction.competencyDate

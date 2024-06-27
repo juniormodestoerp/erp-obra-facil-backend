@@ -3,8 +3,8 @@ import type { PrismaClient } from '@prisma/client'
 import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 
 import type { Tag } from '@modules/tags/entities/tag'
-import type { TagsRepository } from '@modules/tags/repositories/tags-repository'
 import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/prisma-tags-mapper'
+import type { TagsRepository } from '@modules/tags/repositories/tags-repository'
 
 import { prisma } from '@shared/infra/database/prisma'
 
@@ -60,9 +60,7 @@ export class PrismaTagsRepository implements TagsRepository {
 			return []
 		}
 
-		return tags.map((tag) =>
-			PrismaTagsMapper.toDomain(tag),
-		)
+		return tags.map((tag) => PrismaTagsMapper.toDomain(tag))
 	}
 
 	async selectInput(): Promise<ISelectInputDTO[]> {

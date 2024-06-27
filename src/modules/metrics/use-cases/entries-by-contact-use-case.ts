@@ -8,9 +8,9 @@ interface Input {
 interface IEntriesByContact {
 	id: string
 	contact: string | null
-	name: string
-	totalAmount: number
-	transactionDate: string
+	description: string
+	amount: number
+	date: string
 }
 
 interface Output {
@@ -26,9 +26,9 @@ export class EntriesByContactUseCase {
 			select: {
 				id: true,
 				contact: true,
-				name: true,
-				totalAmount: true,
-				transactionDate: true,
+				description: true,
+				amount: true,
+				date: true,
 			},
 		})
 
@@ -42,7 +42,7 @@ export class EntriesByContactUseCase {
 			(transaction) => ({
 				...transaction,
 				contact: transaction.contact || 'Contato não informado',
-				transactionDate: transaction.transactionDate.toISOString(),
+				date: transaction.date.toISOString(),
 			}),
 		)
 

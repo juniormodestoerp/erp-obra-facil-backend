@@ -10,7 +10,8 @@ const paramsSchema = z.object({
 	id: z
 		.string(strMessage('identificador do método de pagamento'))
 		.uuid({
-			message: 'O campo identificador do método de pagamento deve ser um UUID válido.',
+			message:
+				'O campo identificador do método de pagamento deve ser um UUID válido.',
 		})
 		.min(1, 'O campo identificador do método de pagamento é obrigatório.'),
 })
@@ -27,5 +28,7 @@ export async function showCostAndProfitCenterController(
 		id,
 	})
 
-	return reply.status(200).send(CostAndProfitCentersViewModel.toHTTP(costAndProfitCenter))
+	return reply
+		.status(200)
+		.send(CostAndProfitCentersViewModel.toHTTP(costAndProfitCenter))
 }

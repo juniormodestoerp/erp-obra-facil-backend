@@ -1,32 +1,32 @@
-import type { FastifyReply, FastifyRequest } from 'fastify';
-import { z } from 'zod';
+import { randomUUID } from 'node:crypto'
 import {
 	dateMessage,
 	numbMessage,
 	strMessage,
-} from '@core/utils/custom-zod-error';
-import { prisma } from '@shared/infra/database/prisma';
-import { Utils } from '@core/utils/string';
-import { randomUUID } from 'node:crypto';
+} from '@core/utils/custom-zod-error'
+import { Utils } from '@core/utils/string'
+import { prisma } from '@shared/infra/database/prisma'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import { z } from 'zod'
 
 interface ITransactionInput {
-	id?: string;
-	date: string;
-	amount: number;
-	description: string;
-	account: string | null;
-	transferAccount: string | null;
-	card: string | null;
-	category: string | null;
-	subcategory: string | null;
-	contact: string | null;
-	center: string | null;
-	project: string | null;
-	method: string | null;
-	documentNumber: string | null;
-	notes: string | null;
-	competenceDate: string | null;
-	tags: string | null;
+	id?: string
+	date: string
+	amount: number
+	description: string
+	account: string | null
+	transferAccount: string | null
+	card: string | null
+	category: string | null
+	subcategory: string | null
+	contact: string | null
+	center: string | null
+	project: string | null
+	method: string | null
+	documentNumber: string | null
+	notes: string | null
+	competenceDate: string | null
+	tags: string | null
 }
 
 const bodySchema = z
@@ -48,31 +48,31 @@ const bodySchema = z
 		competenceDate: z.coerce.string(dateMessage('Data Competência')).nullable(),
 		tags: z.string(strMessage('Tags')).nullable(),
 	})
-	.array();
+	.array()
 
 export async function verifyXlsxController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const parsedBody = bodySchema.parse(request.body);
+	const parsedBody = bodySchema.parse(request.body)
 	const formattedBody = parsedBody.map((transaction) => ({
 		...transaction,
 		date: Utils.parseDate(transaction.date),
 		competenceDate: transaction.competenceDate
 			? Utils.parseDate(transaction.competenceDate)
 			: null,
-	}));
+	}))
 
 	async function filterNewTransactions(
 		newTransactions: ITransactionInput[],
 	): Promise<{
-		newTransactions: ITransactionInput[];
-		existingTransactions: ITransactionInput[];
+		newTransactions: ITransactionInput[]
+		existingTransactions: ITransactionInput[]
 	}> {
 		const existingTransactions = await prisma.transaction.findMany({
 			where: {
 				OR: newTransactions.map((transaction) => ({
-					date: transaction.date,
+					date: new Date(transaction.date)?.toISOString(),
 					amount: transaction.amount,
 					description: transaction.description,
 				})),
@@ -82,62 +82,47 @@ export async function verifyXlsxController(
 				amount: true,
 				description: true,
 			},
-		});
+		})
 
 		const existingSet = new Set(
 			existingTransactions.map(
 				(transaction) =>
-					`${transaction.date.toISOString()}-${transaction.amount}-${transaction.description}`,
+					`${new Date(transaction.date)?.toISOString()}-${transaction.amount}-${transaction.description}`,
 			),
-		);
+		)
 
-		const newTrans: ITransactionInput[] = [];
-		const existingTrans: ITransactionInput[] = [];
+		const newTrans: ITransactionInput[] = []
+		const existingTrans: ITransactionInput[] = []
 
 		for (const transaction of newTransactions) {
-			const transactionKey = `${transaction.date}-${transaction.amount}-${transaction.description}`;
+			const transactionKey = `${new Date(transaction.date)?.toISOString()}-${transaction.amount}-${transaction.description}`
 			if (existingSet.has(transactionKey)) {
-				existingTrans.push(transaction);
+				existingTrans.push(transaction)
 			} else {
-				newTrans.push(transaction);
+				newTrans.push(transaction)
 			}
 		}
 		return {
 			newTransactions: newTrans,
 			existingTransactions: existingTrans,
-		};
+		}
 	}
 
-	const result = await filterNewTransactions(formattedBody);
+	const result = await filterNewTransactions(formattedBody)
 
 	const addIdToTransactions = (transactions: ITransactionInput[]) =>
-		transactions.map(transaction => ({
+		transactions.map((transaction) => ({
 			...transaction,
 			id: randomUUID(),
-		}));
+		}))
 
-	const newTransactionsWithId = addIdToTransactions(result.newTransactions);
-	const conflictingTransactionsWithId = addIdToTransactions(result.existingTransactions);
+	const newTransactionsWithId = addIdToTransactions(result.newTransactions)
+	const conflictingTransactionsWithId = addIdToTransactions(
+		result.existingTransactions,
+	)
 
 	reply.status(200).send({
 		newTransactions: newTransactionsWithId,
 		conflictingTransactions: conflictingTransactionsWithId,
-	});
+	})
 }
-
-// date
-// amount
-// description
-// account
-// transferAccount
-// card
-// category
-// subcategory
-// contact
-// center
-// project
-// method
-// documentNumber
-// notes
-// competenceDate
-// tags

@@ -9,9 +9,9 @@ interface Input {
 interface IEntriesByCategory {
 	id: string
 	category: string | null
-	name: string
-	totalAmount: number
-	transactionDate: string
+	description: string
+	amount: number
+	date: string
 }
 
 interface Output {
@@ -31,9 +31,9 @@ export class EntriesByCategoryUseCase {
 						name: true,
 					},
 				},
-				name: true,
-				totalAmount: true,
-				transactionDate: true,
+				description: true,
+				amount: true,
+				date: true,
 			},
 		})
 
@@ -47,7 +47,7 @@ export class EntriesByCategoryUseCase {
 			(transaction) => ({
 				...transaction,
 				category: transaction.category?.name || 'Categoria não informada',
-				transactionDate: transaction.transactionDate.toISOString(),
+				date: transaction.date.toISOString(),
 			}),
 		)
 

@@ -7,5 +7,8 @@ export function makeFetchPaymentMethodsUseCase() {
 	const paymentMethodsRepository = new PrismaPaymentMethodsRepository()
 	const usersRepository = new PrismaUsersRepository()
 
-	return new FetchPaymentMethodsUseCase(paymentMethodsRepository, usersRepository)
+	return new FetchPaymentMethodsUseCase(
+		paymentMethodsRepository,
+		usersRepository,
+	)
 }

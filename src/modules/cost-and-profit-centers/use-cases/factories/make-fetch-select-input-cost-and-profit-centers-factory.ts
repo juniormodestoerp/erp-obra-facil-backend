@@ -3,7 +3,10 @@ import { PrismaCostAndProfitCentersRepository } from '@modules/cost-and-profit-c
 import { FetchSelectInputCostAndProfitCentersUseCase } from '@modules/cost-and-profit-centers/use-cases/fetch-select-input-cost-and-profit-centers-use-case'
 
 export function makeFetchSelectInputCostAndProfitCentersUseCase() {
-	const costAndProfitCentersRepository = new PrismaCostAndProfitCentersRepository()
+	const costAndProfitCentersRepository =
+		new PrismaCostAndProfitCentersRepository()
 
-	return new FetchSelectInputCostAndProfitCentersUseCase(costAndProfitCentersRepository)
+	return new FetchSelectInputCostAndProfitCentersUseCase(
+		costAndProfitCentersRepository,
+	)
 }

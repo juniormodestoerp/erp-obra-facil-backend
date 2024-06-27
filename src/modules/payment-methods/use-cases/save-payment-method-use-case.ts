@@ -21,11 +21,7 @@ export class SavePaymentMethodUseCase {
 		private readonly usersRepository: UsersRepository,
 	) {}
 
-	async execute({
-		id,
-		userId,
-		name,
-	}: Input): Promise<Output> {
+	async execute({ id, userId, name }: Input): Promise<Output> {
 		const user = await this.usersRepository.findById({
 			userId,
 		})
@@ -36,7 +32,8 @@ export class SavePaymentMethodUseCase {
 			})
 		}
 
-		const previusPaymentMethod = await this.paymentMethodsRepository.findById(id)
+		const previusPaymentMethod =
+			await this.paymentMethodsRepository.findById(id)
 
 		if (!previusPaymentMethod) {
 			throw new AppError({

@@ -13,9 +13,9 @@ interface Input {
 	categoryId: string
 	establishmentName: string
 	bankName: string
-	transactionDate: string
+	date: string
 	previousBalance: number
-	totalAmount: number
+	amount: number
 	currentBalance: number
 	paymentMethod: string
 	status: string
@@ -47,9 +47,9 @@ export class SaveTransactionUseCase {
 		categoryId,
 		establishmentName,
 		bankName,
-		transactionDate,
+		date,
 		previousBalance,
-		totalAmount,
+		amount,
 		currentBalance,
 		paymentMethod,
 		status,
@@ -83,9 +83,9 @@ export class SaveTransactionUseCase {
 				categoryId,
 				establishmentName,
 				bankName,
-				transactionDate: new Date(transactionDate),
+				date: new Date(date),
 				previousBalance,
-				totalAmount,
+				amount,
 				currentBalance,
 				paymentMethod,
 				status,

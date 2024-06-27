@@ -3,8 +3,8 @@ import type { PrismaClient } from '@prisma/client'
 import type { ISelectInputDTO } from '@core/domain/dtos/select-input-dto'
 
 import type { Transfer } from '@modules/transfers/entities/transfer'
-import type { TransfersRepository } from '@modules/transfers/repositories/transfers-repository'
 import { PrismaTransfersMapper } from '@modules/transfers/repositories/prisma/mappers/prisma-transfers-mapper'
+import type { TransfersRepository } from '@modules/transfers/repositories/transfers-repository'
 
 import { prisma } from '@shared/infra/database/prisma'
 
@@ -59,9 +59,7 @@ export class PrismaTransfersRepository implements TransfersRepository {
 			return []
 		}
 
-		return transfers.map((transfer) =>
-			PrismaTransfersMapper.toDomain(transfer),
-		)
+		return transfers.map((transfer) => PrismaTransfersMapper.toDomain(transfer))
 	}
 
 	async selectInput(): Promise<ISelectInputDTO[]> {

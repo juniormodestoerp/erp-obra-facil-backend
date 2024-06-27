@@ -8,9 +8,7 @@ interface Output {
 }
 
 export class FetchSelectInputTagsUseCase {
-	constructor(
-		private readonly tagsRepository: TagsRepository,
-	) {}
+	constructor(private readonly tagsRepository: TagsRepository) {}
 
 	async execute(): Promise<Output> {
 		const tags = await this.tagsRepository.selectInput()

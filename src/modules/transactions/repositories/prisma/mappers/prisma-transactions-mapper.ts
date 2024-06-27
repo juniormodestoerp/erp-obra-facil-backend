@@ -7,13 +7,13 @@ import { PrismaTagsMapper } from '@modules/tags/repositories/prisma/mappers/pris
 import { Transaction } from '@modules/transactions/entities/transaction'
 import { PrismaUserMapper } from '@modules/users/repositories/prisma/mappers/prisma-user-mapper'
 import type {
-	Transaction as RawTransaction,
-	User as RawUser,
-	Category as RawCategory,
 	BankAccount as RawBankAccount,
+	Category as RawCategory,
 	CostAndProfitCenter as RawCenter,
 	PaymentMethod as RawMethod,
 	Tag as RawTag,
+	Transaction as RawTransaction,
+	User as RawUser,
 } from '@prisma/client'
 
 export class PrismaTransactionsMapper {
@@ -44,10 +44,10 @@ export class PrismaTransactionsMapper {
 	static toDomain(
 		raw: RawTransaction & {
 			user: RawUser
-			category: RawCategory
 			account: RawBankAccount
-			center: RawCenter
-			method: RawMethod
+			category: RawCategory | null
+			center: RawCenter | null
+			method: RawMethod | null
 			tags: RawTag[]
 		},
 	): Transaction {
@@ -69,9 +69,15 @@ export class PrismaTransactionsMapper {
 				deletedAt: raw.deletedAt,
 				user: PrismaUserMapper.toDomain(raw.user),
 				account: PrismaBankAccountsMapper.toDomain(raw.account),
-				category: PrismaCategoriesMapper.toDomain(raw.category),
-				center: PrismaCostAndProfitCentersMapper.toDomain(raw.center),
-				method: PrismaPaymentMethodsMapper.toDomain(raw.method),
+				category: raw.category
+					? PrismaCategoriesMapper.toDomain(raw.category)
+					: null,
+				center: raw.center
+					? PrismaCostAndProfitCentersMapper.toDomain(raw.center)
+					: null,
+				method: raw.method
+					? PrismaPaymentMethodsMapper.toDomain(raw.method)
+					: null,
 				tags: raw.tags.map(PrismaTagsMapper.toDomain),
 			},
 			new UniqueEntityID(raw.id),

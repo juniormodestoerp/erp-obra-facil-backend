@@ -8,7 +8,9 @@ import { PrismaPaymentMethodsMapper } from '@modules/payment-methods/repositorie
 
 import { prisma } from '@shared/infra/database/prisma'
 
-export class PrismaPaymentMethodsRepository implements PaymentMethodsRepository {
+export class PrismaPaymentMethodsRepository
+	implements PaymentMethodsRepository
+{
 	private repository: PrismaClient
 
 	constructor() {
@@ -92,7 +94,8 @@ export class PrismaPaymentMethodsRepository implements PaymentMethodsRepository 
 	}
 
 	async create(paymentMethod: PaymentMethod): Promise<void> {
-		const prismaPaymentMethodData = PrismaPaymentMethodsMapper.toPrisma(paymentMethod)
+		const prismaPaymentMethodData =
+			PrismaPaymentMethodsMapper.toPrisma(paymentMethod)
 
 		await this.repository.paymentMethod.create({
 			data: prismaPaymentMethodData,
@@ -100,7 +103,8 @@ export class PrismaPaymentMethodsRepository implements PaymentMethodsRepository 
 	}
 
 	async save(paymentMethod: PaymentMethod): Promise<void> {
-		const prismaPaymentMethodData = PrismaPaymentMethodsMapper.toPrisma(paymentMethod)
+		const prismaPaymentMethodData =
+			PrismaPaymentMethodsMapper.toPrisma(paymentMethod)
 
 		await this.repository.paymentMethod.update({
 			where: {

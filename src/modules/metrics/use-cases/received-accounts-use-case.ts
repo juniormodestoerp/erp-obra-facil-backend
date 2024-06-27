@@ -7,10 +7,9 @@ interface Input {
 
 interface IReceivedAccounts {
 	id: string
-	name: string
 	description: string
-	totalAmount: number
-	transactionDate: string
+	amount: number
+	date: string
 	status: string
 }
 
@@ -23,17 +22,16 @@ export class ReceivedAccountsUseCase {
 		const transactions = await prisma.transaction.findMany({
 			where: {
 				userId,
-				totalAmount: {
+				amount: {
 					gt: 0,
 				},
 				status: 'paid',
 			},
 			select: {
 				id: true,
-				name: true,
 				description: true,
-				totalAmount: true,
-				transactionDate: true,
+				amount: true,
+				date: true,
 				status: true,
 			},
 		})
@@ -47,7 +45,7 @@ export class ReceivedAccountsUseCase {
 		const formattedTransactions: IReceivedAccounts[] = transactions.map(
 			(transaction) => ({
 				...transaction,
-				transactionDate: transaction.transactionDate.toISOString(),
+				date: transaction.date.toISOString(),
 			}),
 		)
 

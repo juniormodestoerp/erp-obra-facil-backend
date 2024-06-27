@@ -17,7 +17,7 @@ export class BankAccountsViewModel {
 			isFirstInvoice: bankAccount.isFirstInvoice,
 			isCreditCard: bankAccount.isCreditCard,
 			initialBalance: bankAccount.initialBalance,
-			createdAt: bankAccount.createdAt.toISOString(),
+			createdAt: bankAccount.createdAt?.toISOString(),
 		}
 	}
 }

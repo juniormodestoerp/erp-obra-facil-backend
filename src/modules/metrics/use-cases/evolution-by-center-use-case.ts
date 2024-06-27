@@ -8,14 +8,14 @@ interface Input {
 
 interface IEvolution {
 	date: string
-	totalAmount: number
+	amount: number
 	percentageChange: number
 	accumulatedTotal: number
 }
 
 interface ICenterEvolution {
 	id: string
-	centerId: string | null
+	centerId: string[] | null
 	centerName: string | null
 	evolution: IEvolution[]
 }
@@ -32,9 +32,14 @@ export class EvolutionByCenterUseCase {
 			},
 			select: {
 				id: true,
-				costAndProfitCenters: true,
-				totalAmount: true,
-				transactionDate: true,
+				center: {
+					select: {
+						id: true,
+						name: true,
+					},
+				},
+				amount: true,
+				date: true,
 			},
 		})
 
@@ -46,22 +51,21 @@ export class EvolutionByCenterUseCase {
 
 		const evolutionByCenter = transactions.reduce(
 			(acc, transaction) => {
-				const centerName = transaction.costAndProfitCenters || 'Uncategorized'
-				const date = transaction.transactionDate.toISOString().slice(0, 7)
+				const centerName = transaction.center?.name || 'Não informado'
+				const date = transaction.date.toISOString().slice(0, 7)
 
 				if (!acc[centerName]) {
 					acc[centerName] = {
-						createdAt: transaction.transactionDate,
+						createdAt: transaction.date,
 						transactions: {},
 					}
 				}
 
 				if (!acc[centerName].transactions[date]) {
-					acc[centerName].transactions[date] = { totalAmount: 0, ids: [] }
+					acc[centerName].transactions[date] = { amount: 0, ids: [] }
 				}
 
-				acc[centerName].transactions[date].totalAmount +=
-					transaction.totalAmount
+				acc[centerName].transactions[date].amount += transaction.amount
 				acc[centerName].transactions[date].ids.push(transaction.id)
 				return acc
 			},
@@ -69,7 +73,7 @@ export class EvolutionByCenterUseCase {
 				string,
 				{
 					createdAt: Date
-					transactions: Record<string, { totalAmount: number; ids: string[] }>
+					transactions: Record<string, { amount: number; ids: string[] }>
 				}
 			>,
 		)
@@ -90,20 +94,20 @@ export class EvolutionByCenterUseCase {
 					const currentDate = addMonths(startDate, i)
 					const currentMonth = currentDate.toISOString().slice(0, 7)
 
-					const totalAmount = transactions[currentMonth]?.totalAmount || 0
-					accumulatedTotal += totalAmount
+					const amount = transactions[currentMonth]?.amount || 0
+					accumulatedTotal += amount
 
 					const previousMonth = addMonths(currentDate, -1)
 						.toISOString()
 						.slice(0, 7)
-					const previousAmount = transactions[previousMonth]?.totalAmount || 0
+					const previousAmount = transactions[previousMonth]?.amount || 0
 					const percentageChange = previousAmount
-						? ((totalAmount - previousAmount) / Math.abs(previousAmount)) * 100
+						? ((amount - previousAmount) / Math.abs(previousAmount)) * 100
 						: 0
 
 					evolution.push({
 						date: currentMonth,
-						totalAmount,
+						amount,
 						percentageChange,
 						accumulatedTotal,
 					})
@@ -113,10 +117,11 @@ export class EvolutionByCenterUseCase {
 					.flatMap((item) => item.ids)
 					.join(', ')
 
+				const center = transactions[centerName]
 				return {
 					id: ids,
-					centerId: centerName === 'Uncategorized' ? null : centerName,
-					centerName: centerName === 'Uncategorized' ? null : centerName,
+					centerId: centerName === 'Não informado' ? null : center.ids,
+					centerName: centerName === 'Não informado' ? null : centerName,
 					evolution,
 				}
 			},

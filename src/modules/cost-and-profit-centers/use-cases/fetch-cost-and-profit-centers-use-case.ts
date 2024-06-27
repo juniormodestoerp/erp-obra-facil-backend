@@ -29,7 +29,8 @@ export class FetchCostAndProfitCentersUseCase {
 			})
 		}
 
-		const costAndProfitCenters = await this.costAndProfitCentersRepository.findMany(userId)
+		const costAndProfitCenters =
+			await this.costAndProfitCentersRepository.findMany(userId)
 
 		if (costAndProfitCenters.length === 0) {
 			throw new AppError({

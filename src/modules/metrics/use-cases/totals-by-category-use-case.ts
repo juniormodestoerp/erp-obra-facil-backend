@@ -8,7 +8,7 @@ interface Input {
 interface TotalsByCategory {
 	id: string
 	categoryId: string | null
-	totalAmount: number
+	amount: number
 }
 
 interface Output {
@@ -28,7 +28,7 @@ export class TotalsByCategoryUseCase {
 						name: true,
 					},
 				},
-				totalAmount: true,
+				amount: true,
 			},
 		})
 
@@ -42,20 +42,20 @@ export class TotalsByCategoryUseCase {
 			(acc, transaction) => {
 				const categoryId = transaction.category?.name || 'uncategorized'
 				if (!acc[categoryId]) {
-					acc[categoryId] = { totalAmount: 0, ids: [] }
+					acc[categoryId] = { amount: 0, ids: [] }
 				}
-				acc[categoryId].totalAmount += transaction.totalAmount
+				acc[categoryId].amount += transaction.amount
 				acc[categoryId].ids.push(transaction.id)
 				return acc
 			},
-			{} as Record<string, { totalAmount: number; ids: string[] }>,
+			{} as Record<string, { amount: number; ids: string[] }>,
 		)
 
 		const result: TotalsByCategory[] = Object.keys(totalsByCategory).map(
 			(categoryId) => ({
 				id: totalsByCategory[categoryId].ids.join(', '),
 				categoryId: categoryId === 'uncategorized' ? null : categoryId,
-				totalAmount: totalsByCategory[categoryId].totalAmount,
+				amount: totalsByCategory[categoryId].amount,
 			}),
 		)
 

@@ -6,8 +6,7 @@ export async function fetchSelectInputTagsController(
 	_: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const fetchSelectInputTagsUseCase =
-		makeFetchSelectInputTagsUseCase()
+	const fetchSelectInputTagsUseCase = makeFetchSelectInputTagsUseCase()
 
 	const { tags } = await fetchSelectInputTagsUseCase.execute()
 

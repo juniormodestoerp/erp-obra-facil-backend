@@ -3,7 +3,8 @@ import { PrismaCostAndProfitCentersRepository } from '@modules/cost-and-profit-c
 import { RemoveCostAndProfitCenterUseCase } from '@modules/cost-and-profit-centers/use-cases/remove-cost-and-profit-center-use-case'
 
 export function makeRemoveCostAndProfitCenterUseCase() {
-	const costAndProfitCentersRepository = new PrismaCostAndProfitCentersRepository()
+	const costAndProfitCentersRepository =
+		new PrismaCostAndProfitCentersRepository()
 
 	return new RemoveCostAndProfitCenterUseCase(costAndProfitCentersRepository)
 }

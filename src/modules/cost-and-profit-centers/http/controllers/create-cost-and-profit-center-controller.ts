@@ -14,16 +14,18 @@ export async function createCostAndProfitCenterController(
 	request: FastifyRequest,
 	reply: FastifyReply,
 ) {
-	const { name } = bodySchema.parse(
-		request.body,
-	)
+	const { name } = bodySchema.parse(request.body)
 
-	const createCostAndProfitCenterUseCase = makeCreateCostAndProfitCenterUseCase()
+	const createCostAndProfitCenterUseCase =
+		makeCreateCostAndProfitCenterUseCase()
 
-	const { costAndProfitCenter } = await createCostAndProfitCenterUseCase.execute({
-		userId: request.user.sub,
-		name,
-	})
+	const { costAndProfitCenter } =
+		await createCostAndProfitCenterUseCase.execute({
+			userId: request.user.sub,
+			name,
+		})
 
-	return reply.status(201).send(CostAndProfitCentersViewModel.toHTTP(costAndProfitCenter))
+	return reply
+		.status(201)
+		.send(CostAndProfitCentersViewModel.toHTTP(costAndProfitCenter))
 }

@@ -21,11 +21,7 @@ export class SaveTagUseCase {
 		private readonly usersRepository: UsersRepository,
 	) {}
 
-	async execute({
-		id,
-		userId,
-		name,
-	}: Input): Promise<Output> {
+	async execute({ id, userId, name }: Input): Promise<Output> {
 		const user = await this.usersRepository.findById({
 			userId,
 		})

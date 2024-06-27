@@ -7,11 +7,11 @@ interface Input {
 
 interface ICashEntries {
 	id: string
-	totalAmount: number
-	tags: string | null
-	name: string
-	paymentMethod: string
-	transactionDate: string
+	amount: number
+	tags: string[]
+	description: string
+	method: string | null
+	date: string
 }
 
 interface Output {
@@ -26,11 +26,11 @@ export class CashEntriesUseCase {
 			},
 			select: {
 				id: true,
-				totalAmount: true,
+				amount: true,
 				tags: true,
-				name: true,
-				paymentMethod: true,
-				transactionDate: true,
+				description: true,
+				method: true,
+				date: true,
 			},
 		})
 
@@ -43,7 +43,9 @@ export class CashEntriesUseCase {
 		const formattedTransactions: ICashEntries[] = transactions.map(
 			(transaction) => ({
 				...transaction,
-				transactionDate: transaction.transactionDate.toISOString(),
+				tags: transaction.tags.map((tag) => tag.name),
+				date: transaction.date.toISOString(),
+				method: transaction.method ? transaction.method.name : null,
 			}),
 		)
 

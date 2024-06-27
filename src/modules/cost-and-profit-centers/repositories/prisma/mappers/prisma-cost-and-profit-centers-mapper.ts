@@ -4,7 +4,9 @@ import { UniqueEntityID } from '@core/domain/entities/unique-entity-id'
 import { CostAndProfitCenter } from '@modules/cost-and-profit-centers/entities/cost-and-profit-center'
 
 export class PrismaCostAndProfitCentersMapper {
-	static toPrisma(costAndProfitCenter: CostAndProfitCenter): RawCostAndProfitCenter {
+	static toPrisma(
+		costAndProfitCenter: CostAndProfitCenter,
+	): RawCostAndProfitCenter {
 		return {
 			id: costAndProfitCenter.id,
 			userId: costAndProfitCenter.userId,

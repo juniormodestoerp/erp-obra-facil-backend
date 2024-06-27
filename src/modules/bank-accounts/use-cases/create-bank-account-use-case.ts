@@ -1,6 +1,9 @@
 import { AppError } from '@core/domain/errors/app-error'
 
-import { BankAccount, type LimitType } from '@modules/bank-accounts/entities/bank-account'
+import {
+	BankAccount,
+	type LimitType,
+} from '@modules/bank-accounts/entities/bank-account'
 import type { BankAccountsRepository } from '@modules/bank-accounts/repositories/bank-accounts-repository'
 
 interface Input {

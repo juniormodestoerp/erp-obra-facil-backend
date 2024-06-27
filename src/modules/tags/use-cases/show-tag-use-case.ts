@@ -12,9 +12,7 @@ interface Output {
 }
 
 export class ShowTagUseCase {
-	constructor(
-		private readonly tagsRepository: TagsRepository,
-	) {}
+	constructor(private readonly tagsRepository: TagsRepository) {}
 
 	async execute({ id }: Input): Promise<Output> {
 		const tag = await this.tagsRepository.findById(id)

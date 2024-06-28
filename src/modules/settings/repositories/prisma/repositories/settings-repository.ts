@@ -32,18 +32,11 @@ export class PrismaSettingsRepository implements SettingsRepository {
 		return PrismaSettingsMapper.toDomain(setting)
 	}
 
-	async findMany({
-		pageIndex,
-		userId,
-	}: IFindManySettingsDTO): Promise<Setting[]> {
-		const skip = (pageIndex - 1) * 20 ?? env.PER_PAGE
-
+	async findMany({ userId }: IFindManySettingsDTO): Promise<Setting[]> {
 		const settings = await this.repository.setting.findMany({
 			where: {
 				userId,
 			},
-			skip,
-			take: 20 ?? env.PER_PAGE,
 			orderBy: {
 				updatedAt: 'desc',
 			},

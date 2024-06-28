@@ -17,12 +17,11 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 const bodySchema = z.object({
-	type: z.string(strMessage('tipo')),
 	date: z.string(dateMessage('data')),
 	amount: z.number(numbMessage('valor')),
 	description: z.string(strMessage('descrição')),
 	account: z.string(strMessage('conta')),
-	status: z.string(strMessage('status')),
+	status: z.string(strMessage('status')).nullable().default(null),
 	card: z.string(strMessage('cartão')).nullable().default(null),
 	category: z.string(strMessage('categoria')).nullable().default(null),
 	contact: z.string(strMessage('contato')).nullable().default(null),
@@ -47,11 +46,13 @@ export async function addOneController(
 	const parsedBody: ITransaction = bodySchema.parse(request.body)
 	const formattedBody = {
 		...parsedBody,
+		status: parsedBody.status || 'pending',
 		date: Utils.parseDate(parsedBody.date),
 		competenceDate: parsedBody.competenceDate
 			? Utils.parseDate(parsedBody.competenceDate)
 			: null,
 	}
+	
 
 	const existingTransaction = await prisma.transaction.findFirst({
 		where: {
@@ -92,6 +93,12 @@ export async function addOneController(
 		},
 	})
 
+	if (!category) {
+		throw new AppError({
+			code: 'category.not_found',
+		})
+	}
+
 	const center = await prisma.center.findFirst({
 		where: {
 			userId: request.user.sub,
@@ -115,10 +122,16 @@ export async function addOneController(
 
 	const transaction = Transaction.create({
 		userId: request.user.sub,
+		accountId: account.id,
+		categoryId: category.id,
+		centerId: center ? center.id : null,
+		methodId: method ? method.id : null,
+		tagId: tags ? tags.id : null,
+		status: 'pending',
+		type: formattedBody.amount > 0 ? 'Receita' : 'Despesa',
 		date: formattedBody.date,
 		amount: formattedBody.amount,
 		description: formattedBody.description,
-		transferAccount: formattedBody.transferAccount,
 		card: formattedBody.card,
 		contact: formattedBody.contact,
 		project: formattedBody.project,
@@ -132,7 +145,7 @@ export async function addOneController(
 		category: category ? PrismaCategoriesMapper.toDomain(category) : null,
 		center: center ? PrismaCentersMapper.toDomain(center) : null,
 		method: method ? PrismaMethodsMapper.toDomain(method) : null,
-		tags: tags ? [PrismaTagsMapper.toDomain(tags)] : [],
+		tag: tags ? PrismaTagsMapper.toDomain(tags) : null
 	})
 
 	try {

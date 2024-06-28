@@ -33,14 +33,16 @@ export async function fetchTransactions(
 	// 	// searchTerm,
 	// }
 
-	return reply.status(200).send({
-		transactions: transactions.map(
-			(transaction) => TransactionViewModel.toHTTP(transaction) ?? [],
-		),
-		// meta: {
-		// 	pageIndex,
-		// 	perPage: env.PER_PAGE,
-		// 	totalCount,
-		// },
-	})
+	return reply
+		.status(200)
+		.send(
+			transactions.map((transaction) =>
+				TransactionViewModel.toHTTP(transaction),
+			),
+		)
+	// meta: {
+	// 	pageIndex,
+	// 	perPage: env.PER_PAGE,
+	// 	totalCount,
+	// },
 }

@@ -5,13 +5,11 @@ import type { SettingsRepository } from '@modules/settings/repositories/settings
 import type { DomainUsersRepository } from '@modules/users/repositories/domain-users-repository'
 
 interface Input {
-	pageIndex: number
 	userId: string
 }
 
 interface Output {
 	settings: Setting[]
-	totalCount: number
 }
 
 export class FetchSettingsUseCase {
@@ -20,7 +18,7 @@ export class FetchSettingsUseCase {
 		private readonly usersRepository: DomainUsersRepository,
 	) {}
 
-	async execute({ pageIndex, userId }: Input): Promise<Output> {
+	async execute({ userId }: Input): Promise<Output> {
 		const user = await this.usersRepository.findById({
 			userId,
 		})
@@ -32,7 +30,6 @@ export class FetchSettingsUseCase {
 		}
 
 		const settings = await this.settingsRepository.findMany({
-			pageIndex,
 			userId,
 		})
 
@@ -42,11 +39,8 @@ export class FetchSettingsUseCase {
 			})
 		}
 
-		const totalCount = await this.settingsRepository.count()
-
 		return {
 			settings,
-			totalCount,
 		}
 	}
 }

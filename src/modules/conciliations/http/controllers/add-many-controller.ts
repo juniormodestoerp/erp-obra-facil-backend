@@ -71,7 +71,7 @@ export async function addManyController(
 			: null,
 	}))
 
-	const transactionsToCreate = []
+	const transactionsToCreate: Transaction[] = []
 
 	for (const transaction of formattedBody) {
 		const existingTransaction = await prisma.transaction.findFirst({
@@ -113,6 +113,12 @@ export async function addManyController(
 			},
 		})
 
+		if (!category) {
+			throw new AppError({
+				code: 'category.not_found',
+			})
+		}
+
 		const center = await prisma.center.findFirst({
 			where: {
 				userId: request.user.sub,
@@ -136,10 +142,16 @@ export async function addManyController(
 
 		const newTransaction = Transaction.create({
 			userId: request.user.sub,
+			accountId: account.id,
+			categoryId: category?.id,
+			centerId: center ? center?.id : null,
+			methodId: method ? method?.id : null,
+			tagId: tags ? tags?.id : null,
+			status: 'pending',
+			type: transaction.amount > 0 ? 'Receita' : 'Despesa',
 			date: transaction.date,
 			amount: transaction.amount,
 			description: transaction.description,
-			transferAccount: transaction.transferAccount,
 			card: transaction.card,
 			contact: transaction.contact,
 			project: transaction.project,
@@ -153,7 +165,7 @@ export async function addManyController(
 			category: category ? PrismaCategoriesMapper.toDomain(category) : null,
 			center: center ? PrismaCentersMapper.toDomain(center) : null,
 			method: method ? PrismaMethodsMapper.toDomain(method) : null,
-			tags: tags ? [PrismaTagsMapper.toDomain(tags)] : [],
+			tag: tags ? PrismaTagsMapper.toDomain(tags) : null,
 		})
 
 		transactionsToCreate.push(newTransaction)
@@ -169,6 +181,9 @@ export async function addManyController(
 		})
 	} catch (error) {
 		console.log('Erro ao criar lançamentos', error)
+		throw new AppError({
+			code: 'transaction.not_found',
+		})
 	}
 
 	reply.status(200).send(transactionsToCreate)

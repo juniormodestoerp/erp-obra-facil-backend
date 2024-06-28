@@ -171,6 +171,11 @@ export async function addManyController(
 		transactionsToCreate.push(newTransaction)
 	}
 
+	let totalAmount = 0
+	for (const transaction of transactionsToCreate) {
+		totalAmount += transaction.amount
+	}
+
 	try {
 		await prisma.$transaction(async (tsx) => {
 			for (const transaction of transactionsToCreate) {
@@ -178,6 +183,17 @@ export async function addManyController(
 					data: PrismaTransactionsMapper.toPrisma(transaction),
 				})
 			}
+
+			await tsx.user.update({
+				where: {
+					id: request.user.sub,
+				},
+				data: {
+					balance: {
+						increment: totalAmount,
+					},
+				},
+			})
 		})
 	} catch (error) {
 		console.log('Erro ao criar lançamentos', error)

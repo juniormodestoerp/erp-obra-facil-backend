@@ -9,7 +9,7 @@ import { showMethodController } from '@modules/methods/http/controllers/show-met
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
-export async function Router(app: FastifyInstance) {
+export async function MethodRouter(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
 	app.get('/methods/:id', showMethodController)

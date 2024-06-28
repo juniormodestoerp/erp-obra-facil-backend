@@ -9,7 +9,7 @@ import { showTagController } from '@modules/tags/http/controllers/show-tag-contr
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
-export async function Router(app: FastifyInstance) {
+export async function TagsRouter(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
 	app.get('/tags/:id', showTagController)

@@ -10,7 +10,7 @@ import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 import { addManyController } from './controllers/add-many-controller'
 import { addOneController } from './controllers/add-one-controller'
 
-export async function Router(app: FastifyInstance) {
+export async function ConciliationsRouter(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
 	app.post('/conciliations', createConciliationController)

@@ -10,7 +10,7 @@ interface IAccountsPayable {
 	description: string
 	amount: number
 	date: string
-	tags: string[]
+	// tags: string[]
 	method: string | null
 }
 
@@ -35,7 +35,7 @@ export class AccountsPayableUseCase {
 				description: true,
 				amount: true,
 				date: true,
-				tags: true,
+				// tags: true,
 				method: true,
 			},
 		})
@@ -52,7 +52,7 @@ export class AccountsPayableUseCase {
 				description: transaction.description,
 				amount: transaction.amount,
 				date: transaction.date.toISOString(),
-				tags: transaction.tags.map((tag) => tag.name),
+				// tags: transaction.tags.map((tag) => tag.name),
 				method: transaction.method ? transaction.method.name : null,
 			}),
 		)

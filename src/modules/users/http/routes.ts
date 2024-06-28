@@ -11,7 +11,7 @@ import { updateProfilePictureController } from '@modules/users/http/controllers/
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
-export async function Router(app: FastifyInstance) {
+export async function UsersRouter(app: FastifyInstance) {
 	app.get(
 		'/users/profile',
 		{ onRequest: [verifyJwt] },

@@ -9,7 +9,7 @@ import { showCenterController } from '@modules/centers/http/controllers/show-cen
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
-export async function Router(app: FastifyInstance) {
+export async function CentersRouter(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
 	app.get('/centers/:id', showCenterController)

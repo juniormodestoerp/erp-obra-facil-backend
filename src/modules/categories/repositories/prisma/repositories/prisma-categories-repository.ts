@@ -138,11 +138,18 @@ export class PrismaCategoriesRepository implements DomainCategoriesRepository {
 	}
 
 	async remove(id: string): Promise<void> {
-		await this.repository.category.delete({
-			where: {
-				id,
-				deletedAt: null,
-			},
+		await this.repository.$transaction(async (prisma) => {
+			await prisma.transaction.deleteMany({
+				where: {
+					categoryId: id,
+				},
+			})
+
+			await prisma.category.delete({
+				where: {
+					id: id,
+				},
+			})
 		})
 	}
 }

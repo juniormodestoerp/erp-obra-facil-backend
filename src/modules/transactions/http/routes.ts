@@ -8,7 +8,7 @@ import { showTransaction } from '@modules/transactions/http/controllers/show-tra
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
-export async function Router(app: FastifyInstance) {
+export async function TransactionsRouter(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
 	app.get('/transactions/:id', showTransaction)

@@ -155,6 +155,10 @@ export class CreateTransactionUseCase {
 			}
 		}
 
+		user.balance += amount
+
+		await this.usersRepository.save(user)
+
 		const transaction = Transaction.create({
 			userId,
 			accountId: accountEntity.id,

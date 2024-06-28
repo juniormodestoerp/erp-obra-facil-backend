@@ -19,7 +19,6 @@ export class PrismaAddressesMapper {
 			createdAt: address.createdAt,
 			updatedAt: address.updatedAt,
 			deletedAt: address.deletedAt,
-			user: address.user ? { connect: { id: address.user.id } } : null,
 		}
 	}
 
@@ -43,7 +42,6 @@ export class PrismaAddressesMapper {
 				createdAt: new Date(raw.createdAt),
 				updatedAt: new Date(raw.updatedAt),
 				deletedAt: raw.deletedAt ? new Date(raw.deletedAt) : null,
-				user,
 			},
 			new UniqueEntityID(raw.id),
 		)

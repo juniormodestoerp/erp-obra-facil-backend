@@ -9,7 +9,7 @@ import { showCategoryController } from '@modules/categories/http/controllers/sho
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
-export async function Router(app: FastifyInstance) {
+export async function CategoriesRouter(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
 	app.get('/categories/:id', showCategoryController)

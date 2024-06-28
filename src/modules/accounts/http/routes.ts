@@ -9,7 +9,7 @@ import { showAccountController } from '@modules/accounts/http/controllers/show-a
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
-export async function Router(app: FastifyInstance) {
+export async function AccountsRouter(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
 	app.get('/accounts/:id', showAccountController)

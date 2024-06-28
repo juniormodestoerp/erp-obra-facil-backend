@@ -17,12 +17,14 @@ import { totalsByCategoryController } from '@modules/metrics/http/controllers/to
 import { totalsByCenterController } from '@modules/metrics/http/controllers/totals-by-center-controller'
 import { totalsByContactController } from '@modules/metrics/http/controllers/totals-by-contact-controller'
 import { totalsByProjectController } from '@modules/metrics/http/controllers/totals-by-project-controller'
+import { initialPageController } from '@modules/metrics/http/controllers/initial-page-controller'
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
-export async function Router(app: FastifyInstance) {
+export async function MetricsRouter(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
-
+	
+	app.get('/metrics/initial-page', initialPageController)
 	app.get('/metrics/accounts-payable', accountsPayableController)
 	app.get('/metrics/accounts-receivable', accountsReceivableController)
 	app.get('/metrics/cash-entries', cashEntriesController)

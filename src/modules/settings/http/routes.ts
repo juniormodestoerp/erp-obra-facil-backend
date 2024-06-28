@@ -7,7 +7,7 @@ import { showSetting } from '@modules/settings/http/controllers/show-setting-con
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
-export async function Router(app: FastifyInstance) {
+export async function SettingsRouter(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
 	app.get('/settings:id', showSetting)

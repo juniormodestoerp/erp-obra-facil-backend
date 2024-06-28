@@ -52,7 +52,6 @@ export async function addOneController(
 			? Utils.parseDate(parsedBody.competenceDate)
 			: null,
 	}
-	
 
 	const existingTransaction = await prisma.transaction.findFirst({
 		where: {
@@ -145,13 +144,23 @@ export async function addOneController(
 		category: category ? PrismaCategoriesMapper.toDomain(category) : null,
 		center: center ? PrismaCentersMapper.toDomain(center) : null,
 		method: method ? PrismaMethodsMapper.toDomain(method) : null,
-		tag: tags ? PrismaTagsMapper.toDomain(tags) : null
+		tag: tags ? PrismaTagsMapper.toDomain(tags) : null,
 	})
 
 	try {
 		await prisma.$transaction(async (tsx) => {
 			await tsx.transaction.create({
 				data: PrismaTransactionsMapper.toPrisma(transaction),
+			})
+			await prisma.user.update({
+				where: {
+					id: request.user.sub,
+				},
+				data: {
+					balance: {
+						increment: formattedBody.amount,
+					},
+				},
 			})
 		})
 	} catch (error) {

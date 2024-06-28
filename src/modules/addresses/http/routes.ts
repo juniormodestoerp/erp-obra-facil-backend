@@ -6,7 +6,7 @@ import { showAddress } from '@modules/addresses/http/controllers/show-address-co
 
 import { verifyJwt } from '@shared/infra/http/middlewares/verify-jwt'
 
-export async function Router(app: FastifyInstance) {
+export async function AddressRouter(app: FastifyInstance) {
 	app.addHook('onRequest', verifyJwt)
 
 	app
